@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>尺寸表搜索工具 - 智能版</title>
+    <link rel="icon" href="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251105/3e0e4df477d9be2659f3297fbd20b998/7da5dcac0bbf4a168a400721406ddccd.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .refresh-btn {
+            background: #f39c12;
+        }
+        .refresh-btn:hover {
+            background: #e67e22;
+        }
+        .auto-refresh-btn {
+            background: #2ecc71;
+        }
+        .auto-refresh-btn.active {
+            background: #e74c3c;
+        }
+        .results-info {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        .update-status {
+            background: #e8f4fc;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 14px;
+            border-left: 4px solid #3498db;
+        }
+        .update-status.success { 
+            background: #e8f5e8;
+            border-left-color: #2ecc71; 
+        }
+        .update-status.warning { 
+            background: #fff3cd;
+            border-left-color: #f39c12; 
+        }
+        .update-status.error { 
+            background: #fde8e8;
+            border-left-color: #e74c3c; 
+        }
+        .image-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .image-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: white;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .image-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 8px;
+            text-align: center;
+        }
+        .image-code {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .image-meta {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        .status-info {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 4px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #ccc;
+        }
+
+        /* 目录样式 */
+        .directory-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .directory-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .directory-item {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .directory-item:hover {
+            background-color: #f8f9fa;
+        }
+        .directory-item.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1>尺寸表搜索工具 - 智能版</h1>
+        <div class="update-status" id="updateStatus">
+            <span class="loading-spinner"></span>
+            正在初始化...
+        </div>
+        <div>
+            <input type="text" id="searchInput" placeholder="搜索图片代码、描述或标签...">
+            <button onclick="search()">搜索</button>
+            <button class="refresh-btn" onclick="checkUpdate()">检查更新</button>
+            <button class="auto-refresh-btn" onclick="toggleAutoRefresh()" id="autoRefreshBtn">开启自动更新</button>
+        </div>
+        <div class="results-info" id="resultsInfo"></div>
+    </div>
+
+    <!-- 目录选择区域 -->
+    <div class="directory-container" id="directoryContainer" style="display: none;">
+        <h3>选择数据目录</h3>
+        <div class="directory-list" id="directoryList">
+            <!-- 目录项将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <div id="results">
+        <div class="status-info">
+            <p>正在加载数据，请稍候...</p>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // 配置多个数据源目录
+        const DATA_DIRECTORIES = [
+            {
+                name: "主数据库",
+                url: "https://raw.githubusercontent.com/iptv369/image-database/main/images.json",
+                description: "主要图片数据库"
+            },
+            {
+                name: "备份数据库1",
+                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json",
+                description: "JsDelivr CDN备份"
+            },
+            {
+                name: "本地测试数据",
+                url: "local",
+                description: "使用内置本地数据"
+            }
+        ];
+
+        // 本地数据（作为备用）
+        const LOCAL_DATA = [/* 您的本地数据保持不变 */];
+
+        let imageData = [];
+        let lastUpdateTime = 1762308075737;
+        let autoRefreshInterval = null;
+        let isAutoRefresh = false;
+        let currentDataSource = null;
+
+        // 初始化函数
+        async function initialize() {
+            updateStatus('正在加载数据...', 'default');
+            
+            // 显示目录选择界面
+            showDirectorySelector();
+        }
+
+        // 显示目录选择器
+        function showDirectorySelector() {
+            const directoryContainer = document.getElementById('directoryContainer');
+            const directoryList = document.getElementById('directoryList');
+            
+            directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
+                <div class="directory-item" onclick="loadFromDirectory(${index})">
+                    <strong>${dir.name}</strong>
+                    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">${dir.description}</div>
+                </div>
+            `).join('');
+            
+            directoryContainer.style.display = 'block';
+            updateStatus('请选择数据源目录', 'default');
+        }
+
+        // 从目录加载数据
+        async function loadFromDirectory(index) {
+            const directory = DATA_DIRECTORIES[index];
+            currentDataSource = directory;
+            
+            // 更新目录项状态
+            document.querySelectorAll('.directory-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            updateStatus(`正在从 ${directory.name} 加载数据...`, 'default');
+            
+            try {
+                if (directory.url === 'local') {
+                    // 使用本地数据
+                    imageData = LOCAL_DATA;
+                    lastUpdateTime = Date.now();
+                    updateStatus(`✅ 已加载本地数据 (${imageData.length} 张图片)`, 'success');
+                    updateDisplay('local', `✅ 使用本地数据 (共 ${imageData.length} 张图片)`);
+                } else {
+                    // 从URL加载数据
+                    const timestamp = Date.now();
+                    const dataUrl = directory.url.includes('?') 
+                        ? `${directory.url}&t=${timestamp}` 
+                        : `${directory.url}?t=${timestamp}`;
+                    
+                    const response = await fetch(dataUrl);
+                    
+                    if (response.ok) {
+                        const cloudData = await response.json();
+                        imageData = cloudData;
+                        lastUpdateTime = Date.now();
+                        updateStatus(`✅ 已从 ${directory.name} 加载数据 (${imageData.length} 张图片)`, 'success');
+                        updateDisplay('cloud', `✅ 使用 ${directory.name} 数据 (共 ${imageData.length} 张图片)`);
+                    } else {
+                        throw new Error(`服务器返回 ${response.status} 错误`);
+                    }
+                }
+            } catch (error) {
+                console.error('数据加载失败:', error);
+                updateStatus(`❌ ${directory.name} 加载失败: ${error.message}`, 'error');
+                
+                // 如果当前不是本地数据，尝试回退到本地数据
+                if (directory.url !== 'local') {
+                    setTimeout(() => {
+                        updateStatus('正在回退到本地数据...', 'warning');
+                        imageData = LOCAL_DATA;
+                        updateStatus(`✅ 已使用本地数据 (${imageData.length} 张图片)`, 'success');
+                        updateDisplay('local', `✅ 使用本地数据 (共 ${imageData.length} 张图片)`);
+                    }, 1000);
+                }
+            }
+        }
+
+        // 检查更新函数
+        async function checkUpdate() {
+            if (!currentDataSource) {
+                alert('请先选择数据源目录');
+                return;
+            }
+            
+            if (currentDataSource.url === 'local') {
+                alert('本地数据无法更新，请选择网络数据源');
+                return;
+            }
+            
+            try {
+                updateStatus(`正在检查 ${currentDataSource.name} 更新...`, 'default');
+                
+                const timestamp = Date.now();
+                const dataUrl = currentDataSource.url.includes('?') 
+                    ? `${currentDataSource.url}&t=${timestamp}` 
+                    : `${currentDataSource.url}?t=${timestamp}`;
+                    
+                const response = await fetch(dataUrl);
+                
+                if (response.ok) {
+                    const cloudData = await response.json();
+                    const currentCount = imageData.length;
+                    const cloudCount = cloudData.length;
+                    
+                    if (cloudCount > currentCount) {
+                        // 发现新数据
+                        imageData = cloudData;
+                        lastUpdateTime = Date.now();
+                        const newImagesCount = cloudCount - currentCount;
+                        updateStatus(`✅ ${currentDataSource.name} 已更新！新增 ${newImagesCount} 张图片`, 'success');
+                        updateDisplay('cloud', `✅ 使用 ${currentDataSource.name} 数据 (共 ${cloudCount} 张图片，新增 ${newImagesCount} 张)`);
+                    } else if (cloudCount === currentCount) {
+                        updateStatus(`✅ ${currentDataSource.name} 已是最新数据 (${new Date().toLocaleString()})`, 'success');
+                    } else {
+                        updateStatus(`⚠️ ${currentDataSource.name} 数据异常，数据量减少`, 'warning');
+                    }
+                } else {
+                    throw new Error('服务器返回 ' + response.status + ' 错误');
+                }
+            } catch (error) {
+                console.error('更新检查失败:', error);
+                updateStatus(`⚠️ ${currentDataSource.name} 更新检查失败`, 'warning');
+            }
+        }
+
+        // 切换自动更新
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('autoRefreshBtn');
+            if (isAutoRefresh) {
+                // 关闭自动更新
+                clearInterval(autoRefreshInterval);
+                btn.textContent = '开启自动更新';
+                btn.classList.remove('active');
+                isAutoRefresh = false;
+                updateStatus('已关闭自动更新', 'warning');
+            } else {
+                // 开启自动更新（每2小时检查一次）
+                if (!currentDataSource || currentDataSource.url === 'local') {
+                    alert('请先选择网络数据源才能使用自动更新');
+                    return;
+                }
+                autoRefreshInterval = setInterval(checkUpdate, 2 * 60 * 60 * 1000);
+                btn.textContent = '关闭自动更新';
+                btn.classList.add('active');
+                isAutoRefresh = true;
+                updateStatus(`✅ 已开启自动更新，每2小时检查 ${currentDataSource.name}`, 'success');
+            }
+        }
+
+        // 更新状态显示
+        function updateStatus(message, type = 'default') {
+            const statusEl = document.getElementById('updateStatus');
+            statusEl.innerHTML = '<span class="loading-spinner"></span>' + message;
+            statusEl.className = 'update-status ' + type;
+        }
+
+        // 更新显示
+        function updateDisplay(source, message) {
+            document.getElementById('resultsInfo').innerHTML = '<p>' + message + '</p>';
+            document.getElementById('results').innerHTML = `
+                <div class="status-info">
+                    <p>✅ 数据加载成功！共 ${imageData.length} 张图片</p>
+                    <p>请输入关键词搜索图片</p>
+                </div>
+            `;
+        }
+
+        // 搜索功能
+        function search() {
+            if (!imageData || imageData.length === 0) {
+                alert('请先选择数据源目录');
+                return;
+            }
+            
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) {
+                document.getElementById('results').innerHTML = `
+                    <div class="status-info">
+                        <p>共 ${imageData.length} 张图片</p>
+                        <p>请输入关键词搜索图片</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const results = imageData.filter(img => 
+                img.code.toLowerCase().includes(query) || 
+                (img.description && img.description.toLowerCase().includes(query)) ||
+                (img.tags && img.tags.some(tag => tag.toLowerCase().includes(query)))
+            );
+            
+            document.getElementById('resultsInfo').innerHTML = 
+                `<p>找到 ${results.length} 个结果 (共 ${imageData.length} 张图片)</p>`;
+                
+            displayImages(results, query);
+        }
+
+        function displayImages(images, query) {
+            const resultsContainer = document.getElementById('results');
+            
+            if (images.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="status-info">
+                        <p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p>
+                        <p>数据库中共有 ${imageData.length} 张图片</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            resultsContainer.innerHTML = `
+                <div style="margin-bottom: 15px; color: #666;">
+                    <p>找到 ${images.length} 个与 "<strong>${query}</strong>" 匹配的结果</p>
+                </div>
+                <div class="image-results">
+                    ${images.map(img => `
+                        <div class="image-card" onclick="openModal('${img.url}')">
+                            <img src="${img.url}" alt="${img.code}" onerror="this.src='https://via.placeholder.com/150x120?text=图片加载失败'">
+                            <div class="image-info">
+                                <div class="image-code">${img.code}</div>
+                                ${img.date ? `<div class="image-meta">${img.date}</div>` : ''}
+                                ${img.description ? `<div class="image-meta">${img.description}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 图片放大功能
+        function openModal(imageUrl) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = imageUrl;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+
+        // 页面加载时初始化
+        initialize();
+    </script>
+</body>
+</html>
