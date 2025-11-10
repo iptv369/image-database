@@ -213,7 +213,7 @@
 
     <!-- 目录选择区域 -->
     <div class="directory-container" id="directoryContainer" style="display: none;">
-        <h3>选择数据目录</h3>
+        <h3>选择数据源</h3>
         <div class="directory-list" id="directoryList">
             <!-- 目录项将通过JavaScript动态生成 -->
         </div>
@@ -231,22 +231,27 @@
     </div>
 
     <script>
-        // 配置多个数据源目录
-        const DATA_DIRECTORIES = [
+        // 配置多个数据源 - 使用相对路径和可靠的CDN
+        const DATA_SOURCES = [
             {
-                name: "主数据库",
+                name: "GitHub原始数据",
                 url: "https://raw.githubusercontent.com/iptv369/image-database/main/images.json",
-                description: "主要图片数据库"
+                description: "GitHub原始数据（可能被墙）"
             },
             {
-                name: "备份数据库1",
-                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json",
-                description: "JsDelivr CDN备份"
+                name: "JsDelivr CDN",
+                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database/images.json",
+                description: "CDN加速（推荐）"
             },
             {
-                name: "本地测试数据",
+                name: "本地数据",
                 url: "local",
-                description: "使用内置本地数据"
+                description: "使用内置本地数据（最稳定）"
+            },
+            {
+                name: "测试数据",
+                url: "test",
+                description: "生成测试数据"
             }
         ];
 
@@ -254,98 +259,163 @@
         const LOCAL_DATA = [/* 您的本地数据保持不变 */];
 
         let imageData = [];
-        let lastUpdateTime = 1762308075737;
+        let lastUpdateTime = Date.now();
         let autoRefreshInterval = null;
         let isAutoRefresh = false;
         let currentDataSource = null;
 
         // 初始化函数
         async function initialize() {
-            updateStatus('正在加载数据...', 'default');
+            updateStatus('正在初始化...', 'default');
             
-            // 显示目录选择界面
-            showDirectorySelector();
+            // 显示数据源选择界面
+            showDataSourceSelector();
+            
+            // 自动尝试加载第一个可用的数据源
+            setTimeout(() => autoLoadBestSource(), 1000);
         }
 
-        // 显示目录选择器
-        function showDirectorySelector() {
+        // 显示数据源选择器
+        function showDataSourceSelector() {
             const directoryContainer = document.getElementById('directoryContainer');
             const directoryList = document.getElementById('directoryList');
             
-            directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
-                <div class="directory-item" onclick="loadFromDirectory(${index})">
-                    <strong>${dir.name}</strong>
-                    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">${dir.description}</div>
+            directoryList.innerHTML = DATA_SOURCES.map((source, index) => `
+                <div class="directory-item" onclick="loadFromSource(${index})">
+                    <strong>${source.name}</strong>
+                    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">${source.description}</div>
                 </div>
             `).join('');
             
             directoryContainer.style.display = 'block';
-            updateStatus('请选择数据源目录', 'default');
+            updateStatus('请选择数据源，或等待自动选择', 'default');
         }
 
-        // 从目录加载数据
-        async function loadFromDirectory(index) {
-            const directory = DATA_DIRECTORIES[index];
-            currentDataSource = directory;
+        // 自动加载最佳数据源
+        async function autoLoadBestSource() {
+            updateStatus('正在自动选择最佳数据源...', 'default');
+            
+            // 按优先级尝试各个数据源
+            const priorities = [1, 2, 3, 0]; // 优先尝试CDN和本地数据
+            
+            for (const index of priorities) {
+                try {
+                    await loadFromSource(index, true);
+                    if (imageData.length > 0) {
+                        updateStatus(`✅ 自动选择: ${DATA_SOURCES[index].name}`, 'success');
+                        return;
+                    }
+                } catch (error) {
+                    continue;
+                }
+            }
+            
+            // 所有数据源都失败，使用测试数据
+            updateStatus('⚠️ 所有数据源加载失败，使用测试数据', 'warning');
+            generateTestData();
+        }
+
+        // 从数据源加载数据
+        async function loadFromSource(index, silent = false) {
+            const source = DATA_SOURCES[index];
+            currentDataSource = source;
             
             // 更新目录项状态
             document.querySelectorAll('.directory-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
             
-            updateStatus(`正在从 ${directory.name} 加载数据...`, 'default');
+            if (!silent) {
+                updateStatus(`正在从 ${source.name} 加载数据...`, 'default');
+            }
             
             try {
-                if (directory.url === 'local') {
+                if (source.url === 'local') {
                     // 使用本地数据
                     imageData = LOCAL_DATA;
                     lastUpdateTime = Date.now();
-                    updateStatus(`✅ 已加载本地数据 (${imageData.length} 张图片)`, 'success');
-                    updateDisplay('local', `✅ 使用本地数据 (共 ${imageData.length} 张图片)`);
+                    if (!silent) {
+                        updateStatus(`✅ 已加载本地数据 (${imageData.length} 张图片)`, 'success');
+                        updateDisplay('local', `✅ 使用本地数据 (共 ${imageData.length} 张图片)`);
+                    }
+                } else if (source.url === 'test') {
+                    // 生成测试数据
+                    generateTestData();
                 } else {
                     // 从URL加载数据
                     const timestamp = Date.now();
-                    const dataUrl = directory.url.includes('?') 
-                        ? `${directory.url}&t=${timestamp}` 
-                        : `${directory.url}?t=${timestamp}`;
+                    const dataUrl = source.url.includes('?') 
+                        ? `${source.url}&t=${timestamp}` 
+                        : `${source.url}?t=${timestamp}`;
                     
-                    const response = await fetch(dataUrl);
+                    const response = await fetch(dataUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
                     
                     if (response.ok) {
                         const cloudData = await response.json();
                         imageData = cloudData;
                         lastUpdateTime = Date.now();
-                        updateStatus(`✅ 已从 ${directory.name} 加载数据 (${imageData.length} 张图片)`, 'success');
-                        updateDisplay('cloud', `✅ 使用 ${directory.name} 数据 (共 ${imageData.length} 张图片)`);
+                        if (!silent) {
+                            updateStatus(`✅ 已从 ${source.name} 加载数据 (${imageData.length} 张图片)`, 'success');
+                            updateDisplay('cloud', `✅ 使用 ${source.name} 数据 (共 ${imageData.length} 张图片)`);
+                        }
                     } else {
                         throw new Error(`服务器返回 ${response.status} 错误`);
                     }
                 }
+                return true;
             } catch (error) {
                 console.error('数据加载失败:', error);
-                updateStatus(`❌ ${directory.name} 加载失败: ${error.message}`, 'error');
-                
-                // 如果当前不是本地数据，尝试回退到本地数据
-                if (directory.url !== 'local') {
-                    setTimeout(() => {
-                        updateStatus('正在回退到本地数据...', 'warning');
-                        imageData = LOCAL_DATA;
-                        updateStatus(`✅ 已使用本地数据 (${imageData.length} 张图片)`, 'success');
-                        updateDisplay('local', `✅ 使用本地数据 (共 ${imageData.length} 张图片)`);
-                    }, 1000);
+                if (!silent) {
+                    updateStatus(`❌ ${source.name} 加载失败`, 'error');
                 }
+                return false;
             }
+        }
+
+        // 生成测试数据
+        function generateTestData() {
+            imageData = [
+                {
+                    code: "TEST001",
+                    url: "https://via.placeholder.com/300x200/3498db/ffffff?text=测试图片1",
+                    date: "2025-11-01",
+                    tags: ["测试", "示例"],
+                    description: "测试图片1"
+                },
+                {
+                    code: "TEST002",
+                    url: "https://via.placeholder.com/300x200/2ecc71/ffffff?text=测试图片2",
+                    date: "2025-11-01",
+                    tags: ["测试", "示例"],
+                    description: "测试图片2"
+                },
+                {
+                    code: "TEST003",
+                    url: "https://via.placeholder.com/300x200/e74c3c/ffffff?text=测试图片3",
+                    date: "2025-11-01",
+                    tags: ["测试", "示例"],
+                    description: "测试图片3"
+                }
+            ];
+            updateStatus(`✅ 已生成测试数据 (${imageData.length} 张图片)`, 'success');
+            updateDisplay('test', `✅ 使用测试数据 (共 ${imageData.length} 张图片)`);
         }
 
         // 检查更新函数
         async function checkUpdate() {
             if (!currentDataSource) {
-                alert('请先选择数据源目录');
+                alert('请先选择数据源');
                 return;
             }
             
-            if (currentDataSource.url === 'local') {
-                alert('本地数据无法更新，请选择网络数据源');
+            if (currentDataSource.url === 'local' || currentDataSource.url === 'test') {
+                alert('本地数据和测试数据无法更新，请选择网络数据源');
                 return;
             }
             
@@ -397,7 +467,7 @@
                 updateStatus('已关闭自动更新', 'warning');
             } else {
                 // 开启自动更新（每2小时检查一次）
-                if (!currentDataSource || currentDataSource.url === 'local') {
+                if (!currentDataSource || currentDataSource.url === 'local' || currentDataSource.url === 'test') {
                     alert('请先选择网络数据源才能使用自动更新');
                     return;
                 }
@@ -412,7 +482,8 @@
         // 更新状态显示
         function updateStatus(message, type = 'default') {
             const statusEl = document.getElementById('updateStatus');
-            statusEl.innerHTML = '<span class="loading-spinner"></span>' + message;
+            const spinner = type === 'default' ? '<span class="loading-spinner"></span>' : '';
+            statusEl.innerHTML = spinner + message;
             statusEl.className = 'update-status ' + type;
         }
 
@@ -430,7 +501,7 @@
         // 搜索功能
         function search() {
             if (!imageData || imageData.length === 0) {
-                alert('请先选择数据源目录');
+                alert('请先选择数据源');
                 return;
             }
             
