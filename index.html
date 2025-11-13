@@ -2,9 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>尺寸表搜索工具 - 智能版</title>
     <link rel="icon" href="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251105/3e0e4df477d9be2659f3297fbd20b998/7da5dcac0bbf4a168a400721406ddccd.png" type="image/png">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             max-width: 1200px;
@@ -12,6 +17,7 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
+        
         .search-container {
             background: white;
             padding: 20px;
@@ -19,42 +25,63 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
+        
+        .search-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .search-input-container {
+            flex: 1;
+            min-width: 200px;
+        }
+        
         #searchInput {
-            width: 70%;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
         }
+        
         button {
-            padding: 10px 20px;
+            padding: 12px 16px;
             background: #3498db;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            margin-left: 10px;
+            white-space: nowrap;
         }
+        
         button:hover {
             background: #2980b9;
         }
+        
         .refresh-btn {
             background: #f39c12;
         }
+        
         .refresh-btn:hover {
             background: #e67e22;
         }
+        
         .auto-refresh-btn {
             background: #2ecc71;
         }
+        
         .auto-refresh-btn.active {
             background: #e74c3c;
         }
+        
         .results-info {
             margin: 15px 0;
             font-size: 16px;
         }
+        
         .update-status {
             background: #e8f4fc;
             padding: 10px;
@@ -63,24 +90,97 @@
             font-size: 14px;
             border-left: 4px solid #3498db;
         }
+        
         .update-status.success { 
             background: #e8f5e8;
             border-left-color: #2ecc71; 
         }
+        
         .update-status.warning { 
             background: #fff3cd;
             border-left-color: #f39c12; 
         }
+        
         .update-status.error { 
             background: #fde8e8;
             border-left-color: #e74c3c; 
         }
+        
+        /* 主内容区域 - 视频和搜索结果并排显示 */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* 视频容器样式 - 缩小尺寸 */
+        .video-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 35%;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .video-container h2 {
+            margin-top: 0;
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-controls {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .video-controls button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .toggle-video-btn {
+            background: #9b59b6;
+        }
+        
+        .toggle-video-btn:hover {
+            background: #8e44ad;
+        }
+        
+        /* 搜索结果容器样式 */
+        .results-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-height: 400px;
+        }
+        
         .image-results {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
+        
         .image-card {
             border: 1px solid #e0e0e0;
             border-radius: 8px;
@@ -90,23 +190,28 @@
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
         }
+        
         .image-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+        
         .image-card img {
             width: 100%;
             height: 120px;
             object-fit: cover;
         }
+        
         .image-info {
             padding: 8px;
             text-align: center;
         }
+        
         .image-code {
             font-weight: bold;
             font-size: 0.9rem;
         }
+        
         .image-meta {
             font-size: 0.7rem;
             color: #888;
@@ -129,6 +234,7 @@
             display: inline-block;
             margin-right: 10px;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -146,11 +252,13 @@
             justify-content: center;
             align-items: center;
         }
+        
         .modal-content {
             max-width: 95%;
             max-height: 95%;
             border-radius: 4px;
         }
+        
         .close {
             position: absolute;
             top: 15px;
@@ -160,6 +268,7 @@
             font-weight: bold;
             cursor: pointer;
         }
+        
         .close:hover {
             color: #ccc;
         }
@@ -172,12 +281,14 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
+        
         .directory-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
             margin-top: 15px;
         }
+        
         .directory-item {
             padding: 10px;
             border: 1px solid #e0e0e0;
@@ -185,13 +296,137 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
+        
         .directory-item:hover {
             background-color: #f8f9fa;
         }
+        
         .directory-item.active {
             background-color: #3498db;
             color: white;
             border-color: #2980b9;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .search-container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            /* 移动端改为垂直布局 */
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .video-container {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .results-container {
+                min-height: auto;
+            }
+            
+            .image-results {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .image-card img {
+                height: 100px;
+            }
+            
+            .image-code {
+                font-size: 0.8rem;
+            }
+            
+            .image-meta {
+                font-size: 0.65rem;
+            }
+            
+            .update-status {
+                font-size: 13px;
+            }
+            
+            .close {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+            }
+            
+            .directory-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .directory-item {
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .search-container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .image-results {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 8px;
+            }
+            
+            .image-card img {
+                height: 80px;
+            }
+            
+            .image-info {
+                padding: 5px;
+            }
+            
+            .image-code {
+                font-size: 0.75rem;
+            }
+            
+            .status-info {
+                padding: 20px 10px;
+                font-size: 14px;
+            }
+            
+            .directory-container {
+                padding: 15px;
+            }
+            
+            .video-container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -202,8 +437,10 @@
             <span class="loading-spinner"></span>
             正在初始化...
         </div>
-        <div>
-            <input type="text" id="searchInput" placeholder="搜索图片代码、描述或标签...">
+        <div class="search-controls">
+            <div class="search-input-container">
+                <input type="text" id="searchInput" placeholder="搜索图片代码、描述或标签...">
+            </div>
             <button onclick="search()">搜索</button>
             <button class="refresh-btn" onclick="checkUpdate()">检查更新</button>
             <button class="auto-refresh-btn" onclick="toggleAutoRefresh()" id="autoRefreshBtn">开启自动更新</button>
@@ -219,9 +456,28 @@
         </div>
     </div>
 
-    <div id="results">
-        <div class="status-info">
-            <p>正在加载数据，请稍候...</p>
+    <!-- 主内容区域 - 视频和搜索结果并排显示 -->
+    <div class="main-content">
+        <!-- 视频播放区域 - 缩小尺寸 -->
+        <div class="video-container">
+            <h2>产品使用教程</h2>
+            <div class="video-wrapper">
+                <video id="tutorialVideo" muted loop playsinline>
+                    <!-- 视频源将通过JavaScript自动设置 -->
+                    您的浏览器不支持 HTML5 视频。
+                </video>
+            </div>
+            <div class="video-controls">
+                <button onclick="toggleVideo()" class="toggle-video-btn" id="toggleVideoBtn">暂停视频</button>
+                <button onclick="toggleMute()" id="muteBtn">开启声音</button>
+            </div>
+        </div>
+
+        <!-- 搜索结果区域 -->
+        <div class="results-container" id="results">
+            <div class="status-info">
+                <p>正在加载数据，请稍候...</p>
+            </div>
         </div>
     </div>
 
@@ -250,6 +506,15 @@
             }
         ];
 
+        // 可能的视频文件名列表
+        const VIDEO_FILES = [
+            "compressO-gdsp.mp4",
+            "tutorial.mp4",
+            "video.mp4",
+            "demo.mp4",
+            "instruction.mp4"
+        ];
+
         // 本地数据（作为备用）
         const LOCAL_DATA = [];
 
@@ -259,15 +524,64 @@
         let isAutoRefresh = false;
         let currentDataSource = null;
 
+        // 视频控制
+        const video = document.getElementById('tutorialVideo');
+        const toggleVideoBtn = document.getElementById('toggleVideoBtn');
+        const muteBtn = document.getElementById('muteBtn');
+
         // 初始化函数
         async function initialize() {
             updateStatus('正在加载数据...', 'default');
+            
+            // 自动检测并设置视频源
+            await detectAndSetVideoSource();
             
             // 显示目录选择界面
             showDirectorySelector();
             
             // 自动尝试加载本地数据文件
             setTimeout(() => loadFromDirectory(2), 500);
+            
+            // 视频自动播放
+            video.play().catch(e => {
+                console.log("视频自动播放失败:", e);
+                // 如果自动播放失败，显示提示
+                updateStatus('视频自动播放失败，请手动点击播放', 'warning');
+            });
+        }
+
+        // 自动检测并设置视频源
+        async function detectAndSetVideoSource() {
+            updateStatus('正在检测视频文件...', 'default');
+            
+            for (const videoFile of VIDEO_FILES) {
+                const videoUrl = `./${videoFile}`;
+                const isAvailable = await checkVideoAvailability(videoUrl);
+                
+                if (isAvailable) {
+                    // 设置视频源
+                    video.innerHTML = `<source src="${videoUrl}" type="video/mp4">您的浏览器不支持 HTML5 视频。`;
+                    video.load();
+                    updateStatus(`✅ 已检测到视频文件: ${videoFile}`, 'success');
+                    console.log(`使用视频文件: ${videoFile}`);
+                    return;
+                }
+            }
+            
+            // 如果没有找到本地视频文件，使用默认视频
+            updateStatus('⚠️ 未找到本地视频文件，使用默认视频', 'warning');
+            video.innerHTML = `<source src="https://raw.githubusercontent.com/iptv369/image-database/main/your-video.mp4" type="video/mp4">您的浏览器不支持 HTML5 视频。`;
+            video.load();
+        }
+
+        // 检查视频文件是否可用
+        async function checkVideoAvailability(videoUrl) {
+            try {
+                const response = await fetch(videoUrl, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
         }
 
         // 显示目录选择器
@@ -493,6 +807,27 @@
 
         function closeModal() {
             document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // 视频控制功能
+        function toggleVideo() {
+            if (video.paused) {
+                video.play();
+                toggleVideoBtn.textContent = '暂停视频';
+            } else {
+                video.pause();
+                toggleVideoBtn.textContent = '播放视频';
+            }
+        }
+
+        function toggleMute() {
+            if (video.muted) {
+                video.muted = false;
+                muteBtn.textContent = '关闭声音';
+            } else {
+                video.muted = true;
+                muteBtn.textContent = '开启声音';
+            }
         }
 
         window.onclick = function(event) {
