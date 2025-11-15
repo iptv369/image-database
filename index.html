@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,57 +8,92 @@
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
         }
         
         .search-container {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h1:before {
+            content: "📊";
+            font-size: 1.5em;
         }
         
         .search-controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
         
         .search-input-container {
             flex: 1;
-            min-width: 200px;
+            min-width: 250px;
         }
         
         #searchInput {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
         
         button {
-            padding: 12px 16px;
+            padding: 14px 20px;
             background: #3498db;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             white-space: nowrap;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         button:hover {
-            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
         }
         
         .refresh-btn {
@@ -78,17 +113,23 @@
         }
         
         .results-info {
-            margin: 15px 0;
+            margin: 20px 0;
             font-size: 16px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
         }
         
         .update-status {
             background: #e8f4fc;
-            padding: 10px;
-            border-radius: 6px;
-            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
             font-size: 14px;
             border-left: 4px solid #3498db;
+            display: flex;
+            align-items: center;
         }
         
         .update-status.success { 
@@ -109,51 +150,62 @@
         /* 主内容区域 - 视频和搜索结果并排显示 */
         .main-content {
             display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 25px;
+            margin-bottom: 25px;
         }
         
-        /* 视频容器样式 - 缩小尺寸 */
+        /* 视频容器样式 */
         .video-container {
             background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             width: 35%;
-            min-width: 300px;
+            min-width: 320px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
         }
         
         .video-container h2 {
             margin-top: 0;
             color: #3498db;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .video-wrapper {
             position: relative;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            flex: 1;
+            background: #000;
+            min-height: 200px;
         }
         
-        .video-wrapper video {
+        .video-wrapper iframe {
             width: 100%;
-            height: auto;
+            height: 100%;
+            border: none;
             display: block;
         }
         
         .video-controls {
-            margin-top: 10px;
+            margin-top: 15px;
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
         }
         
         .video-controls button {
-            padding: 6px 12px;
-            font-size: 12px;
+            padding: 8px 14px;
+            font-size: 13px;
         }
         
         .toggle-video-btn {
@@ -163,29 +215,60 @@
         .toggle-video-btn:hover {
             background: #8e44ad;
         }
+
+        /* 自定义视频上传区域 */
+        .custom-video-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+        }
+        
+        .custom-video-section h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .video-url-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .video-url-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
         
         /* 搜索结果容器样式 */
         .results-container {
             background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             flex: 1;
-            min-height: 400px;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
         }
         
         .image-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+            flex: 1;
         }
         
         .image-card {
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
             background: white;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -193,35 +276,47 @@
         
         .image-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
         
         .image-card img {
             width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
+            display: block;
         }
         
         .image-info {
-            padding: 8px;
+            padding: 12px 10px;
             text-align: center;
         }
         
         .image-code {
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            margin-bottom: 4px;
         }
         
         .image-meta {
-            font-size: 0.7rem;
-            color: #888;
+            font-size: 0.75rem;
+            color: #7f8c8d;
             margin-top: 2px;
         }
         
         .status-info {
             text-align: center;
             color: #666;
-            padding: 40px 20px;
+            padding: 50px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .status-info p {
+            margin-bottom: 10px;
         }
         
         .loading-spinner {
@@ -247,7 +342,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -256,49 +351,62 @@
         .modal-content {
             max-width: 95%;
             max-height: 95%;
-            border-radius: 4px;
+            border-radius: 8px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
         }
         
         .close {
             position: absolute;
-            top: 15px;
-            right: 25px;
+            top: 20px;
+            right: 30px;
             color: white;
-            font-size: 35px;
+            font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+            transition: color 0.3s;
         }
         
         .close:hover {
-            color: #ccc;
+            color: #ddd;
         }
 
         /* 目录样式 */
         .directory-container {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .directory-container h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .directory-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
             margin-top: 15px;
         }
         
         .directory-item {
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #e0e0e0;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s;
+            background: #f8f9fa;
         }
         
         .directory-item:hover {
-            background-color: #f8f9fa;
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.08);
         }
         
         .directory-item.active {
@@ -310,11 +418,11 @@
         /* 移动端适配 */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
             
             .search-container {
-                padding: 15px;
+                padding: 20px;
             }
             
             h1 {
@@ -343,27 +451,29 @@
             .video-container {
                 width: 100%;
                 min-width: auto;
+                order: 2;
             }
             
             .results-container {
                 min-height: auto;
+                order: 1;
             }
             
             .image-results {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 10px;
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 12px;
             }
             
             .image-card img {
-                height: 100px;
+                height: 110px;
             }
             
             .image-code {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
             
             .image-meta {
-                font-size: 0.65rem;
+                font-size: 0.7rem;
             }
             
             .update-status {
@@ -371,9 +481,9 @@
             }
             
             .close {
-                top: 10px;
-                right: 15px;
-                font-size: 30px;
+                top: 15px;
+                right: 20px;
+                font-size: 35px;
             }
             
             .directory-list {
@@ -387,11 +497,11 @@
         
         @media (max-width: 480px) {
             body {
-                padding: 5px;
+                padding: 10px;
             }
             
             .search-container {
-                padding: 10px;
+                padding: 15px;
             }
             
             h1 {
@@ -399,34 +509,167 @@
             }
             
             .image-results {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                gap: 8px;
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 10px;
             }
             
             .image-card img {
-                height: 80px;
+                height: 90px;
             }
             
             .image-info {
-                padding: 5px;
+                padding: 8px 5px;
             }
             
             .image-code {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
             }
             
             .status-info {
-                padding: 20px 10px;
+                padding: 30px 15px;
                 font-size: 14px;
             }
             
             .directory-container {
-                padding: 15px;
+                padding: 20px;
             }
             
             .video-container {
-                padding: 10px;
+                padding: 15px;
             }
+        }
+        
+        /* 统计数据样式 */
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* 直播状态指示器 */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .video-sources {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .source-btn {
+            padding: 4px 8px;
+            margin: 2px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .source-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .proxy-option {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .proxy-checkbox {
+            margin-right: 5px;
+        }
+
+        .bilibili-player {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .video-error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fde8e8;
+            border-radius: 4px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .video-solution {
+            color: #2c3e50;
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f4fc;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .playback-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .playback-controls button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .autoplay-btn {
+            background: #2ecc71;
+        }
+        
+        .autoplay-btn.active {
+            background: #e74c3c;
+        }
+        
+        .loop-btn {
+            background: #9b59b6;
+        }
+        
+        .loop-btn.active {
+            background: #8e44ad;
         }
     </style>
 </head>
@@ -435,22 +678,38 @@
         <h1>尺寸表搜索工具 - 智能版</h1>
         <div class="update-status" id="updateStatus">
             <span class="loading-spinner"></span>
-            正在初始化...
+            正在初始化系统...
         </div>
         <div class="search-controls">
             <div class="search-input-container">
-                <input type="text" id="searchInput" placeholder="搜索图片代码、描述或标签...">
+                <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
             </div>
-            <button onclick="search()">搜索</button>
-            <button class="refresh-btn" onclick="checkUpdate()">检查更新</button>
-            <button class="auto-refresh-btn" onclick="toggleAutoRefresh()" id="autoRefreshBtn">开启自动更新</button>
+            <button onclick="search()">🔍 搜索</button>
+            <button class="refresh-btn" onclick="checkUpdate()">🔄 检查更新</button>
+            <button class="auto-refresh-btn" onclick="toggleAutoRefresh()" id="autoRefreshBtn">⏰ 开启自动更新</button>
         </div>
         <div class="results-info" id="resultsInfo"></div>
+        
+        <!-- 统计数据 -->
+        <div class="stats-container" id="statsContainer" style="display: none;">
+            <div class="stat-item">
+                <span class="stat-value" id="totalImages">0</span>
+                <span class="stat-label">总图片数</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="lastUpdate">-</span>
+                <span class="stat-label">最后更新</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="dataSource">-</span>
+                <span class="stat-label">数据源</span>
+            </div>
+        </div>
     </div>
 
     <!-- 目录选择区域 -->
     <div class="directory-container" id="directoryContainer" style="display: none;">
-        <h3>选择数据目录</h3>
+        <h3>📁 选择数据目录</h3>
         <div class="directory-list" id="directoryList">
             <!-- 目录项将通过JavaScript动态生成 -->
         </div>
@@ -458,61 +717,103 @@
 
     <!-- 主内容区域 - 视频和搜索结果并排显示 -->
     <div class="main-content">
-        <!-- 视频播放区域 - 缩小尺寸 -->
+        <!-- 视频播放区域 -->
         <div class="video-container">
-            <h2>产品使用教程</h2>
+            <h2>🎬 产品使用教程</h2>
             <div class="video-wrapper">
-                <video id="tutorialVideo" muted loop playsinline>
-                    <!-- 视频源将通过JavaScript自动设置 -->
-                    您的浏览器不支持 HTML5 视频。
-                </video>
+                <iframe class="bilibili-player" 
+                        id="bilibiliPlayer"
+                        src="https://player.bilibili.com/player.html?bvid=BV1qBCCBtEQ2&page=1&high_quality=1&danmaku=0&autoplay=1&loop=1"
+                        scrolling="no" 
+                        border="0" 
+                        frameborder="no" 
+                        framespacing="0" 
+                        allowfullscreen="true"
+                        allow="autoplay; encrypted-media">
+                </iframe>
             </div>
+            <div id="videoError" class="video-error" style="display: none;">
+                <strong>视频加载失败</strong>
+                <div>可能的原因：网络问题、浏览器限制或B站服务暂时不可用</div>
+            </div>
+            <div class="video-solution">
+                <strong>自动播放提示：</strong>
+                <ul>
+                    <li>现代浏览器通常阻止自动播放，需要用户交互</li>
+                    <li>如果视频没有自动播放，请点击播放按钮</li>
+                    <li>或者点击页面任意位置后视频会自动播放</li>
+                </ul>
+            </div>
+            
+            <!-- 播放控制区域 -->
+            <div class="playback-controls">
+                <button class="autoplay-btn active" id="autoplayBtn" onclick="toggleAutoplay()">⏯️ 自动播放: 开启</button>
+                <button class="loop-btn active" id="loopBtn" onclick="toggleLoop()">🔁 循环播放: 开启</button>
+            </div>
+            
             <div class="video-controls">
-                <button onclick="toggleVideo()" class="toggle-video-btn" id="toggleVideoBtn">暂停视频</button>
-                <button onclick="toggleMute()" id="muteBtn">开启声音</button>
+                <button onclick="reloadBilibiliVideo()" style="background: #e74c3c;">🔄 重新加载</button>
+                <button onclick="openInNewTab()" style="background: #9b59b6;">🔗 在新窗口打开</button>
+                <button onclick="forcePlay()" style="background: #2ecc71;">▶️ 强制播放</button>
+            </div>
+            
+            <!-- 自定义视频上传区域 -->
+            <div class="custom-video-section">
+                <h4>📹 自定义B站视频</h4>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">输入B站视频的BV号或完整链接</p>
+                
+                <input type="text" id="customVideoUrl" class="video-url-input" 
+                       placeholder="输入B站视频BV号 (例如: BV1qJCgBaEvx)" 
+                       value="BV1qJCgBaEvx">
+                
+                <button onclick="loadCustomBilibiliVideo()" style="width: 100%; padding: 10px; font-size: 14px;">加载B站视频</button>
+                
+                <div class="video-sources">
+                    <p>💡 推荐视频：</p>
+                    <button class="source-btn" onclick="setVideoSource('BV1qBCCBtEQ2')">产品教程</button>
+                    <button class="source-btn" onclick="setVideoSource('BV1GJ411x7h7')">尺寸测量</button>
+                    <button class="source-btn" onclick="setVideoSource('BV1bs411N7a4')">使用指南</button>
+                </div>
+                
+                <div style="margin-top: 10px; font-size: 11px; color: #888;">
+                    <p>💡 提示：</p>
+                    <ul style="text-align: left; margin: 5px 0; padding-left: 15px;">
+                        <li>只需输入BV号即可加载视频</li>
+                        <li>B站视频需要网络连接</li>
+                        <li>部分视频可能受区域限制</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <!-- 搜索结果区域 -->
         <div class="results-container" id="results">
             <div class="status-info">
-                <p>正在加载数据，请稍候...</p>
+                <p>📥 正在加载数据，请稍候...</p>
+                <p>系统初始化完成后，您可以搜索图片</p>
             </div>
         </div>
     </div>
 
+    <!-- 图片放大模态框 -->
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="modalImage">
     </div>
 
     <script>
-        // 配置多个数据源目录
+        // 配置数据源目录
         const DATA_DIRECTORIES = [
-            {
-                name: "主数据库",
-                url: "https://raw.githubusercontent.com/iptv369/image-database/main/images.json",
-                description: "主要图片数据库"
-            },
-            {
-                name: "备份数据库1",
-                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json",
-                description: "JsDelivr CDN备份"
-            },
             {
                 name: "本地数据文件",
                 url: "./images.json",
-                description: "使用同目录下的images.json文件"
+                description: "主要数据源 - 使用同目录下的images.json文件"
+            },
+            {
+                name: "CDN备份",
+                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json",
+                description: "JsDelivr CDN备份数据"
             }
-        ];
-
-        // 可能的视频文件名列表
-        const VIDEO_FILES = [
-            "compressO-gdsp.mp4",
-            "tutorial.mp4",
-            "video.mp4",
-            "demo.mp4",
-            "instruction.mp4"
         ];
 
         // 本地数据（作为备用）
@@ -523,65 +824,207 @@
         let autoRefreshInterval = null;
         let isAutoRefresh = false;
         let currentDataSource = null;
-
-        // 视频控制
-        const video = document.getElementById('tutorialVideo');
-        const toggleVideoBtn = document.getElementById('toggleVideoBtn');
-        const muteBtn = document.getElementById('muteBtn');
+        
+        // 播放控制状态
+        let autoplayEnabled = true;
+        let loopEnabled = true;
+        let userInteracted = false;
 
         // 初始化函数
         async function initialize() {
             updateStatus('正在加载数据...', 'default');
             
-            // 自动检测并设置视频源
-            await detectAndSetVideoSource();
-            
             // 显示目录选择界面
             showDirectorySelector();
             
-            // 自动尝试加载本地数据文件
-            setTimeout(() => loadFromDirectory(2), 500);
+            // 自动尝试加载本地数据文件（主要数据源）
+            setTimeout(() => loadFromDirectory(0), 500);
             
-            // 视频自动播放
-            video.play().catch(e => {
-                console.log("视频自动播放失败:", e);
-                // 如果自动播放失败，显示提示
-                updateStatus('视频自动播放失败，请手动点击播放', 'warning');
+            // 设置B站播放器加载检测
+            checkBilibiliPlayerLoad();
+            
+            // 添加用户交互检测
+            setupUserInteraction();
+        }
+
+        // 设置用户交互检测
+        function setupUserInteraction() {
+            // 监听页面点击事件
+            document.addEventListener('click', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    console.log("用户已与页面交互，尝试自动播放");
+                    
+                    // 如果自动播放已启用，尝试触发播放
+                    if (autoplayEnabled) {
+                        setTimeout(forcePlay, 500);
+                    }
+                }
+            });
+            
+            // 监听键盘事件
+            document.addEventListener('keydown', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    console.log("用户已与页面交互（键盘），尝试自动播放");
+                    
+                    // 如果自动播放已启用，尝试触发播放
+                    if (autoplayEnabled) {
+                        setTimeout(forcePlay, 500);
+                    }
+                }
             });
         }
 
-        // 自动检测并设置视频源
-        async function detectAndSetVideoSource() {
-            updateStatus('正在检测视频文件...', 'default');
+        // 检测B站播放器是否成功加载
+        function checkBilibiliPlayerLoad() {
+            const iframe = document.getElementById('bilibiliPlayer');
+            const errorDiv = document.getElementById('videoError');
             
-            for (const videoFile of VIDEO_FILES) {
-                const videoUrl = `./${videoFile}`;
-                const isAvailable = await checkVideoAvailability(videoUrl);
+            iframe.onload = function() {
+                errorDiv.style.display = 'none';
+                updateStatus('✅ B站视频加载成功', 'success');
                 
-                if (isAvailable) {
-                    // 设置视频源
-                    video.innerHTML = `<source src="${videoUrl}" type="video/mp4">您的浏览器不支持 HTML5 视频。`;
-                    video.load();
-                    updateStatus(`✅ 已检测到视频文件: ${videoFile}`, 'success');
-                    console.log(`使用视频文件: ${videoFile}`);
-                    return;
+                // 如果自动播放已启用且用户已与页面交互，尝试自动播放
+                if (autoplayEnabled && userInteracted) {
+                    setTimeout(forcePlay, 1000);
                 }
-            }
+            };
             
-            // 如果没有找到本地视频文件，使用默认视频
-            updateStatus('⚠️ 未找到本地视频文件，使用默认视频', 'warning');
-            video.innerHTML = `<source src="https://raw.githubusercontent.com/iptv369/image-database/main/your-video.mp4" type="video/mp4">您的浏览器不支持 HTML5 视频。`;
-            video.load();
+            iframe.onerror = function() {
+                errorDiv.style.display = 'block';
+                updateStatus('❌ B站视频加载失败', 'error');
+            };
+            
+            // 设置超时检测
+            setTimeout(() => {
+                try {
+                    // 尝试访问iframe内容，如果失败则说明加载有问题
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.readyState === 'complete') {
+                        // 如果无法访问iframe内容，可能是跨域限制
+                        if (iframeDoc && iframeDoc.location && iframeDoc.location.href === 'about:blank') {
+                            errorDiv.style.display = 'block';
+                            updateStatus('❌ B站视频加载失败（跨域限制）', 'error');
+                        }
+                    }
+                } catch (e) {
+                    // 跨域访问被阻止
+                    errorDiv.style.display = 'block';
+                    updateStatus('❌ B站视频加载失败（跨域限制）', 'error');
+                }
+            }, 3000);
         }
 
-        // 检查视频文件是否可用
-        async function checkVideoAvailability(videoUrl) {
-            try {
-                const response = await fetch(videoUrl, { method: 'HEAD' });
-                return response.ok;
-            } catch (error) {
-                return false;
+        // 设置视频源到输入框
+        function setVideoSource(bvId) {
+            document.getElementById('customVideoUrl').value = bvId;
+        }
+
+        // 加载自定义B站视频
+        function loadCustomBilibiliVideo() {
+            let bvId = document.getElementById('customVideoUrl').value.trim();
+            
+            if (!bvId) {
+                alert('请输入B站视频BV号');
+                return;
             }
+            
+            // 清理BV号格式
+            bvId = bvId.replace('BV', '').replace('bv', '');
+            
+            updateStatus('正在加载B站视频...', 'default');
+            
+            // 构建B站播放器URL - 根据设置添加自动播放和循环参数
+            let bilibiliUrl = `https://player.bilibili.com/player.html?bvid=BV${bvId}&page=1&high_quality=1&danmaku=0`;
+            
+            // 根据设置添加参数
+            if (autoplayEnabled) {
+                bilibiliUrl += '&autoplay=1';
+            }
+            
+            if (loopEnabled) {
+                bilibiliUrl += '&loop=1';
+            }
+            
+            // 更新iframe的src
+            const iframe = document.getElementById('bilibiliPlayer');
+            iframe.src = bilibiliUrl;
+            
+            // 重新设置加载检测
+            checkBilibiliPlayerLoad();
+        }
+
+        // 重新加载B站视频
+        function reloadBilibiliVideo() {
+            const iframe = document.getElementById('bilibiliPlayer');
+            const currentSrc = iframe.src;
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = currentSrc;
+                updateStatus('重新加载B站视频...', 'default');
+                checkBilibiliPlayerLoad();
+            }, 100);
+        }
+
+        // 在新窗口打开B站视频
+        function openInNewTab() {
+            const iframe = document.getElementById('bilibiliPlayer');
+            window.open(iframe.src, '_blank');
+        }
+
+        // 强制播放视频
+        function forcePlay() {
+            const iframe = document.getElementById('bilibiliPlayer');
+            try {
+                // 尝试通过postMessage发送播放命令
+                iframe.contentWindow.postMessage({
+                    command: 'play'
+                }, '*');
+                
+                updateStatus('尝试强制播放视频...', 'default');
+            } catch (e) {
+                console.error('强制播放失败:', e);
+                updateStatus('❌ 强制播放失败（跨域限制）', 'error');
+            }
+        }
+
+        // 切换自动播放
+        function toggleAutoplay() {
+            const btn = document.getElementById('autoplayBtn');
+            autoplayEnabled = !autoplayEnabled;
+            
+            if (autoplayEnabled) {
+                btn.textContent = '⏯️ 自动播放: 开启';
+                btn.classList.add('active');
+                updateStatus('✅ 已开启自动播放', 'success');
+            } else {
+                btn.textContent = '⏯️ 自动播放: 关闭';
+                btn.classList.remove('active');
+                updateStatus('已关闭自动播放', 'warning');
+            }
+            
+            // 重新加载视频以应用设置
+            loadCustomBilibiliVideo();
+        }
+
+        // 切换循环播放
+        function toggleLoop() {
+            const btn = document.getElementById('loopBtn');
+            loopEnabled = !loopEnabled;
+            
+            if (loopEnabled) {
+                btn.textContent = '🔁 循环播放: 开启';
+                btn.classList.add('active');
+                updateStatus('✅ 已开启循环播放', 'success');
+            } else {
+                btn.textContent = '🔁 循环播放: 关闭';
+                btn.classList.remove('active');
+                updateStatus('已关闭循环播放', 'warning');
+            }
+            
+            // 重新加载视频以应用设置
+            loadCustomBilibiliVideo();
         }
 
         // 显示目录选择器
@@ -625,6 +1068,10 @@
                     const cloudData = await response.json();
                     imageData = cloudData;
                     lastUpdateTime = Date.now();
+                    
+                    // 更新统计数据
+                    updateStats();
+                    
                     updateStatus(`✅ 已从 ${directory.name} 加载数据 (${imageData.length} 张图片)`, 'success');
                     updateDisplay('cloud', `✅ 使用 ${directory.name} 数据 (共 ${imageData.length} 张图片)`);
                 } else {
@@ -640,6 +1087,10 @@
                         updateStatus('正在尝试使用备用数据...', 'warning');
                         if (LOCAL_DATA.length > 0) {
                             imageData = LOCAL_DATA;
+                            
+                            // 更新统计数据
+                            updateStats();
+                            
                             updateStatus(`✅ 已使用备用数据 (${imageData.length} 张图片)`, 'success');
                             updateDisplay('local', `✅ 使用备用数据 (共 ${imageData.length} 张图片)`);
                         } else {
@@ -648,6 +1099,14 @@
                     }, 1000);
                 }
             }
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            document.getElementById('statsContainer').style.display = 'flex';
+            document.getElementById('totalImages').textContent = imageData.length;
+            document.getElementById('lastUpdate').textContent = new Date(lastUpdateTime).toLocaleTimeString();
+            document.getElementById('dataSource').textContent = currentDataSource ? currentDataSource.name : '-';
         }
 
         // 检查更新函数
@@ -676,6 +1135,10 @@
                         // 发现新数据
                         imageData = cloudData;
                         lastUpdateTime = Date.now();
+                        
+                        // 更新统计数据
+                        updateStats();
+                        
                         const newImagesCount = cloudCount - currentCount;
                         updateStatus(`✅ ${currentDataSource.name} 已更新！新增 ${newImagesCount} 张图片`, 'success');
                         updateDisplay('cloud', `✅ 使用 ${currentDataSource.name} 数据 (共 ${cloudCount} 张图片，新增 ${newImagesCount} 张)`);
@@ -699,7 +1162,7 @@
             if (isAutoRefresh) {
                 // 关闭自动更新
                 clearInterval(autoRefreshInterval);
-                btn.textContent = '开启自动更新';
+                btn.textContent = '⏰ 开启自动更新';
                 btn.classList.remove('active');
                 isAutoRefresh = false;
                 updateStatus('已关闭自动更新', 'warning');
@@ -710,7 +1173,7 @@
                     return;
                 }
                 autoRefreshInterval = setInterval(checkUpdate, 2 * 60 * 60 * 1000);
-                btn.textContent = '关闭自动更新';
+                btn.textContent = '⏹️ 关闭自动更新';
                 btn.classList.add('active');
                 isAutoRefresh = true;
                 updateStatus(`✅ 已开启自动更新，每2小时检查 ${currentDataSource.name}`, 'success');
@@ -807,27 +1270,6 @@
 
         function closeModal() {
             document.getElementById('imageModal').style.display = 'none';
-        }
-
-        // 视频控制功能
-        function toggleVideo() {
-            if (video.paused) {
-                video.play();
-                toggleVideoBtn.textContent = '暂停视频';
-            } else {
-                video.pause();
-                toggleVideoBtn.textContent = '播放视频';
-            }
-        }
-
-        function toggleMute() {
-            if (video.muted) {
-                video.muted = false;
-                muteBtn.textContent = '关闭声音';
-            } else {
-                video.muted = true;
-                muteBtn.textContent = '开启声音';
-            }
         }
 
         window.onclick = function(event) {
