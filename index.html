@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>尺寸表搜索工具 - 智能版</title>
+    <title>尺寸表搜索工具</title>
     <link rel="icon" href="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251105/3e0e4df477d9be2659f3297fbd20b998/7da5dcac0bbf4a168a400721406ddccd.png" type="image/png">
     <style>
         * {
@@ -20,6 +20,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .search-container {
@@ -254,14 +255,16 @@
             min-height: 450px;
             display: flex;
             flex-direction: column;
+            overflow: visible; /* 确保内容可以正常显示 */
         }
         
         .image-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 18px;
             margin-top: 18px;
             flex: 1;
+            overflow: visible; /* 确保网格内容可以正常显示 */
         }
         
         .image-card {
@@ -272,6 +275,8 @@
             background: white;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
         }
         
         .image-card:hover {
@@ -281,14 +286,19 @@
         
         .image-card img {
             width: 100%;
-            height: 140px;
-            object-fit: cover;
+            height: 160px;
+            object-fit: contain;
             display: block;
+            background-color: #f8f9fa;
         }
         
         .image-info {
             padding: 12px 10px;
             text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .image-code {
@@ -296,6 +306,7 @@
             font-size: 0.95rem;
             color: #2c3e50;
             margin-bottom: 4px;
+            word-break: break-word;
         }
         
         .image-meta {
@@ -335,6 +346,7 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* 桌面端模态框 */
         .modal {
             display: none;
             position: fixed;
@@ -364,10 +376,97 @@
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s;
+            z-index: 1001;
         }
         
         .close:hover {
             color: #ddd;
+        }
+
+        /* 移动端浮挂式图片查看器 */
+        .mobile-image-viewer {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70vh;
+            background: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .mobile-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        .mobile-viewer-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .mobile-viewer-close {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .mobile-viewer-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .mobile-image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: auto;
+        }
+        
+        .mobile-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .mobile-image-info {
+            padding: 15px 20px;
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+        
+        .mobile-image-code {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .mobile-image-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
         }
 
         /* 目录样式 */
@@ -415,130 +514,6 @@
             border-color: #2980b9;
         }
         
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
-            .search-container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-                margin-top: 0;
-            }
-            
-            .search-controls {
-                flex-direction: column;
-            }
-            
-            .search-input-container {
-                min-width: 100%;
-            }
-            
-            button {
-                width: 100%;
-                margin: 5px 0;
-            }
-            
-            /* 移动端改为垂直布局 */
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .video-container {
-                width: 100%;
-                min-width: auto;
-                order: 2;
-            }
-            
-            .results-container {
-                min-height: auto;
-                order: 1;
-            }
-            
-            .image-results {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 12px;
-            }
-            
-            .image-card img {
-                height: 110px;
-            }
-            
-            .image-code {
-                font-size: 0.85rem;
-            }
-            
-            .image-meta {
-                font-size: 0.7rem;
-            }
-            
-            .update-status {
-                font-size: 13px;
-            }
-            
-            .close {
-                top: 15px;
-                right: 20px;
-                font-size: 35px;
-            }
-            
-            .directory-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .directory-item {
-                padding: 12px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .search-container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 1.3rem;
-            }
-            
-            .image-results {
-                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-                gap: 10px;
-            }
-            
-            .image-card img {
-                height: 90px;
-            }
-            
-            .image-info {
-                padding: 8px 5px;
-            }
-            
-            .image-code {
-                font-size: 0.8rem;
-            }
-            
-            .status-info {
-                padding: 30px 15px;
-                font-size: 14px;
-            }
-            
-            .directory-container {
-                padding: 20px;
-            }
-            
-            .video-container {
-                padding: 15px;
-            }
-        }
-        
         /* 统计数据样式 */
         .stats-container {
             display: flex;
@@ -567,25 +542,6 @@
             color: #7f8c8d;
         }
 
-        /* 直播状态指示器 */
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            background: #e74c3c;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            margin-left: 8px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
         .video-sources {
             margin-top: 10px;
             font-size: 11px;
@@ -605,16 +561,6 @@
 
         .source-btn:hover {
             background: #7f8c8d;
-        }
-
-        .proxy-option {
-            margin-top: 10px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .proxy-checkbox {
-            margin-right: 5px;
         }
 
         .bilibili-player {
@@ -671,11 +617,153 @@
         .loop-btn.active {
             background: #8e44ad;
         }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                overflow-x: hidden; /* 防止水平滚动 */
+            }
+            
+            .search-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            /* 移动端改为垂直布局，并隐藏视频区域 */
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .video-container {
+                display: none; /* 在移动端隐藏视频区域 */
+            }
+            
+            .results-container {
+                min-height: auto;
+                width: 100%;
+                overflow: visible; /* 确保内容可以正常显示 */
+            }
+            
+            /* 移动端图片显示优化 */
+            .image-results {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                overflow: visible; /* 确保网格内容可以正常显示 */
+            }
+            
+            .image-card img {
+                height: 120px;
+            }
+            
+            .image-code {
+                font-size: 0.85rem;
+            }
+            
+            .image-meta {
+                font-size: 0.7rem;
+            }
+            
+            .update-status {
+                font-size: 13px;
+            }
+            
+            .close {
+                top: 15px;
+                right: 20px;
+                font-size: 35px;
+            }
+            
+            .directory-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .directory-item {
+                padding: 12px;
+            }
+            
+            /* 隐藏桌面端模态框，使用移动端浮挂式查看器 */
+            .modal {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .search-container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .image-results {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .image-card img {
+                height: 150px;
+            }
+            
+            .image-info {
+                padding: 8px 5px;
+            }
+            
+            .image-code {
+                font-size: 0.8rem;
+            }
+            
+            .status-info {
+                padding: 30px 15px;
+                font-size: 14px;
+            }
+            
+            .directory-container {
+                padding: 20px;
+            }
+            
+            .video-container {
+                display: none; /* 确保在小屏幕上也隐藏视频区域 */
+            }
+        }
+        
+        /* 大屏幕优化 */
+        @media (min-width: 1200px) {
+            .image-results {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .image-card img {
+                height: 180px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="search-container">
-        <h1>尺寸表搜索工具 - 智能版</h1>
+        <h1>尺寸表搜索工具 </h1>
         <div class="update-status" id="updateStatus">
             <span class="loading-spinner"></span>
             正在初始化系统...
@@ -717,7 +805,7 @@
 
     <!-- 主内容区域 - 视频和搜索结果并排显示 -->
     <div class="main-content">
-        <!-- 视频播放区域 -->
+        <!-- 视频播放区域（在移动端会被隐藏） -->
         <div class="video-container">
             <h2>🎬 产品使用教程</h2>
             <div class="video-wrapper">
@@ -795,10 +883,27 @@
         </div>
     </div>
 
-    <!-- 图片放大模态框 -->
+    <!-- 桌面端图片放大模态框 -->
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- 移动端浮挂式图片查看器 -->
+    <div id="mobileImageViewer" class="mobile-image-viewer">
+        <div class="mobile-viewer-header">
+            <div class="mobile-viewer-title">图片详情</div>
+            <button class="mobile-viewer-close" onclick="closeMobileViewer()">×</button>
+        </div>
+        <div class="mobile-viewer-content">
+            <div class="mobile-image-container">
+                <img id="mobileViewerImage" src="" alt="">
+            </div>
+            <div class="mobile-image-info">
+                <div class="mobile-image-code" id="mobileViewerCode">图片代码</div>
+                <div class="mobile-image-meta" id="mobileViewerMeta">图片描述信息</div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -816,8 +921,45 @@
             }
         ];
 
-        // 本地数据（作为备用）
-        const LOCAL_DATA = [];
+        // 示例数据 - 使用移动端友好的图片URL
+        const SAMPLE_DATA = [
+            {
+                code: "IMG001",
+                description: "示例图片1 - 产品尺寸图",
+                date: "2023-10-01",
+                url: "https://picsum.photos/id/1/300/200"
+            },
+            {
+                code: "IMG002",
+                description: "示例图片2 - 安装示意图",
+                date: "2023-10-02",
+                url: "https://picsum.photos/id/20/300/200"
+            },
+            {
+                code: "IMG003",
+                description: "示例图片3 - 使用说明图",
+                date: "2023-10-03",
+                url: "https://picsum.photos/id/30/300/200"
+            },
+            {
+                code: "IMG004",
+                description: "示例图片4 - 尺寸对照表",
+                date: "2023-10-04",
+                url: "https://picsum.photos/id/40/300/200"
+            },
+            {
+                code: "IMG005",
+                description: "示例图片5 - 规格参数图",
+                date: "2023-10-05",
+                url: "https://picsum.photos/id/50/300/200"
+            },
+            {
+                code: "IMG006",
+                description: "示例图片6 - 测量方法图",
+                date: "2023-10-06",
+                url: "https://picsum.photos/id/60/300/200"
+            }
+        ];
 
         let imageData = [];
         let lastUpdateTime = 1762308075737;
@@ -845,6 +987,73 @@
             
             // 添加用户交互检测
             setupUserInteraction();
+            
+            // 检查是否在移动设备上
+            if (isMobileDevice()) {
+                console.log("检测到移动设备，启用移动端优化");
+                // 添加移动端特定优化
+                enableMobileOptimizations();
+            }
+        }
+
+        // 检测是否为移动设备
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                   window.innerWidth < 768;
+        }
+
+        // 启用移动端优化
+        function enableMobileOptimizations() {
+            // 添加触摸事件支持
+            document.addEventListener('touchstart', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    console.log("移动端用户已与页面交互，尝试自动播放");
+                    
+                    // 如果自动播放已启用，尝试触发播放
+                    if (autoplayEnabled) {
+                        setTimeout(forcePlay, 500);
+                    }
+                }
+            });
+            
+            // 移动端图片加载优化
+            optimizeImageLoading();
+            
+            // 移动端滚动优化
+            optimizeMobileScrolling();
+        }
+
+        // 优化移动端图片加载
+        function optimizeImageLoading() {
+            // 预加载图片占位符
+            const placeholderImage = new Image();
+            placeholderImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+';
+            
+            // 监听图片加载错误
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    console.log('图片加载失败:', e.target.src);
+                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2U3NGMzYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
+                    e.target.alt = '图片加载失败';
+                }
+            }, true);
+        }
+
+        // 优化移动端滚动
+        function optimizeMobileScrolling() {
+            // 防止iOS上的弹性滚动问题
+            document.addEventListener('touchmove', function(e) {
+                // 允许在图片查看器中滚动
+                if (e.target.closest('#mobileImageViewer')) {
+                    return;
+                }
+                
+                // 防止在移动端出现不必要的滚动行为
+                if (document.body.scrollHeight <= window.innerHeight) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
         }
 
         // 设置用户交互检测
@@ -1081,21 +1290,17 @@
                 console.error('数据加载失败:', error);
                 updateStatus(`❌ ${directory.name} 加载失败: ${error.message}`, 'error');
                 
-                // 如果是本地文件加载失败，尝试使用备用数据
+                // 如果是本地文件加载失败，尝试使用示例数据
                 if (directory.url === "./images.json") {
                     setTimeout(() => {
-                        updateStatus('正在尝试使用备用数据...', 'warning');
-                        if (LOCAL_DATA.length > 0) {
-                            imageData = LOCAL_DATA;
-                            
-                            // 更新统计数据
-                            updateStats();
-                            
-                            updateStatus(`✅ 已使用备用数据 (${imageData.length} 张图片)`, 'success');
-                            updateDisplay('local', `✅ 使用备用数据 (共 ${imageData.length} 张图片)`);
-                        } else {
-                            updateStatus('❌ 本地文件和备用数据都不可用', 'error');
-                        }
+                        updateStatus('正在尝试使用示例数据...', 'warning');
+                        imageData = SAMPLE_DATA;
+                        
+                        // 更新统计数据
+                        updateStats();
+                        
+                        updateStatus(`✅ 已使用示例数据 (${imageData.length} 张图片)`, 'success');
+                        updateDisplay('local', `✅ 使用示例数据 (共 ${imageData.length} 张图片)`);
                     }, 1000);
                 }
             }
@@ -1112,7 +1317,7 @@
         // 检查更新函数
         async function checkUpdate() {
             if (!currentDataSource) {
-                alert('请先选择数据源目录');
+                alert('请先选择数据源');
                 return;
             }
             
@@ -1201,7 +1406,7 @@
         // 搜索功能
         function search() {
             if (!imageData || imageData.length === 0) {
-                alert('请先选择数据源目录');
+                alert('请先选择数据源');
                 return;
             }
             
@@ -1247,8 +1452,10 @@
                 </div>
                 <div class="image-results">
                     ${images.map(img => `
-                        <div class="image-card" onclick="openModal('${img.url}')">
-                            <img src="${img.url}" alt="${img.code}" onerror="this.src='https://via.placeholder.com/150x120?text=图片加载失败'">
+                        <div class="image-card" onclick="openImage('${img.url}', '${img.code}', '${img.description || ''}', '${img.date || ''}')">
+                            <img src="${img.url}" alt="${img.code}" 
+                                 onerror="handleImageError(this, '${img.code}')"
+                                 loading="lazy">
                             <div class="image-info">
                                 <div class="image-code">${img.code}</div>
                                 ${img.date ? `<div class="image-meta">${img.date}</div>` : ''}
@@ -1258,9 +1465,57 @@
                     `).join('')}
                 </div>
             `;
+            
+            // 移动端搜索后自动滚动到图片区域
+            if (isMobileDevice()) {
+                setTimeout(() => {
+                    scrollToResults();
+                }, 300); // 增加延迟确保DOM已完全渲染
+            }
         }
 
-        // 图片放大功能
+        // 滚动到结果区域（移动端优化版本）
+        function scrollToResults() {
+            const resultsElement = document.getElementById('results');
+            if (resultsElement) {
+                // 计算滚动位置，使图片区域位于视口顶部
+                const elementRect = resultsElement.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.pageYOffset;
+                const middleOffset = (window.innerHeight - elementRect.height) / 2;
+                
+                // 使用更平滑的滚动
+                window.scrollTo({
+                    top: Math.max(0, absoluteElementTop - 20), // 减去一点边距
+                    behavior: 'smooth'
+                });
+                
+                console.log("滚动到结果区域:", {
+                    elementTop: absoluteElementTop,
+                    scrollTop: Math.max(0, absoluteElementTop - 20),
+                    windowHeight: window.innerHeight
+                });
+            }
+        }
+
+        // 处理图片加载错误
+        function handleImageError(imgElement, code) {
+            console.log(`图片加载失败: ${code} - ${imgElement.src}`);
+            imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2U3NGMzYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
+            imgElement.alt = '图片加载失败';
+        }
+
+        // 打开图片（根据设备类型选择不同方式）
+        function openImage(imageUrl, code, description, date) {
+            if (isMobileDevice()) {
+                // 移动设备使用浮挂式查看器
+                openMobileViewer(imageUrl, code, description, date);
+            } else {
+                // 桌面设备使用模态框
+                openModal(imageUrl);
+            }
+        }
+
+        // 桌面端图片放大功能
         function openModal(imageUrl) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
@@ -1270,6 +1525,57 @@
 
         function closeModal() {
             document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // 移动端浮挂式图片查看器
+        function openMobileViewer(imageUrl, code, description, date) {
+            const viewer = document.getElementById('mobileImageViewer');
+            const viewerImage = document.getElementById('mobileViewerImage');
+            const viewerCode = document.getElementById('mobileViewerCode');
+            const viewerMeta = document.getElementById('mobileViewerMeta');
+            
+            viewerImage.src = imageUrl;
+            viewerCode.textContent = code;
+            
+            let metaText = '';
+            if (date) metaText += date;
+            if (description) metaText += (metaText ? ' - ' : '') + description;
+            viewerMeta.textContent = metaText || '无描述信息';
+            
+            viewer.style.display = 'flex';
+            
+            // 添加滑动关闭功能
+            let startY = 0;
+            let currentY = 0;
+            
+            viewer.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            viewer.addEventListener('touchmove', function(e) {
+                currentY = e.touches[0].clientY;
+                const diff = currentY - startY;
+                
+                if (diff > 0) {
+                    viewer.style.transform = `translateY(${diff}px)`;
+                }
+            }, { passive: true });
+            
+            viewer.addEventListener('touchend', function() {
+                const diff = currentY - startY;
+                
+                if (diff > 100) {
+                    closeMobileViewer();
+                } else {
+                    viewer.style.transform = 'translateY(0)';
+                }
+            }, { passive: true });
+        }
+
+        function closeMobileViewer() {
+            const viewer = document.getElementById('mobileImageViewer');
+            viewer.style.display = 'none';
+            viewer.style.transform = 'translateY(0)';
         }
 
         window.onclick = function(event) {
