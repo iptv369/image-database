@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>尺寸表搜索工具</title>
-    <link rel="icon" href="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251105/3e0e4df477d9be2659f3297fbd20b998/7da5dcac0bbf4a168a400721406ddccd.png" type="image/png">
+    <!-- ========== 修复图标路径 - 使用相对路径 ========== -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#3498db">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
         * {
             box-sizing: border-box;
@@ -763,7 +771,7 @@
 </head>
 <body>
     <div class="search-container">
-        <h1>尺寸表搜索工具 </h1>
+        <h1>尺寸表搜索工具</h1>
         <div class="update-status" id="updateStatus">
             <span class="loading-spinner"></span>
             正在初始化系统...
@@ -820,19 +828,6 @@
                         allow="autoplay; encrypted-media">
                 </iframe>
             </div>
-            <div id="videoError" class="video-error" style="display: none;">
-                <strong>视频加载失败</strong>
-                <div>可能的原因：网络问题、浏览器限制或B站服务暂时不可用</div>
-            </div>
-            <div class="video-solution">
-                <strong>自动播放提示：</strong>
-                <ul>
-                    <li>现代浏览器通常阻止自动播放，需要用户交互</li>
-                    <li>如果视频没有自动播放，请点击播放按钮</li>
-                    <li>或者点击页面任意位置后视频会自动播放</li>
-                </ul>
-            </div>
-            
             <!-- 播放控制区域 -->
             <div class="playback-controls">
                 <button class="autoplay-btn active" id="autoplayBtn" onclick="toggleAutoplay()">⏯️ 自动播放: 开启</button>
