@@ -1001,19 +1001,13 @@
             }
         ];
 
-        // 重量数据源配置
+        // 重量数据源配置 - 使用传统JS格式
         const WEIGHT_DATA_SOURCES = [
             {
                 name: "本地重量数据",
                 url: "./weight.js",
                 description: "主要重量数据源 - 使用同目录下的weight.js文件",
-                type: "module"
-            },
-            {
-                name: "JSON重量数据",
-                url: "./weights.json",
-                description: "备用重量数据源 - 使用同目录下的weights.json文件",
-                type: "json"
+                type: "traditional"
             }
         ];
 
@@ -1156,50 +1150,53 @@
         async function loadWeightData() {
             updateStatus('正在加载重量数据...', 'default');
             
+            let loaded = false;
+            
             // 尝试从多个来源加载重量数据
             for (const source of WEIGHT_DATA_SOURCES) {
                 try {
-                    if (source.type === "module") {
-                        await loadWeightDataFromModule(source.url);
-                    } else if (source.type === "json") {
-                        await loadWeightDataFromJSON(source.url);
+                    if (source.type === "traditional") {
+                        await loadWeightDataFromTraditional(source.url);
+                        loaded = true;
+                        updateStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success');
+                        break;
                     }
-                    
-                    updateStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success');
-                    return; // 成功加载后退出
                 } catch (error) {
                     console.log(`${source.name} 加载失败:`, error.message);
+                    continue;
                 }
             }
             
-            // 如果所有来源都失败，使用默认数据
-            updateStatus('⚠️ 重量数据加载失败，使用默认数据', 'warning');
+            if (!loaded) {
+                updateStatus('⚠️ 重量数据加载失败，使用默认数据', 'warning');
+            }
+            
+            // 显示加载的重量数据数量
+            const weightCount = Object.keys(weightData).length;
+            console.log(`重量数据加载完成，共 ${weightCount} 个款式`);
         }
 
-        // 从ES6模块加载重量数据
-        async function loadWeightDataFromModule(url) {
-            try {
-                // 使用动态import加载模块
-                const module = await import(url + '?t=' + Date.now());
-                
-                // 检查模块是否导出了weightData
-                if (module && module.weightData) {
-                    weightData = module.weightData;
-                } else {
-                    throw new Error('模块未导出weightData');
-                }
-            } catch (error) {
-                throw new Error(`模块加载失败: ${error.message}`);
-            }
-        }
-
-        // 从JSON文件加载重量数据
-        async function loadWeightDataFromJSON(url) {
-            const response = await fetch(url + '?t=' + Date.now());
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-            weightData = await response.json();
+        // 从传统JS文件加载重量数据
+        function loadWeightDataFromTraditional(url) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url + '?t=' + Date.now();
+                script.onload = () => {
+                    // 给一点时间让脚本执行
+                    setTimeout(() => {
+                        // 检查是否成功定义了weightData变量
+                        if (typeof window.weightData !== 'undefined') {
+                            weightData = window.weightData;
+                            console.log('重量数据加载成功:', Object.keys(weightData).length + '个款式');
+                            resolve();
+                        } else {
+                            reject(new Error('JS文件未定义weightData变量'));
+                        }
+                    }, 100);
+                };
+                script.onerror = () => reject(new Error('JS文件加载失败'));
+                document.head.appendChild(script);
+            });
         }
 
         // 加载公告

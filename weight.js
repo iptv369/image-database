@@ -1,5 +1,9 @@
+// weight.js - 重量数据 (传统JS格式)
+// 由ES6转传统JS工具生成
+// 将此文件放在与HTML文件相同的目录中
+
 // weight.js - 重量数据
-const weightData = {
+var weightData = {
   "9002": {
     "TU": "118g"
   },
