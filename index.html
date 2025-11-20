@@ -470,32 +470,6 @@
             margin-top: 2px;
         }
         
-        .weight-info {
-            margin-top: 8px;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border-left: 3px solid #2ecc71;
-        }
-        
-        .weight-spec {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            margin: 2px 0;
-        }
-        
-        .copy-weight-btn {
-            background: #2ecc71;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        
         .status-info {
             text-align: center;
             color: #666;
@@ -1766,7 +1740,7 @@
             }
         }
 
-        // 搜索图片
+        // 搜索图片 - 只搜索图片数据，不显示重量信息
         function searchImages(query) {
             if (!imageData || imageData.length === 0) {
                 alert('请先选择数据源');
@@ -1784,11 +1758,11 @@
                 
             displayImages(results, query);
             
-            // 滚动到搜索结果区域 - 修复移动端滚动问题
+            // 滚动到搜索结果区域
             setTimeout(scrollToResults, 100);
         }
 
-        // 显示图片结果
+        // 显示图片结果 - 纯图片，不显示重量
         function displayImages(images, query) {
             const resultsContainer = document.getElementById('results');
             
@@ -1804,12 +1778,7 @@
             
             resultsContainer.innerHTML = `
                 <div class="image-results">
-                    ${images.map(img => {
-                        // 检查是否有重量信息
-                        const weightInfo = weightData[img.code];
-                        const hasWeight = weightInfo && Object.keys(weightInfo).length > 0;
-                        
-                        return `
+                    ${images.map(img => `
                         <div class="image-card" onclick="openImageModal('${img.url}', '${img.code}', '${img.description || ''}', '${img.date || ''}')">
                             <img src="${img.url}" alt="${img.code}" 
                                  onerror="handleImageError(this, '${img.code}')"
@@ -1818,30 +1787,14 @@
                                 <div class="image-code">${img.code}</div>
                                 ${img.date ? `<div class="image-meta">${img.date}</div>` : ''}
                                 ${img.description ? `<div class="image-meta">${img.description}</div>` : ''}
-                                
-                                ${hasWeight ? `
-                                <div class="weight-info">
-                                    <div style="font-size: 0.7rem; color: #7f8c8d; margin-bottom: 5px;">重量信息:</div>
-                                    ${Object.entries(weightInfo).map(([spec, weight]) => `
-                                        <div class="weight-spec">
-                                            <span>${spec}:</span>
-                                            <span style="font-weight: bold;">${weight}</span>
-                                        </div>
-                                    `).join('')}
-                                    <button class="copy-weight-btn" onclick="event.stopPropagation(); copyWeightData('${img.code}')">
-                                        复制整款重量
-                                    </button>
-                                </div>
-                                ` : ''}
                             </div>
                         </div>
-                        `;
-                    }).join('')}
+                    `).join('')}
                 </div>
             `;
         }
 
-        // 搜索重量
+        // 搜索重量 - 只搜索重量数据
         function searchWeights(query) {
             const results = [];
             
@@ -1853,7 +1806,7 @@
             }
             
             document.getElementById('resultsInfo').innerHTML = 
-                `<p>找到 ${results.length} 个重量结果</p>`;
+                `<p>找到 ${results.length} 个重量结果 (共 ${Object.keys(weightData).length} 个款式)</p>`;
                 
             displayWeights(results, query);
             
@@ -1861,7 +1814,7 @@
             setTimeout(scrollToResults, 100);
         }
 
-        // 显示重量结果
+        // 显示重量结果 - 纯重量信息
         function displayWeights(results, query) {
             const resultsContainer = document.getElementById('results');
             
@@ -1869,6 +1822,7 @@
                 resultsContainer.innerHTML = `
                     <div class="status-info">
                         <p>没有找到与 "<strong>${query}</strong>" 匹配的重量数据</p>
+                        <p>重量数据库中共有 ${Object.keys(weightData).length} 个款式</p>
                     </div>
                 `;
                 return;
