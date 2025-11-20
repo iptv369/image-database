@@ -1,9 +1,8 @@
 // weight.js - 重量数据 (传统JS格式)
-// 由ES6转传统JS工具生成
 // 将此文件放在与HTML文件相同的目录中
 
-// weight.js - 重量数据
-var weightData = {
+// 使用 window.weightData 来避免变量冲突
+window.weightData = {
   "9002": {
     "TU": "118g"
   },
