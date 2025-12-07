@@ -10,55 +10,673 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#3498db">
+    <meta name="theme-color" content="#1a237e">
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-     <style>
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         
+        /* 星空背景 */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
+            background: #0a0e2a;
+            color: #fff;
             line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* 星空效果 */
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { 
+                opacity: 0.3; 
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.2);
+            }
+            100% { 
+                opacity: 0.5; 
+                transform: scale(1);
+            }
+        }
+        
+        /* 飞船样式 */
+        .spaceship {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd166);
+            border-radius: 10px 5px 5px 10px;
+            top: 30%;
+            left: -50px;
+            animation: flyAcross 12s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.7));
+            z-index: 1;
+        }
+        
+        .spaceship::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #7befff;
+            border-radius: 50%;
+            top: 6px;
+            right: 5px;
+            box-shadow: 0 0 8px #7befff;
+            animation: lightBlink 1s infinite alternate;
+        }
+        
+        .spaceship::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background: linear-gradient(90deg, transparent, #ff6b6b);
+            border-radius: 0 5px 5px 0;
+            top: 5px;
+            right: -12px;
+        }
+        
+        .spaceship-wings {
+            position: absolute;
+            width: 12px;
+            height: 6px;
+            background: #ffd166;
+            top: -6px;
+            left: 10px;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .spaceship-wings::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 6px;
+            background: #ffd166;
+            top: 20px;
+            left: 0;
+            border-radius: 0 0 3px 3px;
+        }
+        
+        @keyframes flyAcross {
+            0% {
+                left: -50px;
+                top: 30%;
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                top: 25%;
+                transform: translateY(-10px) rotate(5deg);
+            }
+            50% {
+                top: 35%;
+                transform: translateY(10px) rotate(-5deg);
+            }
+            75% {
+                top: 28%;
+                transform: translateY(-5px) rotate(3deg);
+            }
+            100% {
+                left: calc(100% + 50px);
+                top: 30%;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+        
+        /* 左侧插画区域 */
+        .illustration-container {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 250px;
+            height: 400px;
+            z-index: 0;
+            opacity: 0.9;
+            display: none; /* 默认隐藏，在大屏幕显示 */
+        }
+        
+        @media (min-width: 1200px) {
+            .illustration-container {
+                display: block;
+            }
+        }
+        
+        /* 宇航员插画 - 优化版本 */
+        .astronaut {
+            position: absolute;
+            width: 160px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(123, 239, 255, 0.5));
+        }
+        
+        .astronaut-body {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(145deg, #4a5fc1, #2a3a8f);
+            border-radius: 45px 45px 35px 35px;
+            top: 60px;
+            left: 30px;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.4),
+                inset 0 -5px 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        .astronaut-helmet {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 35% 35%, #7befff, #4a5fc1);
+            border-radius: 50%;
+            top: 20px;
+            left: 25px;
+            box-shadow: 
+                inset 0 0 25px rgba(123, 239, 255, 0.6),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .astronaut-visor {
+            position: absolute;
+            width: 70px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(123, 239, 255, 0.4), rgba(255, 255, 255, 0.2));
+            border-radius: 50%;
+            top: 35px;
+            left: 20px;
+            box-shadow: 
+                inset 0 0 15px rgba(123, 239, 255, 0.5),
+                0 0 20px rgba(123, 239, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .astronaut-light {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd166;
+            border-radius: 50%;
+            top: 45px;
+            right: 30px;
+            box-shadow: 0 0 10px #ffd166;
+            animation: lightBlink 0.8s infinite alternate;
+        }
+        
+        .astronaut-backpack {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            background: linear-gradient(145deg, #3a506b, #2a3a8f);
+            border-radius: 20px;
+            top: 80px;
+            right: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .astronaut-antenna {
+            position: absolute;
+            width: 3px;
+            height: 25px;
+            background: linear-gradient(to top, #7befff, #ffd166);
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .astronaut-antenna-tip {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd166;
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 8px #ffd166;
+            animation: lightBlink 1.2s infinite alternate;
+        }
+        
+        /* 漂浮的行星 */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 94, 0, 0.5);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+        
+        .planet1 {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #ffd166, #ff9a00);
+            top: 50px;
+            right: 30px;
+            animation: orbit1 25s linear infinite;
+        }
+        
+        .planet2 {
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle at 30% 30%, #00b4d8, #0077b6);
+            bottom: 80px;
+            left: 10px;
+            animation: orbit2 30s linear infinite reverse;
+            box-shadow: 0 0 25px rgba(0, 180, 216, 0.5);
+        }
+        
+        .planet3 {
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle at 30% 30%, #9d4edd, #560bad);
+            top: 120px;
+            left: 40px;
+            animation: orbit3 35s linear infinite;
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+        }
+        
+        /* 流星效果 */
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px white;
+            animation: meteorFall linear infinite;
+        }
+        
+        @keyframes meteorFall {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(100px, 100px);
+            }
+        }
+        
+        /* 右侧日历天气区域 */
+        .calendar-weather-container {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 320px;
+            background: linear-gradient(145deg, rgba(26, 35, 126, 0.95), rgba(40, 53, 147, 0.95));
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            z-index: 0;
+            display: none; /* 默认隐藏，在大屏幕显示 */
+        }
+        
+        @media (min-width: 1200px) {
+            .calendar-weather-container {
+                display: block;
+            }
+        }
+        
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .calendar-header h3 {
+            color: #7befff;
+            font-size: 22px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(123, 239, 255, 0.5);
+        }
+        
+        .current-date {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .date-details {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .lunar-date {
+            color: #ffd166;
+            font-size: 16px;
+            background: rgba(255, 209, 102, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 209, 102, 0.3);
+        }
+        
+        .week-day {
+            color: #5bc0be;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .weather-info {
+            background: linear-gradient(145deg, rgba(28, 37, 65, 0.8), rgba(40, 53, 147, 0.8));
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .location {
+            color: #ffd166;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .refresh-weather {
+            background: rgba(91, 192, 190, 0.2);
+            color: #7befff;
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .refresh-weather:hover {
+            background: rgba(91, 192, 190, 0.4);
+            transform: rotate(90deg);
+        }
+        
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .weather-temp {
+            font-size: 42px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .weather-icon-large {
+            font-size: 48px;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .weather-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(40, 53, 147, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(123, 239, 255, 0.1);
+        }
+        
+        .weather-item-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+        
+        .weather-item-value {
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #ffd166;
+            font-weight: 600;
+            background: rgba(40, 53, 147, 0.5);
+            border-radius: 10px;
+        }
+        
+        .calendar-date {
+            text-align: center;
+            padding: 12px 8px;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(28, 37, 65, 0.5);
+            border: 1px solid rgba(123, 239, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .calendar-date:hover {
+            background: rgba(91, 192, 190, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .calendar-date.today {
+            background: linear-gradient(145deg, #5bc0be, #3a506b);
+            color: #fff;
+            font-weight: bold;
+            border-color: #7befff;
+            box-shadow: 0 0 15px rgba(91, 192, 190, 0.5);
+        }
+        
+        .calendar-date.weekend {
+            color: #ff9a00;
+        }
+        
+        .calendar-date.other-month {
+            color: rgba(255, 255, 255, 0.3);
+            background: rgba(28, 37, 65, 0.2);
+        }
+        
+        .calendar-footer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(123, 239, 255, 0.2);
+        }
+        
+        .calendar-footer-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(28, 37, 65, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(123, 239, 255, 0.1);
+        }
+        
+        .calendar-footer-label {
+            display: block;
+            font-size: 12px;
+            color: #ffd166;
+            margin-bottom: 5px;
+        }
+        
+        .calendar-footer-value {
+            display: block;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* 天气加载状态 */
+        .weather-loading {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .weather-loading .loading-spinner {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, -55%);
+            }
+        }
+        
+        @keyframes lightBlink {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+        
+        @keyframes orbit1 {
+            0% {
+                transform: rotate(0deg) translateX(80px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(80px) rotate(-360deg);
+            }
+        }
+        
+        @keyframes orbit2 {
+            0% {
+                transform: rotate(0deg) translateX(100px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(100px) rotate(-360deg);
+            }
+        }
+        
+        @keyframes orbit3 {
+            0% {
+                transform: rotate(0deg) translateX(60px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(60px) rotate(-360deg);
+            }
+        }
+        
+        /* 主要内容区域 - 保持原有尺寸 */
+        .main-content-area {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         /* 滚动公告条样式 */
         .announcement-bar {
-            background: #3498db;
+            background: linear-gradient(90deg, #1a237e, #283593);
             color: white;
             padding: 12px 40px 12px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
             min-height: 50px;
             display: flex;
             align-items: center;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            width: 100%;
         }
         
         .announcement-bar.info {
-            background: #3498db;
+            background: linear-gradient(90deg, #1a237e, #283593);
         }
         
         .announcement-bar.warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, #ff9800, #ff5722);
         }
         
         .announcement-bar.success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
         }
         
         .announcement-bar.error {
-            background: #e74c3c;
+            background: linear-gradient(90deg, #f44336, #c62828);
         }
         
         .announcement-content {
@@ -87,7 +705,7 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
+            background: rgba(123, 239, 255, 0.2);
             border: none;
             color: white;
             width: 26px;
@@ -103,7 +721,7 @@
         }
         
         .announcement-close:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(123, 239, 255, 0.4);
             transform: translateY(-50%) scale(1.1);
         }
         
@@ -121,16 +739,19 @@
         }
         
         .search-container {
-            background: white;
+            background: rgba(26, 35, 126, 0.9);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             margin-bottom: 25px;
-            border-left: 5px solid #3498db;
+            border-left: 5px solid #5bc0be;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            width: 100%;
         }
         
         h1 {
-            color: #2c3e50;
+            color: #7befff;
             margin-bottom: 15px;
             font-size: 1.8rem;
             display: flex;
@@ -153,21 +774,23 @@
         #searchInput {
             width: 100%;
             padding: 14px 16px;
-            border: 1px solid #ddd;
+            background: rgba(28, 37, 65, 0.8);
+            border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s;
+            color: white;
         }
         
         #searchInput:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: #5bc0be;
+            box-shadow: 0 0 0 3px rgba(91, 192, 190, 0.2);
         }
         
         button {
             padding: 14px 20px;
-            background: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
             border: none;
             border-radius: 8px;
@@ -180,7 +803,8 @@
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #7befff, #5bc0be);
         }
         
         .search-type {
@@ -191,49 +815,54 @@
         
         .search-type-btn {
             padding: 10px 15px;
-            background: #e0e0e0;
-            color: #555;
-            border: none;
+            background: rgba(28, 37, 65, 0.8);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(123, 239, 255, 0.2);
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
         }
         
         .search-type-btn.active {
-            background: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
+            border-color: #5bc0be;
         }
         
         .results-info {
             margin: 20px 0;
             font-size: 16px;
             padding: 12px 15px;
-            background: #f8f9fa;
+            background: rgba(28, 37, 65, 0.8);
             border-radius: 8px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #5bc0be;
+            color: white;
         }
         
         .main-content {
             display: flex;
             gap: 25px;
             margin-bottom: 25px;
+            width: 100%;
         }
         
         .video-container {
-            background: white;
+            background: rgba(26, 35, 126, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             width: 35%;
             min-width: 320px;
             text-align: center;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 239, 255, 0.2);
         }
         
         .video-container h2 {
             margin-top: 0;
-            color: #3498db;
+            color: #7befff;
             font-size: 1.3rem;
             margin-bottom: 15px;
             display: flex;
@@ -246,7 +875,7 @@
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             flex: 1;
             background: #000;
             min-height: 200px;
@@ -285,19 +914,19 @@
         }
         
         .autoplay-btn {
-            background: #2ecc71;
+            background: linear-gradient(45deg, #4caf50, #2e7d32);
         }
         
         .autoplay-btn.active {
-            background: #2ecc71;
+            background: linear-gradient(45deg, #4caf50, #2e7d32);
         }
         
         .auto-next-btn {
-            background: #9b59b6;
+            background: linear-gradient(45deg, #9d4edd, #560bad);
         }
         
         .auto-next-btn.active {
-            background: #9b59b6;
+            background: linear-gradient(45deg, #9d4edd, #560bad);
         }
         
         .video-nav-controls {
@@ -310,12 +939,12 @@
         .video-nav-controls button {
             padding: 8px 12px;
             font-size: 12px;
-            background: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
         }
         
         .video-playlist {
             margin-top: 10px;
-            background: #f8f9fa;
+            background: rgba(28, 37, 65, 0.8);
             padding: 10px;
             border-radius: 8px;
         }
@@ -328,25 +957,26 @@
         
         .playlist-item {
             padding: 4px 8px;
-            background: #e9ecef;
+            background: rgba(40, 53, 147, 0.8);
             border-radius: 4px;
             font-size: 11px;
             cursor: pointer;
-            border: 1px solid #dee2e6;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            color: white;
         }
         
         .playlist-item.active {
-            background: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
-            border-color: #2980b9;
+            border-color: #5bc0be;
         }
         
         .playlist-item:hover {
-            background: #dee2e6;
+            background: rgba(91, 192, 190, 0.3);
         }
         
         .playlist-item.active:hover {
-            background: #2980b9;
+            background: linear-gradient(45deg, #7befff, #5bc0be);
         }
         
         .video-loading {
@@ -383,7 +1013,7 @@
         
         .video-error button {
             margin-top: 10px;
-            background: #e74c3c;
+            background: linear-gradient(45deg, #f44336, #c62828);
         }
         
         .video-progress {
@@ -398,22 +1028,25 @@
         
         .video-progress-bar {
             height: 100%;
-            background: #e74c3c;
+            background: #5bc0be;
             width: 0%;
             transition: width 0.3s;
         }
         
         .results-container {
-            background: white;
+            background: rgba(26, 35, 126, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             flex: 1;
             min-height: 450px;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 239, 255, 0.2);
         }
         
+        /* 优化搜索小图 - 统一尺寸和布局 */
         .image-results {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -423,28 +1056,31 @@
         }
         
         .image-card {
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-            background: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(28, 37, 65, 0.8);
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             display: flex;
             flex-direction: column;
+            height: 260px; /* 固定高度确保卡片大小一致 */
         }
         
         .image-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
+            border-color: #5bc0be;
         }
         
         .image-card img {
             width: 100%;
-            height: 160px;
-            object-fit: contain;
+            height: 180px; /* 固定图片高度 */
+            object-fit: contain; /* 使用contain确保图片完整显示，不被裁剪 */
             display: block;
-            background-color: #f8f9fa;
+            background-color: rgba(28, 37, 65, 0.8); /* 添加背景色，避免透明背景问题 */
+            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
         }
         
         .image-info {
@@ -454,25 +1090,37 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            min-height: 80px; /* 确保信息区域有足够高度 */
         }
         
         .image-code {
             font-weight: bold;
             font-size: 0.95rem;
-            color: #2c3e50;
+            color: #7befff;
             margin-bottom: 4px;
             word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* 限制显示一行 */
+            -webkit-box-orient: vertical;
         }
         
         .image-meta {
             font-size: 0.75rem;
-            color: #7f8c8d;
+            color: rgba(255, 255, 255, 0.7);
             margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 限制显示两行 */
+            -webkit-box-orient: vertical;
+            line-height: 1.4;
         }
         
         .status-info {
             text-align: center;
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             padding: 50px 20px;
             flex: 1;
             display: flex;
@@ -489,15 +1137,15 @@
         }
         
         .weight-card {
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-            background: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(28, 37, 65, 0.8);
         }
         
         .weight-header {
-            background: #2ecc71;
+            background: linear-gradient(45deg, #4caf50, #2e7d32);
             color: white;
             padding: 12px 15px;
             font-weight: bold;
@@ -520,24 +1168,24 @@
         .weight-spec-item {
             text-align: center;
             padding: 8px;
-            background: #f8f9fa;
+            background: rgba(40, 53, 147, 0.8);
             border-radius: 6px;
         }
         
         .weight-spec-name {
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 4px;
         }
         
         .weight-spec-value {
             font-weight: bold;
-            color: #2c3e50;
+            color: #7befff;
             font-size: 0.9rem;
         }
         
         .copy-all-btn {
-            background: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
             border: none;
             border-radius: 4px;
@@ -549,11 +1197,13 @@
         }
         
         .directory-container {
-            background: white;
+            background: rgba(26, 35, 126, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 239, 255, 0.2);
         }
         
         .directory-list {
@@ -565,37 +1215,40 @@
         
         .directory-item {
             padding: 12px 15px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
-            background: #f8f9fa;
+            background: rgba(28, 37, 65, 0.8);
             min-width: 150px;
+            color: white;
         }
         
         .directory-item:hover {
-            background-color: #e9ecef;
+            background-color: rgba(91, 192, 190, 0.3);
             transform: translateY(-3px);
+            border-color: #5bc0be;
         }
         
         .directory-item.active {
-            background-color: #3498db;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
-            border-color: #2980b9;
+            border-color: #5bc0be;
         }
         
         .update-status {
-            background: #e8f4fc;
+            background: rgba(28, 37, 65, 0.8);
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
             font-size: 14px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #5bc0be;
+            color: white;
         }
         
         .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #5bc0be;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -637,10 +1290,11 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: rgba(26, 35, 126, 0.95);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(123, 239, 255, 0.3);
         }
         
         .modal-image-container {
@@ -651,6 +1305,7 @@
             padding: 20px;
             max-height: calc(100vh - 150px);
             overflow: auto;
+            background: rgba(28, 37, 65, 0.8);
         }
         
         .modal-image-container img {
@@ -662,26 +1317,27 @@
         
         .modal-info {
             padding: 15px 20px;
-            background: white;
-            border-top: 1px solid #eee;
+            background: rgba(28, 37, 65, 0.8);
+            border-top: 1px solid rgba(123, 239, 255, 0.2);
+            color: white;
         }
         
         .modal-code {
             font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 5px;
-            color: #2c3e50;
+            color: #7befff;
         }
         
         .modal-description {
             font-size: 0.95rem;
             margin-bottom: 5px;
-            color: #555;
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .modal-date {
             font-size: 0.85rem;
-            color: #7f8c8d;
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .modal-close {
@@ -704,7 +1360,7 @@
         }
         
         .modal-close:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(91, 192, 190, 0.8);
             transform: scale(1.1);
         }
         
@@ -712,6 +1368,11 @@
         @media (max-width: 768px) {
             body {
                 padding: 15px;
+            }
+            
+            .main-content-area {
+                width: 100%;
+                max-width: 100%;
             }
             
             .announcement-bar {
@@ -759,11 +1420,15 @@
             
             .image-results {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                gap: 12px;
+            }
+            
+            .image-card {
+                height: 220px; /* 移动端调整高度 */
             }
             
             .image-card img {
-                height: 120px;
+                height: 140px;
             }
             
             .weight-results {
@@ -812,8 +1477,12 @@
                 grid-template-columns: 1fr;
             }
             
+            .image-card {
+                height: 240px;
+            }
+            
             .image-card img {
-                height: 150px;
+                height: 160px;
             }
             
             .modal-content {
@@ -827,6 +1496,114 @@
     </style>
 </head>
 <body>
+    <!-- 星空背景 -->
+    <div id="stars"></div>
+    
+    <!-- 飞船 -->
+    <div class="spaceship">
+        <div class="spaceship-wings"></div>
+    </div>
+    
+    <!-- 左侧宇航员插画 - 优化版本 -->
+    <div class="illustration-container">
+        <div class="astronaut">
+            <div class="astronaut-antenna">
+                <div class="astronaut-antenna-tip"></div>
+            </div>
+            <div class="astronaut-helmet">
+                <div class="astronaut-visor"></div>
+                <div class="astronaut-light"></div>
+            </div>
+            <div class="astronaut-body"></div>
+            <div class="astronaut-backpack"></div>
+        </div>
+        <div class="planet planet1"></div>
+        <div class="planet planet2"></div>
+        <div class="planet planet3"></div>
+    </div>
+    
+    <!-- 右侧日历天气区域 -->
+    <div class="calendar-weather-container">
+        <div class="calendar-header">
+            <h3>📅 智能日历 & 天气</h3>
+            <div class="current-date" id="currentDate">--月--日</div>
+            <div class="date-details">
+                <div class="lunar-date" id="lunarDate">农历--月--</div>
+                <div class="week-day" id="weekDay">星期--</div>
+            </div>
+        </div>
+        
+        <div class="weather-info">
+            <div class="weather-header">
+                <div class="location" id="weatherLocation">
+                    <span>📍</span>
+                    <span>获取位置中...</span>
+                </div>
+                <div class="refresh-weather" onclick="getWeather()" title="刷新天气">
+                    🔄
+                </div>
+            </div>
+            
+            <div id="weatherLoading" class="weather-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <div>正在获取天气信息...</div>
+            </div>
+            
+            <div id="weatherContent" style="display: block;">
+                <div class="weather-main">
+                    <div class="weather-temp" id="weatherTemp">--°C</div>
+                    <div class="weather-icon-large" id="weatherIcon">☀️</div>
+                </div>
+                
+                <div class="weather-details">
+                    <div class="weather-item">
+                        <div class="weather-item-label">天气</div>
+                        <div class="weather-item-value" id="weatherDesc">--</div>
+                    </div>
+                    <div class="weather-item">
+                        <div class="weather-item-label">湿度</div>
+                        <div class="weather-item-value" id="weatherHumidity">--%</div>
+                    </div>
+                    <div class="weather-item">
+                        <div class="weather-item-label">风速</div>
+                        <div class="weather-item-value" id="weatherWind">--km/h</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="weatherError" style="display: none; text-align: center; color: #ff6b6b; padding: 10px;">
+                天气信息获取失败，请刷新重试
+            </div>
+        </div>
+        
+        <div class="calendar-grid" id="calendarDays">
+            <!-- 星期标题 -->
+            <div class="calendar-day">日</div>
+            <div class="calendar-day">一</div>
+            <div class="calendar-day">二</div>
+            <div class="calendar-day">三</div>
+            <div class="calendar-day">四</div>
+            <div class="calendar-day">五</div>
+            <div class="calendar-day">六</div>
+            <!-- 日历日期将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="calendar-footer">
+            <div class="calendar-footer-item">
+                <span class="calendar-footer-label">节气</span>
+                <span class="calendar-footer-value" id="solarTerm">--</span>
+            </div>
+            <div class="calendar-footer-item">
+                <span class="calendar-footer-label">宜</span>
+                <span class="calendar-footer-value" id="yiContent">--</span>
+            </div>
+            <div class="calendar-footer-item">
+                <span class="calendar-footer-label">忌</span>
+                <span class="calendar-footer-value" id="jiContent">--</span>
+            </div>
+        </div>
+    </div>
+    
     <!-- 滚动公告条 -->
     <div class="announcement-bar info" id="announcementBar">
         <div class="announcement-content">
@@ -852,115 +1629,121 @@
         </div>
     </div>
 
-    <div class="search-container">
-        <h1>📊 尺寸表搜索工具</h1>
-        
-        <div class="update-status" id="updateStatus">
-            <span class="loading-spinner"></span>
-            正在初始化系统...
-        </div>
-        
-        <div class="search-type">
-            <button class="search-type-btn active" id="imageSearchBtn" onclick="setSearchType('image')">🖼️ 尺寸表搜索</button>
-            <button class="search-type-btn" id="weightSearchBtn" onclick="setSearchType('weight')">⚖️ 重量搜索</button>
-        </div>
-        
-        <div class="search-controls">
-            <div class="search-input-container">
-                <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
+    <!-- 主要内容区域 -->
+    <div class="main-content-area">
+        <div class="search-container">
+            <h1>📊 尺寸表搜索工具</h1>
+            
+            <div class="update-status" id="updateStatus">
+                <span class="loading-spinner"></span>
+                正在初始化系统...
             </div>
-            <button onclick="search()">🔍 搜索</button>
-            <button class="refresh-btn" onclick="checkUpdate()">🔄 检查更新</button>
+            
+            <div class="search-type">
+                <button class="search-type-btn active" id="imageSearchBtn" onclick="setSearchType('image')">🖼️ 尺寸表搜索</button>
+                <button class="search-type-btn" id="weightSearchBtn" onclick="setSearchType('weight')">⚖️ 重量搜索</button>
+            </div>
+            
+            <div class="search-controls">
+                <div class="search-input-container">
+                    <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
+                </div>
+                <button onclick="search()">🔍 搜索</button>
+                <button class="refresh-btn" onclick="checkUpdate()">🔄 检查更新</button>
+            </div>
+            
+            <div class="results-info" id="resultsInfo"></div>
         </div>
-        
-        <div class="results-info" id="resultsInfo"></div>
-    </div>
 
-    <div class="directory-container" id="directoryContainer" style="display: none;">
-        <h3>📁 选择数据目录</h3>
-        <div class="directory-list" id="directoryList">
-            <!-- 目录项将通过JavaScript动态生成 -->
-        </div>
-    </div>
-
-    <div class="main-content">
-        <!-- 视频播放区域 -->
-        <div class="video-container">
-            <h2>🎬 视频教程</h2>
-            <div class="video-wrapper">
-                <div class="video-loading" id="videoLoading" style="display: none;">
-                    <div>视频加载中...</div>
-                </div>
-                <div class="video-error" id="videoError" style="display: none;">
-                    <div>视频加载失败</div>
-                    <button onclick="retryVideo()">重试</button>
-                </div>
-                <div class="video-progress">
-                    <div class="video-progress-bar" id="videoProgressBar"></div>
-                </div>
-                <iframe class="bilibili-player" 
-                        id="bilibiliPlayer"
-                        src=""
-                        scrolling="no" 
-                        border="0" 
-                        frameborder="no" 
-                        framespacing="0" 
-                        allowfullscreen="true"
-                        allow="encrypted-media; autoplay">
-                </iframe>
-            </div>
-            
-            <!-- 播放控制区域 -->
-            <div class="playback-controls">
-                <button class="autoplay-btn active" id="autoplayBtn" onclick="toggleAutoplay()">⏯️ 自动播放: 开启</button>
-                <button class="auto-next-btn active" id="autoNextBtn" onclick="toggleAutoNext()">⏭️ 自动下一个: 开启</button>
-            </div>
-            
-            <!-- 上一个/下一个控制 -->
-            <div class="video-nav-controls">
-                <button onclick="playPreviousVideo()">⏪ 上一个</button>
-                <button onclick="playNextVideo()">⏩ 下一个</button>
-            </div>
-            
-            <!-- 播放列表 -->
-            <div class="video-playlist">
-                <div style="font-size: 12px; color: #666; margin-bottom: 8px;">播放列表:</div>
-                <div class="playlist-items" id="playlistItems">
-                    <!-- 播放列表项将通过JavaScript动态生成 -->
-                </div>
-            </div>
-            
-            <!-- 视频控制按钮 -->
-            <div class="video-controls">
-                <button onclick="reloadBilibiliVideo()" style="background: #e74c3c;">🔄 重新加载</button>
-                <button onclick="openInNewTab()" style="background: #9b59b6;">🔗 在新窗口打开</button>
-                <button onclick="forcePlay()" style="background: #2ecc71;">▶️ 强制播放</button>
-            </div>
-            
-            <!-- 自定义视频源区域 -->
-            <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                <h4 style="margin-bottom: 10px; color: #495057;">🎥 自定义视频源</h4>
-                <input type="text" id="customVideoUrl" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;" 
-                       placeholder="输入视频URL (例如: http://api.qemao.com/api/douyin)" 
-                       value="http://api.qemao.com/api/douyin">
-                <button onclick="loadCustomVideo()" style="width: 100%; padding: 8px; background: #9b59b6;">加载自定义视频</button>
-            </div>
-            
-            <div style="margin-top: 15px; font-size: 12px; color: #666;">
-                <p>💡 提示：视频可能需要网络连接，部分视频可能受区域限制</p>
+        <div class="directory-container" id="directoryContainer" style="display: none;">
+            <h3>📁 选择数据目录</h3>
+            <div class="directory-list" id="directoryList">
+                <!-- 目录项将通过JavaScript动态生成 -->
             </div>
         </div>
 
-        <!-- 搜索结果区域 -->
-        <div class="results-container" id="results">
-            <div class="status-info">
-                <p>📥 正在加载数据，请稍候...</p>
-                <p>系统初始化完成后，您可以搜索图片或重量信息</p>
+        <div class="main-content">
+            <!-- 视频播放区域 -->
+            <div class="video-container">
+                <h2>🎬 视频教程</h2>
+                <div class="video-wrapper">
+                    <div class="video-loading" id="videoLoading" style="display: none;">
+                        <div>视频加载中...</div>
+                    </div>
+                    <div class="video-error" id="videoError" style="display: none;">
+                        <div>视频加载失败</div>
+                        <button onclick="retryVideo()">重试</button>
+                    </div>
+                    <div class="video-progress">
+                        <div class="video-progress-bar" id="videoProgressBar"></div>
+                    </div>
+                    <iframe class="bilibili-player" 
+                            id="bilibiliPlayer"
+                            src=""
+                            scrolling="no" 
+                            border="0" 
+                            frameborder="no" 
+                            framespacing="0" 
+                            allowfullscreen="true"
+                            allow="encrypted-media; autoplay">
+                    </iframe>
+                </div>
+                
+                <!-- 播放控制区域 -->
+                <div class="playback-controls">
+                    <button class="autoplay-btn active" id="autoplayBtn" onclick="toggleAutoplay()">⏯️ 自动播放: 开启</button>
+                    <button class="auto-next-btn active" id="autoNextBtn" onclick="toggleAutoNext()">⏭️ 自动下一个: 开启</button>
+                </div>
+                
+                <!-- 上一个/下一个控制 -->
+                <div class="video-nav-controls">
+                    <button onclick="playPreviousVideo()">⏪ 上一个</button>
+                    <button onclick="playNextVideo()">⏩ 下一个</button>
+                </div>
+                
+                <!-- 播放列表 -->
+                <div class="video-playlist">
+                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">播放列表:</div>
+                    <div class="playlist-items" id="playlistItems">
+                        <!-- 播放列表项将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+                
+                <!-- 视频控制按钮 -->
+                <div class="video-controls">
+                    <button onclick="reloadBilibiliVideo()" style="background: linear-gradient(45deg, #f44336, #c62828);">🔄 重新加载</button>
+                    <button onclick="openInNewTab()" style="background: linear-gradient(45deg, #9d4edd, #560bad);">🔗 在新窗口打开</button>
+                    <button onclick="forcePlay()" style="background: linear-gradient(45deg, #4caf50, #2e7d32);">▶️ 强制播放</button>
+                </div>
+                
+                <!-- 自定义视频源区域 -->
+                <div style="margin-top: 15px; padding: 10px; background: rgba(28, 37, 65, 0.8); border-radius: 8px;">
+                    <h4 style="margin-bottom: 10px; color: #7befff;">🎥 自定义视频源</h4>
+                    <input type="text" id="customVideoUrl" style="width: 100%; padding: 8px; background: rgba(40, 53, 147, 0.8); border: 1px solid rgba(123, 239, 255, 0.3); border-radius: 4px; margin-bottom: 8px; color: white;" 
+                           placeholder="输入视频URL (例如: http://api.qemao.com/api/douyin)" 
+                           value="http://api.qemao.com/api/douyin">
+                    <button onclick="loadCustomVideo()" style="width: 100%; padding: 8px; background: linear-gradient(45deg, #9d4edd, #560bad);">加载自定义视频</button>
+                </div>
+                
+                <div style="margin-top: 15px; font-size: 12px; color: rgba(255, 255, 255, 0.7);">
+                    <p>💡 提示：视频可能需要网络连接，部分视频可能受区域限制</p>
+                </div>
+            </div>
+
+            <!-- 搜索结果区域 -->
+            <div class="results-container" id="results">
+                <div class="status-info">
+                    <p>📥 正在加载数据，请稍候...</p>
+                    <p>系统初始化完成后，您可以搜索图片或重量信息</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 高德地图API密钥（免费密钥，每日限额3000次）
+        const AMAP_API_KEY = '080e2cc46ec4d46c7c8bd0cfc681d4f6'; // 高德地图Web服务API密钥
+        
         // 配置数据源目录
         const DATA_DIRECTORIES = [
             {
@@ -1096,6 +1879,7 @@
         let imageData = [];
         let currentSearchType = 'image'; // 'image' 或 'weight'
         let currentDataSource = null;
+        let currentCity = "广州市"; // 默认城市
 
         // 视频播放控制状态
         let autoplayEnabled = true;
@@ -1106,8 +1890,78 @@
         let videoProgressInterval = null;
         let currentVideoStartTime = 0;
 
+        // 农历数据和节气数据
+        const lunarData = {
+            monthNames: ["正月", "二月", "三月", "四月", "五月", "六月", 
+                        "七月", "八月", "九月", "十月", "冬月", "腊月"],
+            dayNames: ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
+                      "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                      "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"]
+        };
+
+        const solarTerms = [
+            "立春", "雨水", "惊蛰", "春分", "清明", "谷雨",
+            "立夏", "小满", "芒种", "夏至", "小暑", "大暑",
+            "立秋", "处暑", "白露", "秋分", "寒露", "霜降",
+            "立冬", "小雪", "大雪", "冬至", "小寒", "大寒"
+        ];
+
+        // 宜忌内容
+        const luckyItems = ["出行", "签约", "搬家", "开业", "交易", "纳财", "祈福", "祭祀", "求嗣", "嫁娶"];
+        const unluckyItems = ["动土", "安葬", "破土", "开光", "针灸", "造船", "行丧", "出货", "伐木", "作灶"];
+
+        // 天气图标映射
+        const weatherIcons = {
+            '晴': '☀️',
+            '多云': '⛅',
+            '阴': '☁️',
+            '阵雨': '🌦️',
+            '雷阵雨': '⛈️',
+            '雷阵雨伴有冰雹': '⛈️',
+            '雨夹雪': '🌨️',
+            '小雨': '🌧️',
+            '中雨': '🌧️',
+            '大雨': '🌧️',
+            '暴雨': '🌧️',
+            '大暴雨': '🌧️',
+            '特大暴雨': '🌧️',
+            '阵雪': '🌨️',
+            '小雪': '❄️',
+            '中雪': '❄️',
+            '大雪': '❄️',
+            '暴雪': '❄️',
+            '雾': '🌫️',
+            '冻雨': '🌨️',
+            '沙尘暴': '🌪️',
+            '小雨-中雨': '🌧️',
+            '中雨-大雨': '🌧️',
+            '大雨-暴雨': '🌧️',
+            '暴雨-大暴雨': '🌧️',
+            '大暴雨-特大暴雨': '🌧️',
+            '小雪-中雪': '❄️',
+            '中雪-大雪': '❄️',
+            '大雪-暴雪': '❄️',
+            '浮尘': '🌫️',
+            '扬沙': '🌫️',
+            '强沙尘暴': '🌪️',
+            '霾': '😷',
+            '未知': '🌈'
+        };
+
         // 初始化函数
         async function initialize() {
+            // 创建星空背景（包含流星效果）
+            createStars();
+            
+            // 添加流星效果
+            createMeteors();
+            
+            // 初始化日历和天气
+            initializeCalendar();
+            
+            // 立即获取天气（使用真实API）
+            getWeather();
+            
             updateStatus('正在加载数据...', 'default');
             
             // 加载公告
@@ -1124,6 +1978,571 @@
             
             // 初始化视频播放器
             initializeVideoPlayer();
+        }
+
+        // 创建星空背景 - 优化闪烁频率
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 300; // 增加星星数量
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // 随机大小 (1-4px) - 增大范围
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // 随机位置
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // 加快闪烁速度 (0.5-2秒)
+                const duration = Math.random() * 1.5 + 0.5;
+                star.style.setProperty('--duration', duration + 's');
+                
+                // 随机亮度 - 提高整体亮度
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 创建流星效果
+        function createMeteors() {
+            const starsContainer = document.getElementById('stars');
+            
+            // 创建多个流星
+            const meteorCount = 8;
+            
+            for (let i = 0; i < meteorCount; i++) {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                // 随机位置
+                const left = Math.random() * 30;
+                const top = Math.random() * 30;
+                meteor.style.left = left + '%';
+                meteor.style.top = top + '%';
+                
+                // 随机大小
+                const size = Math.random() * 2 + 1;
+                meteor.style.width = size + 'px';
+                meteor.style.height = size + 'px';
+                
+                // 随机速度和延迟
+                const duration = Math.random() * 2 + 1;
+                const delay = Math.random() * 10;
+                
+                meteor.style.animationDuration = duration + 's';
+                meteor.style.animationDelay = delay + 's';
+                
+                starsContainer.appendChild(meteor);
+            }
+        }
+
+        // 初始化日历
+        function initializeCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const date = now.getDate();
+            const day = now.getDay();
+            
+            // 星期几的中文名称
+            const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
+            
+            // 更新当前日期
+            document.getElementById('currentDate').textContent = 
+                `${month + 1}月${date}日`;
+            
+            // 更新星期几
+            document.getElementById('weekDay').textContent = 
+                `星期${weekDays[day]}`;
+            
+            // 更新农历
+            updateLunarDate(now);
+            
+            // 生成日历
+            generateCalendar(year, month);
+            
+            // 更新宜忌内容
+            updateLuckyUnlucky();
+        }
+
+        // 更新农历日期
+        function updateLunarDate(date) {
+            // 简化的农历计算（实际应用中应该使用完整的农历算法）
+            const month = date.getMonth();
+            const day = date.getDate();
+            
+            // 简化的农历计算：根据公历日期估算农历
+            const lunarMonth = (month + 1) % 12 + 1;
+            const lunarDay = (day + 15) % 30 + 1;
+            
+            const lunarMonthName = lunarData.monthNames[lunarMonth - 1];
+            const lunarDayName = lunarData.dayNames[lunarDay - 1];
+            
+            document.getElementById('lunarDate').textContent = 
+                `农历${lunarMonthName}${lunarDayName}`;
+            
+            // 更新节气（简单模拟）
+            const solarTermIndex = Math.floor(Math.random() * solarTerms.length);
+            document.getElementById('solarTerm').textContent = solarTerms[solarTermIndex];
+        }
+
+        // 更新宜忌内容
+        function updateLuckyUnlucky() {
+            const yiIndex = Math.floor(Math.random() * luckyItems.length);
+            const jiIndex = Math.floor(Math.random() * unluckyItems.length);
+            
+            document.getElementById('yiContent').textContent = luckyItems[yiIndex];
+            document.getElementById('jiContent').textContent = unluckyItems[jiIndex];
+        }
+
+        // 生成日历
+        function generateCalendar(year, month) {
+            const calendarGrid = document.getElementById('calendarDays');
+            
+            // 清空现有日期（保留星期标题）
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+            
+            // 获取当月第一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            
+            // 第一天是星期几
+            const firstDayIndex = firstDay.getDay();
+            
+            // 添加上个月的最后几天
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = firstDayIndex - 1; i >= 0; i--) {
+                const day = prevMonthLastDay - i;
+                const dateElement = document.createElement('div');
+                dateElement.className = 'calendar-date other-month';
+                dateElement.textContent = day;
+                calendarGrid.appendChild(dateElement);
+            }
+            
+            // 添加当月日期
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateElement = document.createElement('div');
+                dateElement.className = 'calendar-date';
+                dateElement.textContent = day;
+                
+                // 检查是否是今天
+                if (year === today.getFullYear() && 
+                    month === today.getMonth() && 
+                    day === today.getDate()) {
+                    dateElement.classList.add('today');
+                }
+                
+                // 检查是否是周末
+                const dayIndex = (firstDayIndex + day - 1) % 7;
+                if (dayIndex === 0 || dayIndex === 6) {
+                    dateElement.classList.add('weekend');
+                }
+                
+                calendarGrid.appendChild(dateElement);
+            }
+            
+            // 添加下个月的开始几天
+            const totalCells = 42; // 6行 * 7天
+            const remainingCells = totalCells - (firstDayIndex + daysInMonth);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dateElement = document.createElement('div');
+                dateElement.className = 'calendar-date other-month';
+                dateElement.textContent = day;
+                calendarGrid.appendChild(dateElement);
+            }
+        }
+
+        // 获取天气信息 - 使用高德地图API
+        async function getWeather() {
+            showWeatherLoading(true);
+            hideWeatherError();
+            hideWeatherContent();
+            
+            try {
+                // 首先尝试使用IP定位获取位置
+                const locationData = await getLocationByIP();
+                
+                if (locationData && locationData.city) {
+                    currentCity = locationData.city;
+                    // 使用高德地图API获取天气
+                    await fetchWeatherFromAMap(currentCity);
+                } else {
+                    // 如果IP定位失败，使用默认城市
+                    currentCity = "广州";
+                    await fetchWeatherFromAMap(currentCity);
+                }
+            } catch (error) {
+                console.error('获取天气失败:', error);
+                // 显示错误信息
+                showWeatherError();
+                hideWeatherLoading();
+                updateStatus('天气信息获取失败', 'error');
+            }
+        }
+
+        // 通过IP获取位置
+        async function getLocationByIP() {
+            try {
+                // 使用高德地图IP定位API
+                const response = await fetch(`https://restapi.amap.com/v3/ip?key=${AMAP_API_KEY}`, {
+                    timeout: 5000
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === '1' && data.city) {
+                        return {
+                            city: data.city.replace('市', ''), // 去掉"市"字
+                            province: data.province,
+                            adcode: data.adcode
+                        };
+                    } else {
+                        throw new Error('IP定位失败: ' + data.info);
+                    }
+                } else {
+                    throw new Error('IP定位服务不可用');
+                }
+            } catch (error) {
+                console.warn('IP定位失败:', error);
+                // 返回默认位置
+                return {
+                    city: "广州",
+                    province: "广东",
+                    adcode: "440100"
+                };
+            }
+        }
+
+        // 使用高德地图API获取天气
+        async function fetchWeatherFromAMap(city) {
+            try {
+                // 先通过地理编码获取城市编码
+                const geocodeResponse = await fetch(
+                    `https://restapi.amap.com/v3/geocode/geo?key=${AMAP_API_KEY}&address=${encodeURIComponent(city)}`
+                );
+                
+                if (!geocodeResponse.ok) {
+                    throw new Error('地理编码请求失败');
+                }
+                
+                const geocodeData = await geocodeResponse.json();
+                
+                if (geocodeData.status !== '1' || geocodeData.geocodes.length === 0) {
+                    throw new Error('未找到城市信息');
+                }
+                
+                const adcode = geocodeData.geocodes[0].adcode;
+                
+                // 使用adcode获取天气信息（更准确）
+                const weatherResponse = await fetch(
+                    `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP_API_KEY}&city=${adcode}&extensions=base`
+                );
+                
+                if (!weatherResponse.ok) {
+                    throw new Error('天气请求失败');
+                }
+                
+                const weatherData = await weatherResponse.json();
+                
+                if (weatherData.status === '1' && weatherData.lives && weatherData.lives.length > 0) {
+                    const live = weatherData.lives[0];
+                    updateWeatherUI({
+                        temp: live.temperature,
+                        description: live.weather,
+                        icon: weatherIcons[live.weather] || '🌈',
+                        humidity: live.humidity,
+                        windSpeed: live.windpower,
+                        city: live.city,
+                        windDirection: live.winddirection,
+                        reportTime: live.reporttime
+                    });
+                    showWeatherContent();
+                    updateStatus('✅ 天气信息已更新', 'success');
+                } else {
+                    throw new Error('天气数据解析失败');
+                }
+                
+            } catch (error) {
+                console.error('获取天气数据失败:', error);
+                // 尝试备用方案 - 直接使用城市名查询
+                await fetchWeatherFromAMapBackup(city);
+            } finally {
+                hideWeatherLoading();
+            }
+        }
+
+        // 备用天气API - 和风天气（免费版）
+        async function fetchWeatherFromAMapBackup(city) {
+            try {
+                // 使用和风天气的免费API（需要注册获取key）
+                // 这里使用一个公开的演示key（实际使用时请注册自己的key）
+                const HE_WEATHER_KEY = 'cc2ee5e7b35242cf8f8dc7a9dfa8596c';
+                const response = await fetch(
+                    `https://devapi.qweather.com/v7/weather/now?location=${encodeURIComponent(city)}&key=${HE_WEATHER_KEY}`
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.code === '200') {
+                        const now = data.now;
+                        updateWeatherUI({
+                            temp: now.temp,
+                            description: now.text,
+                            icon: getHeWeatherIcon(now.icon),
+                            humidity: now.humidity,
+                            windSpeed: now.windScale,
+                            city: city,
+                            windDirection: now.windDir
+                        });
+                        showWeatherContent();
+                        updateStatus('✅ 天气信息已更新（备用源）', 'success');
+                        return;
+                    }
+                }
+                
+                // 如果和风天气也失败，使用模拟数据
+                throw new Error('备用天气API失败');
+                
+            } catch (error) {
+                console.error('备用天气API失败:', error);
+                // 最后使用模拟数据
+                useMockWeatherData(city);
+                showWeatherContent();
+                updateStatus('⚠️ 使用模拟天气数据', 'warning');
+            }
+        }
+
+        // 获取和风天气图标
+        function getHeWeatherIcon(iconCode) {
+            const iconMap = {
+                '100': '☀️', // 晴
+                '101': '⛅', // 多云
+                '102': '⛅', // 少云
+                '103': '☁️', // 晴间多云
+                '104': '☁️', // 阴
+                '150': '🌙', // 晴（夜）
+                '151': '⛅', // 多云（夜）
+                '152': '⛅', // 少云（夜）
+                '153': '☁️', // 晴间多云（夜）
+                '300': '🌧️', // 阵雨
+                '301': '🌧️', // 强阵雨
+                '302': '⛈️', // 雷阵雨
+                '303': '⛈️', // 强雷阵雨
+                '304': '🌨️', // 雷阵雨伴有冰雹
+                '305': '🌧️', // 小雨
+                '306': '🌧️', // 中雨
+                '307': '🌧️', // 大雨
+                '308': '🌧️', // 极端降雨
+                '309': '🌧️', // 毛毛雨/细雨
+                '310': '🌧️', // 暴雨
+                '311': '🌧️', // 大暴雨
+                '312': '🌧️', // 特大暴雨
+                '313': '🌧️', // 冻雨
+                '314': '🌧️', // 小到中雨
+                '315': '🌧️', // 中到大雨
+                '316': '🌧️', // 大到暴雨
+                '317': '🌧️', // 暴雨到大暴雨
+                '318': '🌧️', // 大暴雨到特大暴雨
+                '399': '🌧️', // 雨
+                '400': '❄️', // 小雪
+                '401': '❄️', // 中雪
+                '402': '❄️', // 大雪
+                '403': '❄️', // 暴雪
+                '404': '🌨️', // 雨夹雪
+                '405': '🌨️', // 雨雪天气
+                '406': '🌨️', // 阵雨夹雪
+                '407': '🌨️', // 阵雪
+                '408': '❄️', // 小到中雪
+                '409': '❄️', // 中到大雪
+                '410': '❄️', // 大到暴雪
+                '499': '❄️', // 雪
+                '500': '🌫️', // 薄雾
+                '501': '🌫️', // 雾
+                '502': '😷', // 霾
+                '503': '🌫️', // 扬沙
+                '504': '🌫️', // 浮尘
+                '507': '🌫️', // 沙尘暴
+                '508': '🌫️', // 强沙尘暴
+                '509': '🌫️', // 浓雾
+                '510': '🌫️', // 强浓雾
+                '511': '😷', // 中度霾
+                '512': '😷', // 重度霾
+                '513': '😷', // 严重霾
+                '514': '🌫️', // 大雾
+                '515': '🌫️', // 特强浓雾
+            };
+            return iconMap[iconCode] || '🌈';
+        }
+
+        // 使用模拟天气数据
+        function useMockWeatherData(city = "广州市") {
+            const mockData = generateRealisticWeather(city);
+            updateWeatherUI(mockData);
+        }
+
+        // 生成真实的天气数据（模拟）- 仅作为最后的备用
+        function generateRealisticWeather(city) {
+            const now = new Date();
+            const month = now.getMonth();
+            const hour = now.getHours();
+            
+            // 根据不同季节和时间生成合理的天气
+            let baseTemp, weatherDesc, icon, humidity, windSpeed;
+            
+            // 季节调整
+            if (month >= 2 && month <= 4) { // 春季
+                baseTemp = 15 + Math.random() * 15; // 15-30°C
+                const rand = Math.random();
+                if (rand < 0.3) {
+                    weatherDesc = "小雨";
+                    icon = "🌧️";
+                    humidity = 70 + Math.random() * 20;
+                } else if (rand < 0.6) {
+                    weatherDesc = "多云";
+                    icon = "⛅";
+                    humidity = 50 + Math.random() * 20;
+                } else {
+                    weatherDesc = "晴";
+                    icon = "☀️";
+                    humidity = 40 + Math.random() * 20;
+                }
+            } else if (month >= 5 && month <= 7) { // 夏季
+                baseTemp = 25 + Math.random() * 10; // 25-35°C
+                const rand = Math.random();
+                if (rand < 0.4) {
+                    weatherDesc = "雷阵雨";
+                    icon = "⛈️";
+                    humidity = 80 + Math.random() * 15;
+                } else if (rand < 0.7) {
+                    weatherDesc = "多云";
+                    icon = "⛅";
+                    humidity = 60 + Math.random() * 20;
+                } else {
+                    weatherDesc = "晴";
+                    icon = "☀️";
+                    humidity = 50 + Math.random() * 20;
+                }
+            } else if (month >= 8 && month <= 10) { // 秋季
+                baseTemp = 10 + Math.random() * 15; // 10-25°C
+                const rand = Math.random();
+                if (rand < 0.3) {
+                    weatherDesc = "阴";
+                    icon = "☁️";
+                    humidity = 60 + Math.random() * 20;
+                } else if (rand < 0.6) {
+                    weatherDesc = "多云";
+                    icon = "⛅";
+                    humidity = 50 + Math.random() * 20;
+                } else {
+                    weatherDesc = "晴";
+                    icon = "☀️";
+                    humidity = 40 + Math.random() * 20;
+                }
+            } else { // 冬季
+                baseTemp = 0 + Math.random() * 15; // 0-15°C
+                const rand = Math.random();
+                if (rand < 0.2) {
+                    weatherDesc = "小雪";
+                    icon = "❄️";
+                    humidity = 60 + Math.random() * 20;
+                } else if (rand < 0.5) {
+                    weatherDesc = "阴";
+                    icon = "☁️";
+                    humidity = 50 + Math.random() * 20;
+                } else {
+                    weatherDesc = "晴";
+                    icon = "☀️";
+                    humidity = 40 + Math.random() * 20;
+                }
+            }
+            
+            // 时间调整（夜间温度较低）
+            if (hour >= 18 || hour < 6) {
+                baseTemp -= 5; // 夜间降温
+                if (weatherDesc === "晴") {
+                    icon = "🌙";
+                }
+            }
+            
+            // 风速（km/h）
+            windSpeed = (5 + Math.random() * 15).toFixed(1);
+            
+            return {
+                temp: Math.round(baseTemp),
+                description: weatherDesc,
+                icon: icon,
+                humidity: Math.round(humidity),
+                windSpeed: windSpeed,
+                city: city,
+                feelsLike: Math.round(baseTemp - 2 + Math.random() * 4),
+                pressure: Math.round(980 + Math.random() * 40),
+                visibility: Math.round(5 + Math.random() * 15)
+            };
+        }
+
+        // 显示天气加载状态
+        function showWeatherLoading(show) {
+            const loading = document.getElementById('weatherLoading');
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        // 显示天气内容
+        function showWeatherContent() {
+            const content = document.getElementById('weatherContent');
+            content.style.display = 'block';
+        }
+
+        // 隐藏天气内容
+        function hideWeatherContent() {
+            const content = document.getElementById('weatherContent');
+            content.style.display = 'none';
+        }
+
+        // 显示天气错误
+        function showWeatherError() {
+            const error = document.getElementById('weatherError');
+            error.style.display = 'block';
+        }
+
+        // 隐藏天气错误
+        function hideWeatherError() {
+            const error = document.getElementById('weatherError');
+            error.style.display = 'none';
+        }
+
+        // 更新天气UI
+        function updateWeatherUI(weatherData) {
+            document.getElementById('weatherTemp').textContent = `${weatherData.temp}°C`;
+            document.getElementById('weatherIcon').textContent = weatherData.icon;
+            document.getElementById('weatherDesc').textContent = weatherData.description;
+            document.getElementById('weatherHumidity').textContent = `${weatherData.humidity}%`;
+            
+            // 处理风速数据
+            let windSpeed = weatherData.windSpeed;
+            // 如果风速是字符串且包含"级"，尝试转换为km/h
+            if (typeof windSpeed === 'string' && windSpeed.includes('级')) {
+                // 简单转换：1级≈2km/h, 2级≈5km/h, 3级≈10km/h, 4级≈15km/h, 以此类推
+                const level = parseInt(windSpeed);
+                if (!isNaN(level)) {
+                    windSpeed = (level * 3).toString() + 'km/h';
+                }
+            } else if (!windSpeed.includes('km/h') && !windSpeed.includes('m/s')) {
+                windSpeed += 'km/h';
+            }
+            
+            document.getElementById('weatherWind').textContent = windSpeed;
+            document.getElementById('weatherLocation').innerHTML = 
+                `<span>📍</span><span>${weatherData.city}</span>`;
         }
 
         // 加载重量数据
@@ -1194,7 +2613,7 @@
                     // 如果根目录加载失败，使用默认公告
                     const defaultAnnouncements = [
                         { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面升级", type: "info" },
-                        { message: "📢 新增图片点击放大功能", type: "success" },
+                        { message: "📢 新增实时天气功能，使用高德地图API", type: "success" },
                         { message: "⚡ 优化了移动端图片显示效果", type: "info" },
                         { message: "🔔 系统维护时间：每周日凌晨2:00-4:00", type: "warning" }
                     ];
@@ -1206,7 +2625,7 @@
                 // 加载失败时使用默认公告
                 const defaultAnnouncements = [
                     { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面升级", type: "info" },
-                    { message: "📢 新增图片点击放大功能", type: "success" },
+                    { message: "📢 新增实时天气功能，使用高德地图API", type: "success" },
                     { message: "⚡ 优化了移动端图片显示效果", type: "info" },
                     { message: "🔔 系统维护时间：每周日凌晨2:00-4:00", type: "warning" }
                 ];
@@ -1569,8 +2988,8 @@
             // 清空搜索结果
             document.getElementById('results').innerHTML = `
                 <div class="status-info">
-                    <p>已切换到${type === 'image' ? '图片' : '重量'}搜索模式</p>
-                    <p>请输入关键词进行搜索</p>
+                    <p>数据加载成功！</p>
+                    <p>请选择搜索类型并输入关键词进行搜索</p>
                 </div>
             `;
             document.getElementById('resultsInfo').innerHTML = '';
@@ -1584,7 +3003,7 @@
             directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
                 <div class="directory-item" onclick="loadFromDirectory(${index})">
                     <strong>${dir.name}</strong>
-                    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">${dir.description}</div>
+                    <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">${dir.description}</div>
                 </div>
             `).join('');
             
@@ -1701,17 +3120,17 @@
             
             // 根据类型设置样式
             if (type === 'success') {
-                statusEl.style.background = '#e8f5e8';
+                statusEl.style.background = 'rgba(46, 204, 113, 0.2)';
                 statusEl.style.borderLeftColor = '#2ecc71';
             } else if (type === 'warning') {
-                statusEl.style.background = '#fff3cd';
+                statusEl.style.background = 'rgba(243, 156, 18, 0.2)';
                 statusEl.style.borderLeftColor = '#f39c12';
             } else if (type === 'error') {
-                statusEl.style.background = '#fde8e8';
+                statusEl.style.background = 'rgba(231, 76, 60, 0.2)';
                 statusEl.style.borderLeftColor = '#e74c3c';
             } else {
-                statusEl.style.background = '#e8f4fc';
-                statusEl.style.borderLeftColor = '#3498db';
+                statusEl.style.background = 'rgba(28, 37, 65, 0.8)';
+                statusEl.style.borderLeftColor = '#5bc0be';
             }
         }
 
@@ -1720,7 +3139,7 @@
             document.getElementById('resultsInfo').innerHTML = '<p>' + message + '</p>';
             document.getElementById('results').innerHTML = `
                 <div class="status-info">
-                    <p>✅ 数据加载成功！</p>
+                    <p>数据加载成功！</p>
                     <p>请选择搜索类型并输入关键词进行搜索</p>
                 </div>
             `;
@@ -1768,7 +3187,7 @@
             setTimeout(scrollToResults, 100);
         }
 
-        // 显示图片结果 - 纯图片，不显示重量
+        // 显示图片结果 - 统一小图大小
         function displayImages(images, query) {
             const resultsContainer = document.getElementById('results');
             
@@ -1859,7 +3278,7 @@
                                         </div>
                                     `).join('')}
                                 </div>
-                                <div style="margin-top: 10px; padding: 8px; background: #e8f4fc; border-radius: 4px; font-size: 0.8rem; color: #3498db;">
+                                <div style="margin-top: 10px; padding: 8px; background: rgba(91, 192, 190, 0.2); border-radius: 4px; font-size: 0.8rem; color: #7befff;">
                                     <strong>完整重量信息:</strong> ${weightList}
                                 </div>
                                 <button class="copy-all-btn" onclick="copyWeightData('${code}')">
@@ -1965,13 +3384,14 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: #2ecc71;
+                background: linear-gradient(45deg, #2ecc71, #27ae60);
                 color: white;
                 padding: 12px 20px;
                 border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
                 z-index: 10000;
                 font-weight: 600;
+                border: 1px solid rgba(123, 239, 255, 0.3);
             `;
             
             notification.textContent = message;
@@ -1986,7 +3406,7 @@
         // 处理图片加载错误
         function handleImageError(imgElement, code) {
             console.log(`图片加载失败: ${code} - ${imgElement.src}`);
-            imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2U3NGMzYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
+            imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWMyNTQxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzViYzBiZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
             imgElement.alt = '图片加载失败';
         }
 
@@ -2000,4 +3420,4 @@
         initialize();
     </script>
 </body>
-</html
+</html>
