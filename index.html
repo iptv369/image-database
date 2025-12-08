@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#1a237e">
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-    <style>
+<style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -1558,7 +1558,70 @@
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
-    </style>
+    /* 图片卡片按钮样式 */
+.image-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.copy-btn {
+    padding: 4px 8px;
+    background: linear-gradient(45deg, #5bc0be, #3a506b);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    flex: 1;
+    max-width: 80px;
+}
+
+.copy-btn:hover {
+    background: linear-gradient(45deg, #7befff, #5bc0be);
+    transform: translateY(-1px);
+}
+
+/* 模态框按钮样式 */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.modal-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 复制通知动画 */
+@keyframes copyNotificationSlideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes copyNotificationSlideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+</style>
 </head>
 <body>
     <!-- 星空背景 -->
@@ -3295,37 +3358,43 @@ function displayAnnouncements(announcements) {
             displayImages(results, query);
         }
 
-        // 显示图片结果
-        function displayImages(images, query) {
-            const resultsContainer = document.getElementById('results');
-            
-            if (images.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="status-info">
-                        <p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p>
-                        <p>数据库中共有 ${imageData.length} 张图片</p>
+        // 显示图片结果 - 添加复制图片按钮
+function displayImages(images, query) {
+    const resultsContainer = document.getElementById('results');
+    
+    if (images.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="status-info">
+                <p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p>
+                <p>数据库中共有 ${imageData.length} 张图片</p>
+            </div>
+        `;
+        return;
+    }
+    
+    resultsContainer.innerHTML = `
+        <div class="image-results">
+            ${images.map(img => `
+                <div class="image-card">
+                    <div class="image-wrapper">
+                        <img src="${img.url}" alt="${img.code}" 
+                             id="img-${img.code}"
+                             onerror="handleImageError(this, '${img.code}')"
+                             loading="lazy">
                     </div>
-                `;
-                return;
-            }
-            
-            resultsContainer.innerHTML = `
-                <div class="image-results">
-                    ${images.map(img => `
-                        <div class="image-card" onclick="openImageModal('${img.url}', '${img.code}')">
-                            <div class="image-wrapper">
-                                <img src="${img.url}" alt="${img.code}" 
-                                     onerror="handleImageError(this, '${img.code}')"
-                                     loading="lazy">
-                            </div>
-                            <div class="image-info">
-                                <div class="image-code">${img.code}</div>
-                            </div>
+                    <div class="image-info">
+                        <div class="image-code">${img.code}</div>
+                        <div class="image-actions">
+                            <button class="copy-btn" onclick="copyImageToClipboard('${img.url}', '${img.code}')" title="复制图片">
+                                🖼️ 复制图片
+                            </button>
                         </div>
-                    `).join('')}
+                    </div>
                 </div>
-            `;
-        }
+            `).join('')}
+        </div>
+    `;
+}
 
         // 搜索重量
         function searchWeights(query) {
@@ -3403,34 +3472,45 @@ function displayAnnouncements(announcements) {
             imgElement.alt = '图片加载失败';
         }
 
-        // 打开图片模态框
-        function openImageModal(imageUrl, code) {
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            const modalCode = document.getElementById('modalCode');
-            
-            modalImage.src = imageUrl;
-            modalCode.textContent = code;
-            
-            modal.classList.add('active');
-            
-            document.addEventListener('keydown', handleModalKeydown);
-        }
-
-        // 关闭图片模态框
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.remove('active');
-            
-            document.removeEventListener('keydown', handleModalKeydown);
-        }
-
-        // 处理模态框键盘事件
-        function handleModalKeydown(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        }
+        // 修改模态框中的按钮
+function openImageModal(imageUrl, code, description = '') {
+    const modal = document.getElementById('imageModal');
+    
+    // 在模态框中添加复制图片按钮
+    modal.innerHTML = `
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img id="modalImage" src="${imageUrl}" alt="${code}">
+            </div>
+            <div class="modal-info">
+                <div class="modal-code">${code}</div>
+                ${description ? `<div class="modal-description">${description}</div>` : ''}
+                <div class="modal-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="copyImageToClipboard('${imageUrl}', '${code}')" 
+                            style="padding: 8px 16px; background: linear-gradient(45deg, #5bc0be, #3a506b); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                        🖼️ 复制图片
+                    </button>
+                    <button onclick="downloadImage('${imageUrl}', '${code}')" 
+                            style="padding: 8px 16px; background: linear-gradient(45deg, #4caf50, #2e7d32); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                        💾 下载图片
+                    </button>
+                    <button onclick="copyToClipboard('${imageUrl}', '图片链接')" 
+                            style="padding: 8px 16px; background: linear-gradient(45deg, #9d4edd, #560bad); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                        🔗 复制链接
+                    </button>
+                    <button onclick="copyToClipboard('${code}', '图片代码')" 
+                            style="padding: 8px 16px; background: linear-gradient(45deg, #ff6b6b, #ff9a00); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                        📋 复制代码
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+    document.addEventListener('keydown', handleModalKeydown);
+}
 
         // 复制重量数据
         function copyWeightData(code) {
@@ -3490,6 +3570,138 @@ function displayAnnouncements(announcements) {
 
         // 页面加载时初始化
         initialize();
-    </script>
+    // ==================== 图片复制功能 ====================
+
+// 复制图片到剪贴板
+async function copyImageToClipboard(imageUrl, imageCode) {
+    try {
+        // 显示加载状态
+        showCopyNotification('🔄 正在准备复制图片...');
+        
+        // 获取图片数据
+        const response = await fetch(imageUrl);
+        if (!response.ok) {
+            throw new Error(`图片加载失败: ${response.status}`);
+        }
+        
+        // 将响应转换为Blob
+        const blob = await response.blob();
+        
+        // 创建一个图片元素用于绘制到canvas
+        const img = new Image();
+        img.crossOrigin = 'anonymous'; // 处理跨域问题
+        
+        // 等待图片加载
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = () => reject(new Error('图片加载失败'));
+            img.src = imageUrl;
+            
+            // 设置超时
+            setTimeout(() => reject(new Error('图片加载超时')), 10000);
+        });
+        
+        // 创建canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        
+        // 绘制图片到canvas
+        ctx.drawImage(img, 0, 0);
+        
+        // 将canvas转换为Blob
+        canvas.toBlob(async (blob) => {
+            try {
+                // 使用Clipboard API复制图片
+                const item = new ClipboardItem({
+                    [blob.type]: blob
+                });
+                
+                await navigator.clipboard.write([item]);
+                showCopyNotification(`✅ 已复制图片: ${imageCode}`);
+            } catch (clipboardError) {
+                // 如果Clipboard API失败，尝试降级方案
+                console.log('Clipboard API失败，尝试备用方案:', clipboardError);
+                fallbackCopyImage(blob, imageCode);
+            }
+        });
+        
+    } catch (error) {
+        console.error('复制图片失败:', error);
+        showCopyNotification(`❌ 复制图片失败: ${error.message}`);
+    }
+}
+
+// 备用复制方案
+function fallbackCopyImage(blob, imageCode) {
+    try {
+        // 创建一个临时链接用于复制
+        const tempLink = document.createElement('a');
+        tempLink.href = URL.createObjectURL(blob);
+        tempLink.download = `${imageCode}.png`;
+        
+        // 创建一个临时容器
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'fixed';
+        tempContainer.style.left = '-9999px';
+        tempContainer.appendChild(tempLink);
+        document.body.appendChild(tempContainer);
+        
+        // 触发下载
+        tempLink.click();
+        
+        // 清理
+        setTimeout(() => {
+            document.body.removeChild(tempContainer);
+            URL.revokeObjectURL(tempLink.href);
+        }, 100);
+        
+        showCopyNotification(`✅ 图片已准备下载: ${imageCode}`);
+        
+    } catch (error) {
+        console.error('备用复制方案失败:', error);
+        showCopyNotification('❌ 无法复制图片，请右键另存为');
+    }
+}
+
+// 下载图片函数
+function downloadImage(url, filename) {
+    showCopyNotification('🔄 正在下载图片...');
+    
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename + '.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            showCopyNotification(`✅ ${filename} 图片下载已开始`);
+        })
+        .catch(error => {
+            console.error('下载失败:', error);
+            showCopyNotification('❌ 图片下载失败');
+        });
+}
+
+// 通用复制函数（用于复制文本）
+function copyToClipboard(text, type = '内容') {
+    navigator.clipboard.writeText(text).then(() => {
+        showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+    }).catch(err => {
+        // 降级方案
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+    });
+}
+</script>
 </body>
 </html>
