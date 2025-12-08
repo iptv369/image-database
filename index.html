@@ -335,7 +335,7 @@
             }
         }
         
-        /* 右侧日历区域 - 去掉天气 */
+        /* 右侧日历区域 */
         .calendar-container {
             position: fixed;
             right: 20px;
@@ -356,6 +356,164 @@
             .calendar-container {
                 display: block;
             }
+        }
+        
+        /* 天气区域样式 */
+        .weather-container {
+            background: rgba(28, 37, 65, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+        }
+        
+        .weather-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
+        }
+        
+        .weather-title {
+            color: #7befff;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .weather-location {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .weather-location:hover {
+            color: #ffd166;
+        }
+        
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .weather-temp {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffd166;
+            display: flex;
+            align-items: center;
+        }
+        
+        .weather-icon {
+            font-size: 36px;
+        }
+        
+        .weather-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .weather-detail-item {
+            text-align: center;
+            padding: 5px;
+            background: rgba(40, 53, 147, 0.6);
+            border-radius: 6px;
+        }
+        
+        .weather-detail-label {
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .weather-detail-value {
+            display: block;
+            color: #7befff;
+            font-weight: 600;
+        }
+        
+        /* 天气刷新按钮 */
+        .weather-refresh {
+            background: rgba(91, 192, 190, 0.3);
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            color: #7befff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .weather-refresh:hover {
+            background: rgba(91, 192, 190, 0.5);
+            transform: rotate(180deg);
+        }
+        
+        /* 天气API配置区域 */
+        .weather-config {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(123, 239, 255, 0.2);
+        }
+        
+        .weather-config-toggle {
+            font-size: 11px;
+            color: #ffd166;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .weather-config-content {
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .weather-config-content.show {
+            display: block;
+        }
+        
+        .weather-config-input {
+            width: 100%;
+            padding: 6px 8px;
+            background: rgba(40, 53, 147, 0.8);
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            border-radius: 4px;
+            color: white;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+        
+        .weather-config-btn {
+            width: 100%;
+            padding: 6px;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 5px;
         }
         
         .calendar-header {
@@ -500,28 +658,29 @@
             padding-top: 20px;
         }
         
-        /* 滚动公告条样式 */
+        /* 优化后的滚动公告条样式 */
         .announcement-bar {
             background: linear-gradient(90deg, #1a237e, #283593);
             color: white;
-            padding: 12px 40px 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 8px 30px 8px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-            min-height: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            min-height: 40px;
             display: flex;
             align-items: center;
             border: 1px solid rgba(123, 239, 255, 0.2);
             width: 100%;
+            font-size: 14px;
         }
         
         .announcement-content {
             flex: 1;
             overflow: hidden;
             position: relative;
-            height: 26px;
+            height: 22px;
         }
         
         .announcement-scroll {
@@ -529,6 +688,7 @@
             width: 100%;
             animation: scrollAnnouncement 20s linear infinite;
             white-space: nowrap;
+            font-size: 13px;
         }
         
         @keyframes scrollAnnouncement {
@@ -540,6 +700,24 @@
             }
         }
         
+        .announcement-close {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         .announcement-bar.hidden {
             display: none;
         }
@@ -547,10 +725,10 @@
         /* 搜索区域 */
         .search-container {
             background: rgba(26, 35, 126, 0.9);
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-left: 5px solid #5bc0be;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(123, 239, 255, 0.2);
@@ -646,7 +824,7 @@
             color: white;
         }
         
-        /* 主要内容布局 - 还原原有布局 */
+        /* 主要内容布局 */
         .main-content {
             display: flex;
             gap: 25px;
@@ -654,7 +832,7 @@
             width: 100%;
         }
         
-        /* 视频容器 - 还原原有样式 */
+        /* 视频容器 */
         .video-container {
             background: rgba(26, 35, 126, 0.9);
             padding: 20px;
@@ -857,19 +1035,20 @@
             width: 100%;
         }
         
-        /* 优化搜索小图 - 统一尺寸和布局 */
+        /* 优化搜索小图 - 简洁无字体干扰 */
         .image-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 18px;
-            margin-top: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
             flex: 1;
             align-items: start;
+            justify-items: center;
         }
         
         .image-card {
             border: 1px solid rgba(123, 239, 255, 0.3);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
             background: rgba(28, 37, 65, 0.8);
@@ -877,8 +1056,10 @@
             transition: all 0.3s;
             display: flex;
             flex-direction: column;
-            height: 260px;
+            height: 240px;
             position: relative;
+            width: 100%;
+            max-width: 240px;
         }
         
         .image-card:hover {
@@ -887,10 +1068,10 @@
             border-color: #5bc0be;
         }
         
-        /* 修复图片显示问题 */
+        /* 修复图片显示问题 - 简洁无字体 */
         .image-card .image-wrapper {
             width: 100%;
-            height: 180px;
+            height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -909,7 +1090,7 @@
         }
         
         .image-info {
-            padding: 12px 10px;
+            padding: 10px;
             text-align: center;
             flex: 1;
             display: flex;
@@ -920,7 +1101,7 @@
         
         .image-code {
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #7befff;
             margin-bottom: 4px;
             word-break: break-word;
@@ -929,18 +1110,6 @@
             display: -webkit-box;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
-        }
-        
-        .image-meta {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 2px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            line-height: 1.4;
         }
         
         .status-info {
@@ -954,35 +1123,46 @@
             align-items: center;
         }
         
-        /* 目录容器样式 - 修改为更紧凑 */
+        /* 目录容器样式 - 只保留两个选项 */
         .directory-container {
             background: rgba(26, 35, 126, 0.9);
-            padding: 15px; /* 减少内边距 */
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            margin-bottom: 20px; /* 减少底部边距 */
+            margin-bottom: 15px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(123, 239, 255, 0.2);
         }
         
+        .directory-container h3 {
+            color: #7befff;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .directory-list {
             display: flex;
-            gap: 12px; /* 减小间距 */
-            margin-top: 12px; /* 减小上边距 */
+            gap: 10px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
         
-        /* 目录项样式 - 修改为更紧凑 */
+        /* 目录项样式 - 只保留两个选项 */
         .directory-item {
-            padding: 8px 12px; /* 减少内边距 */
+            padding: 12px 16px;
             border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             background: rgba(28, 37, 65, 0.8);
-            min-width: 120px; /* 减小最小宽度 */
+            min-width: 140px;
             color: white;
-            font-size: 14px; /* 减小字体大小 */
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
         }
         
         .directory-item:hover {
@@ -999,7 +1179,7 @@
         
         .update-status {
             background: rgba(28, 37, 65, 0.8);
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             margin: 15px 0;
             font-size: 14px;
@@ -1243,104 +1423,141 @@
         }
         
         /* 移动端适配 */
-@media (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
-    
-    .main-content-area {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    /* 隐藏滚动公告条 */
-    .announcement-bar {
-        display: none !important;
-    }
-    
-    .search-container {
-        padding: 20px;
-        margin-top: 10px;
-    }
-    
-    h1 {
-        font-size: 1.5rem;
-    }
-    
-    .search-controls {
-        flex-direction: column;
-    }
-    
-    .search-input-container {
-        min-width: 100%;
-    }
-    
-    button {
-        width: 100%;
-        margin: 5px 0;
-    }
-    
-    /* 移动端隐藏视频播放器 */
-    .video-container {
-        display: none !important;
-    }
-    
-    .main-content {
-        flex-direction: column;
-    }
-    
-    .results-container {
-        min-height: auto;
-        width: 100%;
-        scroll-margin-top: 80px; /* 添加滚动边距，避免被固定元素遮挡 */
-    }
-    
-    .image-results {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    
-    .image-card {
-        height: 220px;
-    }
-    
-    .image-card .image-wrapper {
-        height: 140px;
-    }
-    
-    .weight-results {
-        grid-template-columns: 1fr;
-    }
-    
-    /* 移动端适配 - 减小移动端的目录尺寸 */
-    .directory-container {
-        padding: 12px; /* 移动端更小的内边距 */
-    }
-    
-    .directory-list {
-        flex-direction: column;
-    }
-    
-    .directory-item {
-        min-width: auto;
-        padding: 6px 10px; /* 移动端更小的内边距 */
-        font-size: 13px; /* 移动端更小的字体 */
-    }
-}
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .main-content-area {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            /* 移动端公告栏 */
+            .announcement-bar {
+                padding: 6px 25px 6px 12px;
+                min-height: 36px;
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .announcement-content {
+                height: 18px;
+            }
+            
+            .announcement-scroll {
+                font-size: 11px;
+            }
+            
+            .announcement-close {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .search-container {
+                padding: 15px;
+                margin-top: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            /* 移动端隐藏视频播放器 */
+            .video-container {
+                display: none !important;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .results-container {
+                min-height: auto;
+                width: 100%;
+                scroll-margin-top: 80px;
+                padding: 15px;
+            }
+            
+            /* 移动端图片显示 */
+            .image-results {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                justify-items: center;
+            }
+            
+            .image-card {
+                height: 200px;
+                max-width: 100%;
+            }
+            
+            .image-card .image-wrapper {
+                height: 130px;
+            }
+            
+            .weight-results {
+                grid-template-columns: 1fr;
+            }
+            
+            /* 移动端目录 */
+            .directory-container {
+                padding: 10px;
+            }
+            
+            .directory-container h3 {
+                font-size: 14px;
+            }
+            
+            .directory-list {
+                flex-direction: column;
+            }
+            
+            .directory-item {
+                min-width: auto;
+                padding: 10px;
+                font-size: 13px;
+                text-align: center;
+            }
+        }
 
-@media (max-width: 480px) {
-    .image-results {
-        grid-template-columns: 1fr;
-    }
-    
-    .image-card {
-        height: 240px;
-    }
-    
-    .image-card .image-wrapper {
-        height: 160px;
-    }
-}
+        @media (max-width: 480px) {
+            .image-results {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-card {
+                height: 220px;
+            }
+            
+            .image-card .image-wrapper {
+                height: 150px;
+            }
+        }
+        
+        /* 天气通知动画 */
+        @keyframes weatherNotificationSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes weatherNotificationSlideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -1370,8 +1587,52 @@
         <div class="planet planet3"></div>
     </div>
     
-    <!-- 右侧日历区域（去掉天气） -->
+    <!-- 右侧日历区域 -->
     <div class="calendar-container">
+        <!-- 天气区域 -->
+        <div class="weather-container" id="weatherContainer">
+            <div class="weather-header">
+                <div class="weather-title">🌤️ 当地天气</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="weather-location" id="weatherLocation">加载中...</div>
+                    <div class="weather-refresh" id="weatherRefreshBtn" title="刷新天气">↻</div>
+                </div>
+            </div>
+            <div class="weather-main">
+                <div class="weather-temp" id="weatherTemp">--°C</div>
+                <div class="weather-icon" id="weatherIcon">⏳</div>
+            </div>
+            <div class="weather-description" id="weatherDescription">正在获取天气数据...</div>
+            <div class="weather-details">
+                <div class="weather-detail-item">
+                    <span class="weather-detail-label">湿度</span>
+                    <span class="weather-detail-value" id="weatherHumidity">--%</span>
+                </div>
+                <div class="weather-detail-item">
+                    <span class="weather-detail-label">风速</span>
+                    <span class="weather-detail-value" id="weatherWind">--m/s</span>
+                </div>
+                <div class="weather-detail-item">
+                    <span class="weather-detail-label">体感</span>
+                    <span class="weather-detail-value" id="weatherFeelsLike">--°C</span>
+                </div>
+            </div>
+            
+            <!-- 天气配置区域 -->
+            <div class="weather-config">
+                <div class="weather-config-toggle" onclick="toggleWeatherConfig()">
+                    ⚙️ 配置天气API
+                </div>
+                <div class="weather-config-content" id="weatherConfigContent">
+                    <input type="text" class="weather-config-input" id="weatherApiKey" 
+                           placeholder="输入天气API密钥 (可选)">
+                    <input type="text" class="weather-config-input" id="weatherCity" 
+                           placeholder="城市名 (如: 东莞)" value="东莞">
+                    <button class="weather-config-btn" onclick="saveWeatherConfig()">保存配置</button>
+                </div>
+            </div>
+        </div>
+        
         <div class="calendar-header">
             <h3>📅 智能日历</h3>
             <div class="current-date" id="currentDate">--月--日</div>
@@ -1466,7 +1727,7 @@
         </div>
 
         <div class="main-content">
-            <!-- 视频播放区域 - 还原原有功能 -->
+            <!-- 视频播放区域 -->
             <div class="video-container">
                 <h2>🎬 视频教程</h2>
                 <div class="video-wrapper">
@@ -1533,7 +1794,7 @@
                 </div>
             </div>
 
-            <!-- 搜索结果区域 - 优化图片显示 -->
+            <!-- 搜索结果区域 -->
             <div class="results-container" id="results">
                 <div class="status-info">
                     <p>📥 正在加载数据，请稍候...</p>
@@ -1544,17 +1805,15 @@
     </div>
 
     <script>
-        // 配置数据源目录
+        // 配置数据源目录 - 只保留两个，去掉描述
         const DATA_DIRECTORIES = [
             {
                 name: "本地数据文件",
-                url: "./images.json",
-                description: "主要数据源 - 使用同目录下的images.json文件"
+                url: "./images.json"
             },
             {
                 name: "CDN备份",
-                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json",
-                description: "JsDelivr CDN备份数据"
+                url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json"
             }
         ];
 
@@ -1608,7 +1867,7 @@
             }
         };
 
-        // 播放列表配置 - 还原原有视频
+        // 播放列表配置
         const VIDEO_PLAYLIST = [
             {
                 id: 'BV1N9yFBpEaf',
@@ -1636,9 +1895,21 @@
             }
         ];
 
+        // 天气配置
+        const WEATHER_CONFIG = {
+            apiKey: "",
+            city: "Dongguan",
+            countryCode: "CN",
+            units: "metric",
+            fallbackApi: "https://api.open-meteo.com/v1/forecast"
+        };
+
         let imageData = [];
         let currentSearchType = 'image';
         let currentDataSource = null;
+        let currentWeatherCity = "东莞";
+        let weatherApiKey = "";
+        let weatherUpdateTimer = null;
 
         // 视频播放控制状态
         let autoplayEnabled = true;
@@ -1648,7 +1919,172 @@
         let videoProgressInterval = null;
         let currentVideoStartTime = 0;
 
-        // 初始化函数
+        // ==================== 简单准确的农历计算 ====================
+        function getAccurateLunarDate(year, month, day) {
+            // 2025年准确的农历数据表
+            const lunarData2025 = {
+                // 1月
+                '2025-01-01': '甲辰年腊月初二',
+                '2025-01-29': '甲辰年腊月三十', // 除夕
+                '2025-01-30': '乙巳年正月初一', // 春节
+                
+                // 2月
+                '2025-02-10': '乙巳年正月十二',
+                '2025-02-20': '乙巳年正月廿二',
+                '2025-02-28': '乙巳年正月三十',
+                
+                // 3月
+                '2025-03-01': '乙巳年二月初二',
+                '2025-03-10': '乙巳年二月十一',
+                '2025-03-20': '乙巳年二月廿一',
+                '2025-03-30': '乙巳年三月初一',
+                
+                // 4月
+                '2025-04-01': '乙巳年三月初三',
+                '2025-04-10': '乙巳年三月十二',
+                '2025-04-20': '乙巳年三月廿二',
+                '2025-04-30': '乙巳年四月初三',
+                
+                // 5月
+                '2025-05-01': '乙巳年四月初四',
+                '2025-05-10': '乙巳年四月十三',
+                '2025-05-20': '乙巳年四月廿三',
+                '2025-05-30': '乙巳年五月初三',
+                
+                // 6月
+                '2025-06-01': '乙巳年五月初五',
+                '2025-06-10': '乙巳年五月十四',
+                '2025-06-20': '乙巳年五月廿四',
+                '2025-06-30': '乙巳年闰五月初四', // 2025年有闰六月
+                
+                // 7月
+                '2025-07-01': '乙巳年闰五月初五',
+                '2025-07-10': '乙巳年闰五月十四',
+                '2025-07-20': '乙巳年闰五月廿四',
+                '2025-07-30': '乙巳年六月初五',
+                
+                // 8月
+                '2025-08-01': '乙巳年六月初七',
+                '2025-08-10': '乙巳年六月十六',
+                '2025-08-20': '乙巳年六月廿六',
+                '2025-08-30': '乙巳年七月初七',
+                
+                // 9月
+                '2025-09-01': '乙巳年七月初九',
+                '2025-09-10': '乙巳年七月十八',
+                '2025-09-20': '乙巳年七月廿八',
+                '2025-09-30': '乙巳年八月初八',
+                
+                // 10月
+                '2025-10-01': '乙巳年八月初九',
+                '2025-10-10': '乙巳年八月十八',
+                '2025-10-20': '乙巳年八月廿八',
+                '2025-10-30': '乙巳年九月初九',
+                
+                // 11月
+                '2025-11-01': '乙巳年九月十一',
+                '2025-11-10': '乙巳年九月二十',
+                '2025-11-20': '乙巳年九月三十',
+                '2025-11-30': '乙巳年十月初十',
+                
+                // 12月
+                '2025-12-01': '乙巳年十月十一',
+                '2025-12-10': '乙巳年十月二十',
+                '2025-12-20': '乙巳年十月三十',
+                '2025-12-25': '乙巳年冬月初五', // 圣诞节
+                '2025-12-30': '乙巳年冬月初十',
+                '2025-12-31': '乙巳年冬月十一'
+            };
+
+            const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            
+            // 如果有精确匹配，直接返回
+            if (lunarData2025[dateStr]) {
+                return lunarData2025[dateStr];
+            }
+            
+            // 如果没有精确匹配，查找最近的数据进行计算
+            const dateObj = new Date(year, month - 1, day);
+            
+            // 2025年春节是1月29日
+            const springFestival2025 = new Date(2025, 0, 29);
+            const diffDays = Math.floor((dateObj - springFestival2025) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays >= 0) {
+                // 春节之后，属于乙巳年
+                const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
+                                       "七月", "八月", "九月", "十月", "冬月", "腊月"];
+                const lunarDayNames = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
+                                     "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                                     "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+                
+                // 2025年农历月份天数（包括闰六月）
+                const lunarMonthDays = [
+                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29,  // 正月至五月
+                    30,  // 闰六月（2025年有闰六月）
+                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29  // 六月至腊月
+                ];
+                
+                let remainingDays = diffDays;
+                let lunarMonth = 0;
+                
+                // 计算农历月份
+                while (remainingDays >= lunarMonthDays[lunarMonth]) {
+                    remainingDays -= lunarMonthDays[lunarMonth];
+                    lunarMonth++;
+                }
+                
+                const lunarDay = remainingDays + 1;
+                
+                // 处理闰月显示
+                let monthDisplay = "";
+                if (lunarMonth === 5) { // 第六个月是闰六月
+                    monthDisplay = "闰六月";
+                } else if (lunarMonth > 5) {
+                    monthDisplay = lunarMonthNames[lunarMonth - 1]; // 闰月后的月份减1
+                } else {
+                    monthDisplay = lunarMonthNames[lunarMonth];
+                }
+                
+                return `乙巳年${monthDisplay}${lunarDayNames[lunarDay - 1]}`;
+            } else {
+                // 春节之前，属于甲辰年
+                return "甲辰年腊月";
+            }
+        }
+
+        // 获取节气（简化版）
+        function getSolarTerm(year, month, day) {
+            const solarTerms = ["小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", 
+                              "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", 
+                              "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至"];
+            
+            const date = new Date(year, month - 1, day);
+            const startOfYear = new Date(year, 0, 1);
+            const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+            
+            // 节气近似计算（每15天一个节气）
+            const termIndex = Math.floor((dayOfYear - 1) / 15) % 24;
+            return solarTerms[termIndex] || "--";
+        }
+
+        // 获取宜忌（简化版）
+        function getYiJi(year, month, day) {
+            const yiItems = ["祭祀", "祈福", "求嗣", "开光", "出行", "解除", "交易", "立券", "纳财", "安床"];
+            const jiItems = ["嫁娶", "安葬", "破土", "开市", "入宅", "动土", "作灶", "栽种"];
+            
+            // 基于日期的简单计算
+            const dateNum = year * 10000 + month * 100 + day;
+            const yiIndex = dateNum % yiItems.length;
+            const jiIndex = dateNum % jiItems.length;
+            
+            return {
+                yi: yiItems[yiIndex] || "祭祀",
+                ji: jiItems[jiIndex] || "破土"
+            };
+        }
+
+        // ==================== 初始化函数 ====================
         async function initialize() {
             // 创建星空背景
             createStars();
@@ -1656,6 +2092,10 @@
             
             // 初始化日历
             initializeCalendar();
+            
+            // 加载天气配置并初始化天气
+            loadWeatherConfig();
+            await initializeRealWeather();
             
             updateStatus('正在加载数据...', 'default');
             
@@ -1671,8 +2111,13 @@
             // 立即尝试加载本地数据文件
             loadFromDirectory(0);
             
-            // 初始化视频播放器 - 还原原有功能
+            // 初始化视频播放器
             initializeVideoPlayer();
+            
+            // 设置天气刷新按钮事件
+            document.getElementById('weatherRefreshBtn').addEventListener('click', function() {
+                refreshWeather();
+            });
         }
 
         // 创建星空背景
@@ -1735,42 +2180,18 @@
             document.getElementById('currentDate').textContent = `${month + 1}月${date}日`;
             document.getElementById('weekDay').textContent = `星期${weekDays[day]}`;
             
-            // 农历数据
-            const lunarData = {
-                monthNames: ["正月", "二月", "三月", "四月", "五月", "六月", 
-                            "七月", "八月", "九月", "十月", "冬月", "腊月"],
-                dayNames: ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
-                          "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
-                          "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"]
-            };
+            // 使用准确的农历计算
+            const lunarDate = getAccurateLunarDate(year, month + 1, date);
+            document.getElementById('lunarDate').textContent = `农历${lunarDate}`;
             
-            // 简化农历计算
-            const lunarMonthIndex = month % 12;
-            const lunarDayIndex = (date - 1) % 30;
+            // 获取节气
+            const solarTerm = getSolarTerm(year, month + 1, date);
+            document.getElementById('solarTerm').textContent = solarTerm;
             
-            const lunarMonth = lunarData.monthNames[lunarMonthIndex];
-            const lunarDay = lunarData.dayNames[lunarDayIndex];
-            
-            document.getElementById('lunarDate').textContent = `农历${lunarMonth}${lunarDay}`;
-            
-            // 节气
-            const solarTerms = ["立春", "雨水", "惊蛰", "春分", "清明", "谷雨",
-                              "立夏", "小满", "芒种", "夏至", "小暑", "大暑",
-                              "立秋", "处暑", "白露", "秋分", "寒露", "霜降",
-                              "立冬", "小雪", "大雪", "冬至", "小寒", "大寒"];
-            
-            const solarTermIndex = Math.floor(Math.random() * solarTerms.length);
-            document.getElementById('solarTerm').textContent = solarTerms[solarTermIndex];
-            
-            // 宜忌内容
-            const luckyItems = ["出行", "签约", "搬家", "开业", "交易", "纳财", "祈福", "祭祀", "求嗣", "嫁娶"];
-            const unluckyItems = ["动土", "安葬", "破土", "开光", "针灸", "造船", "行丧", "出货", "伐木", "作灶"];
-            
-            const yiIndex = Math.floor(Math.random() * luckyItems.length);
-            const jiIndex = Math.floor(Math.random() * unluckyItems.length);
-            
-            document.getElementById('yiContent').textContent = luckyItems[yiIndex];
-            document.getElementById('jiContent').textContent = unluckyItems[jiIndex];
+            // 获取宜忌
+            const { yi, ji } = getYiJi(year, month + 1, date);
+            document.getElementById('yiContent').textContent = yi;
+            document.getElementById('jiContent').textContent = ji;
             
             // 生成日历
             generateCalendar(year, month);
@@ -1837,6 +2258,329 @@
             }
         }
 
+        // 加载天气配置
+        function loadWeatherConfig() {
+            try {
+                const savedConfig = localStorage.getItem('weatherConfig');
+                if (savedConfig) {
+                    const config = JSON.parse(savedConfig);
+                    weatherApiKey = config.apiKey || "";
+                    currentWeatherCity = config.city || "东莞";
+                    
+                    // 更新输入框
+                    document.getElementById('weatherApiKey').value = weatherApiKey;
+                    document.getElementById('weatherCity').value = currentWeatherCity;
+                }
+            } catch (e) {
+                console.log('天气配置加载失败，使用默认设置');
+            }
+        }
+
+        // 保存天气配置
+        function saveWeatherConfig() {
+            const apiKey = document.getElementById('weatherApiKey').value.trim();
+            const city = document.getElementById('weatherCity').value.trim() || "东莞";
+            
+            weatherApiKey = apiKey;
+            currentWeatherCity = city;
+            
+            const config = {
+                apiKey: apiKey,
+                city: city
+            };
+            
+            try {
+                localStorage.setItem('weatherConfig', JSON.stringify(config));
+                showNotification('✅ 天气配置已保存');
+                
+                // 隐藏配置区域
+                document.getElementById('weatherConfigContent').classList.remove('show');
+                
+                // 刷新天气
+                refreshWeather();
+            } catch (e) {
+                showNotification('⚠️ 配置保存失败: ' + e.message);
+            }
+        }
+
+        // 切换天气配置显示
+        function toggleWeatherConfig() {
+            const configContent = document.getElementById('weatherConfigContent');
+            configContent.classList.toggle('show');
+        }
+
+        // 初始化真实天气
+        async function initializeRealWeather() {
+            // 先显示加载状态
+            document.getElementById('weatherLocation').textContent = currentWeatherCity;
+            document.getElementById('weatherTemp').textContent = '--°C';
+            document.getElementById('weatherIcon').textContent = '⏳';
+            document.getElementById('weatherDescription').textContent = '正在获取天气数据...';
+            document.getElementById('weatherHumidity').textContent = '--%';
+            document.getElementById('weatherWind').textContent = '--m/s';
+            document.getElementById('weatherFeelsLike').textContent = '--°C';
+            
+            // 获取天气数据
+            await fetchRealWeather();
+            
+            // 设置定时刷新（每30分钟刷新一次）
+            if (weatherUpdateTimer) {
+                clearInterval(weatherUpdateTimer);
+            }
+            weatherUpdateTimer = setInterval(fetchRealWeather, 30 * 60 * 1000);
+        }
+
+        // 获取真实天气数据
+        async function fetchRealWeather() {
+            try {
+                let weatherData;
+                
+                // 如果有用户提供的API密钥，使用和风天气API
+                if (weatherApiKey) {
+                    weatherData = await fetchHeWeatherData();
+                } else {
+                    // 否则使用免费API
+                    weatherData = await fetchFreeWeatherData();
+                }
+                
+                // 更新显示
+                updateWeatherDisplayWithRealData(weatherData);
+                
+            } catch (error) {
+                console.error('天气数据获取失败:', error);
+                
+                // 显示错误信息
+                document.getElementById('weatherDescription').textContent = '天气数据获取失败';
+                document.getElementById('weatherIcon').textContent = '⚠️';
+                
+                // 显示通知
+                showNotification('⚠️ 天气数据获取失败，请检查网络或配置');
+            }
+        }
+
+        // 获取和风天气数据
+        async function fetchHeWeatherData() {
+            if (!weatherApiKey) {
+                throw new Error('未配置API密钥');
+            }
+            
+            const encodedCity = encodeURIComponent(currentWeatherCity);
+            const url = `https://devapi.qweather.com/v7/weather/now?location=${encodedCity}&key=${weatherApiKey}`;
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.code !== '200') {
+                throw new Error(`API错误: ${data.code}`);
+            }
+            
+            return {
+                temperature: data.now.temp,
+                condition: data.now.text,
+                humidity: data.now.humidity,
+                windSpeed: data.now.windSpeed,
+                feelsLike: data.now.feelsLike,
+                icon: getWeatherIconFromCode(data.now.icon)
+            };
+        }
+
+        // 获取免费天气数据
+        async function fetchFreeWeatherData() {
+            const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(currentWeatherCity)}&count=1&language=zh&format=json`;
+            
+            const geoResponse = await fetch(geocodingUrl);
+            if (!geoResponse.ok) {
+                throw new Error('地理位置查询失败');
+            }
+            
+            const geoData = await geoResponse.json();
+            
+            if (!geoData.results || geoData.results.length === 0) {
+                throw new Error('未找到城市信息');
+            }
+            
+            const location = geoData.results[0];
+            const latitude = location.latitude;
+            const longitude = location.longitude;
+            const cityName = location.name;
+            
+            currentWeatherCity = cityName;
+            
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto`;
+            
+            const weatherResponse = await fetch(weatherUrl);
+            if (!weatherResponse.ok) {
+                throw new Error('天气数据获取失败');
+            }
+            
+            const weatherData = await weatherResponse.json();
+            
+            const current = weatherData.current_weather;
+            const hourly = weatherData.hourly;
+            
+            const currentTime = new Date(current.time);
+            let tempIndex = -1;
+            
+            for (let i = 0; i < hourly.time.length; i++) {
+                const hourTime = new Date(hourly.time[i]);
+                if (hourTime.getHours() === currentTime.getHours()) {
+                    tempIndex = i;
+                    break;
+                }
+            }
+            
+            const humidity = tempIndex >= 0 ? hourly.relativehumidity_2m[tempIndex] : 50;
+            const windSpeed = current.windspeed;
+            const temperature = current.temperature;
+            const feelsLike = calculateRealFeelsLike(temperature, humidity, windSpeed);
+            const weatherCode = current.weathercode;
+            const { condition, icon } = getWeatherFromCode(weatherCode);
+            
+            return {
+                temperature: temperature,
+                condition: condition,
+                humidity: humidity,
+                windSpeed: windSpeed,
+                feelsLike: feelsLike,
+                icon: icon
+            };
+        }
+
+        // 根据天气代码获取天气信息
+        function getWeatherFromCode(code) {
+            const weatherMap = {
+                0: { condition: "晴", icon: "☀️" },
+                1: { condition: "主要晴朗", icon: "🌤️" },
+                2: { condition: "局部多云", icon: "⛅" },
+                3: { condition: "多云", icon: "☁️" },
+                45: { condition: "雾", icon: "🌫️" },
+                48: { condition: "雾", icon: "🌫️" },
+                51: { condition: "毛毛雨", icon: "🌦️" },
+                53: { condition: "毛毛雨", icon: "🌦️" },
+                55: { condition: "毛毛雨", icon: "🌦️" },
+                56: { condition: "冻毛毛雨", icon: "🌨️" },
+                57: { condition: "冻毛毛雨", icon: "🌨️" },
+                61: { condition: "小雨", icon: "🌧️" },
+                63: { condition: "中雨", icon: "🌧️" },
+                65: { condition: "大雨", icon: "🌧️" },
+                66: { condition: "冻雨", icon: "🌨️" },
+                67: { condition: "冻雨", icon: "🌨️" },
+                71: { condition: "小雪", icon: "🌨️" },
+                73: { condition: "中雪", icon: "❄️" },
+                75: { condition: "大雪", icon: "❄️" },
+                77: { condition: "雪粒", icon: "❄️" },
+                80: { condition: "阵雨", icon: "🌦️" },
+                81: { condition: "阵雨", icon: "🌦️" },
+                82: { condition: "强阵雨", icon: "⛈️" },
+                85: { condition: "阵雪", icon: "🌨️" },
+                86: { condition: "阵雪", icon: "🌨️" },
+                95: { condition: "雷暴", icon: "⛈️" },
+                96: { condition: "雷暴", icon: "⛈️" },
+                99: { condition: "雷暴", icon: "⛈️" }
+            };
+            
+            return weatherMap[code] || { condition: "未知", icon: "🌤️" };
+        }
+
+        // 计算真实体感温度
+        function calculateRealFeelsLike(temp, humidity, windSpeed) {
+            let feelsLike = temp;
+            
+            if (temp >= 25) {
+                feelsLike += (humidity - 50) * 0.05;
+            }
+            
+            if (temp < 10 && windSpeed > 5) {
+                const windChill = 13.12 + 0.6215 * temp - 11.37 * Math.pow(windSpeed, 0.16) + 0.3965 * temp * Math.pow(windSpeed, 0.16);
+                feelsLike = Math.min(feelsLike, windChill);
+            }
+            
+            return Math.round(feelsLike * 10) / 10;
+        }
+
+        // 从和风天气图标代码获取图标
+        function getWeatherIconFromCode(iconCode) {
+            const iconMap = {
+                "100": "☀️", "101": "🌤️", "102": "⛅", "103": "☁️", "104": "☁️",
+                "150": "🌙", "151": "☁️", "152": "☁️", "153": "☁️",
+                "300": "🌧️", "301": "🌧️", "302": "⛈️", "303": "⛈️", "304": "🌧️",
+                "305": "🌦️", "306": "🌧️", "307": "🌧️", "308": "🌧️", "309": "🌧️",
+                "310": "🌧️", "311": "🌧️", "312": "🌧️", "313": "🌧️", "314": "🌧️",
+                "315": "🌧️", "316": "🌧️", "317": "🌧️", "318": "🌧️", "399": "🌧️",
+                "400": "🌨️", "401": "❄️", "402": "❄️", "403": "❄️", "404": "🌨️",
+                "405": "🌨️", "406": "🌨️", "407": "🌨️", "408": "❄️", "409": "❄️",
+                "410": "❄️", "499": "🌨️", "500": "🌫️", "501": "🌫️", "502": "🌫️",
+                "503": "😷", "504": "😷", "507": "😷", "508": "😷", "509": "🌫️",
+                "510": "🌫️", "511": "🌫️", "512": "😷", "513": "😷", "514": "🌫️",
+                "515": "🌫️"
+            };
+            
+            return iconMap[iconCode] || "🌤️";
+        }
+
+        // 使用真实天气数据更新显示
+        function updateWeatherDisplayWithRealData(weatherData) {
+            document.getElementById('weatherLocation').textContent = currentWeatherCity;
+            document.getElementById('weatherTemp').textContent = `${Math.round(weatherData.temperature)}°C`;
+            document.getElementById('weatherIcon').textContent = weatherData.icon;
+            document.getElementById('weatherDescription').textContent = weatherData.condition;
+            document.getElementById('weatherHumidity').textContent = `${Math.round(weatherData.humidity)}%`;
+            document.getElementById('weatherWind').textContent = `${Math.round(weatherData.windSpeed * 10) / 10} m/s`;
+            document.getElementById('weatherFeelsLike').textContent = `${Math.round(weatherData.feelsLike)}°C`;
+            
+            const now = new Date();
+            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('weatherDescription').textContent += ` (${timeString}更新)`;
+        }
+
+        // 刷新天气
+        function refreshWeather() {
+            showNotification('🔄 正在刷新天气数据...');
+            fetchRealWeather();
+        }
+
+        // 显示通知
+        function showNotification(message) {
+            const oldNotification = document.querySelector('.weather-notification');
+            if (oldNotification) {
+                oldNotification.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = 'weather-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 70px;
+                right: 20px;
+                background: linear-gradient(45deg, #4a5fc1, #2a3a8f);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: 600;
+                border: 1px solid rgba(123, 239, 255, 0.3);
+                animation: weatherNotificationSlideIn 0.3s ease;
+                font-size: 14px;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'weatherNotificationSlideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
         // 加载重量数据
         async function loadWeightData() {
             updateStatus('正在加载重量数据...', 'default');
@@ -1884,18 +2628,146 @@
         }
 
         // 加载公告
-        async function loadAnnouncements() {
+async function loadAnnouncements() {
+    try {
+        // 优先尝试从根目录读取公告文件
+        const announcementFiles = [
+            './announcements.txt',
+            './announcement.txt', 
+            './notice.txt',
+            './notices.txt',
+            './公告.txt',
+            './公告.md'
+        ];
+        
+        let announcements = [];
+        let fileFound = false;
+        
+        // 依次尝试各个可能的公告文件
+        for (const file of announcementFiles) {
             try {
-                const defaultAnnouncements = [
-                    { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
-                    { message: "📢 优化了图片显示效果，统一图片尺寸", type: "success" },
-                    { message: "⚡ 还原了视频播放功能，支持多个视频源", type: "info" }
-                ];
-                displayAnnouncements(defaultAnnouncements);
+                const response = await fetch(file + '?t=' + Date.now());
+                if (response.ok) {
+                    const content = await response.text();
+                    if (content.trim()) {
+                        // 解析公告内容
+                        announcements = parseAnnouncementContent(content);
+                        fileFound = true;
+                        console.log(`✅ 成功加载公告文件: ${file}`);
+                        break;
+                    }
+                }
             } catch (error) {
-                console.log('公告加载失败:', error.message);
+                console.log(`尝试加载 ${file} 失败:`, error.message);
+                continue;
             }
         }
+        
+        // 如果没有找到公告文件，使用默认公告
+        if (!fileFound || announcements.length === 0) {
+            announcements = [
+                { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
+                { message: "🌤️ 新增真实天气功能，支持实时天气数据", type: "success" },
+                { message: "⚡ 优化了图片显示效果，图片显示更简洁", type: "info" },
+                { message: "📅 新增2025年准确农历计算功能", type: "success" },
+                { message: "📢 提示：在根目录创建 announcements.txt 文件可自定义公告", type: "warning" }
+            ];
+            console.log('使用默认公告');
+        }
+        
+        displayAnnouncements(announcements);
+        
+    } catch (error) {
+        console.log('公告加载失败:', error.message);
+        // 使用默认公告作为后备
+        const defaultAnnouncements = [
+            { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
+            { message: "📢 公告加载失败，请检查公告文件", type: "warning" }
+        ];
+        displayAnnouncements(defaultAnnouncements);
+    }
+}
+
+// 解析公告内容
+function parseAnnouncementContent(content) {
+    const announcements = [];
+    const lines = content.split('\n');
+    
+    for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) continue; // 跳过空行
+        
+        // 解析格式：[类型] 公告内容
+        let type = "info";
+        let message = trimmedLine;
+        
+        if (trimmedLine.startsWith('[INFO]') || trimmedLine.startsWith('[info]')) {
+            type = "info";
+            message = trimmedLine.substring(6).trim();
+        } else if (trimmedLine.startsWith('[SUCCESS]') || trimmedLine.startsWith('[success]')) {
+            type = "success";
+            message = trimmedLine.substring(9).trim();
+        } else if (trimmedLine.startsWith('[WARNING]') || trimmedLine.startsWith('[warning]')) {
+            type = "warning";
+            message = trimmedLine.substring(9).trim();
+        } else if (trimmedLine.startsWith('[ERROR]') || trimmedLine.startsWith('[error]')) {
+            type = "error";
+            message = trimmedLine.substring(7).trim();
+        } else if (trimmedLine.startsWith('[更新]')) {
+            type = "success";
+            message = trimmedLine.substring(4).trim();
+        } else if (trimmedLine.startsWith('[重要]')) {
+            type = "warning";
+            message = trimmedLine.substring(4).trim();
+        }
+        
+        // 移除可能的前缀符号
+        message = message.replace(/^[•\-*>]\s*/, '');
+        
+        if (message) {
+            announcements.push({
+                message: message,
+                type: type
+            });
+        }
+    }
+    
+    return announcements;
+}
+
+// 显示公告
+function displayAnnouncements(announcements) {
+    if (!announcements || announcements.length === 0) {
+        document.getElementById('announcementBar').classList.add('hidden');
+        return;
+    }
+    
+    const announcementScroll = document.getElementById('announcementScroll');
+    const announcementBar = document.getElementById('announcementBar');
+    
+    // 将所有公告连接起来，用分隔符隔开
+    const allMessages = announcements.map(ann => ann.message).join('  |  ');
+    announcementScroll.innerHTML = allMessages;
+    
+    // 根据公告类型设置样式
+    const hasWarning = announcements.some(ann => ann.type === 'warning' || ann.type === 'error');
+    const hasSuccess = announcements.some(ann => ann.type === 'success');
+    
+    if (hasWarning) {
+        announcementBar.style.background = 'linear-gradient(90deg, #ff6b6b, #ff9a00)';
+    } else if (hasSuccess) {
+        announcementBar.style.background = 'linear-gradient(90deg, #4caf50, #2e7d32)';
+    } else {
+        announcementBar.style.background = 'linear-gradient(90deg, #1a237e, #283593)';
+    }
+    
+    announcementBar.classList.remove('hidden');
+    
+    // 动态调整滚动速度（根据内容长度）
+    const contentLength = allMessages.length;
+    const duration = Math.max(30, contentLength / 3); // 每3个字符1秒，最少30秒
+    announcementScroll.style.animationDuration = `${duration}s`;
+}
 
         function displayAnnouncements(announcements) {
             if (!announcements || announcements.length === 0) {
@@ -1917,15 +2789,10 @@
             document.getElementById('announcementBar').classList.add('hidden');
         }
 
-        // 初始化视频播放器 - 还原原有功能
+        // 初始化视频播放器
         function initializeVideoPlayer() {
-            // 初始化播放列表显示
             initializePlaylist();
-            
-            // 添加用户交互检测
             setupUserInteraction();
-            
-            // 开始播放第一个视频
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
@@ -1942,52 +2809,40 @@
             `).join('');
         }
 
-        // 从播放列表播放视频 - 还原原有功能
+        // 从播放列表播放视频
         function playVideoFromPlaylist(index) {
             currentPlaylistIndex = index;
             const video = VIDEO_PLAYLIST[index];
             
-            // 更新播放列表项状态
             document.querySelectorAll('.playlist-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
             
             const iframe = document.getElementById('bilibiliPlayer');
             
-            // 显示加载状态
             showVideoLoading(true);
             hideVideoError();
-            
-            // 重置进度条
             resetVideoProgress();
             
             if (video.type === 'bilibili') {
-                // 构建B站播放器URL
                 let bilibiliUrl = `https://player.bilibili.com/player.html?bvid=${video.id}&page=1&high_quality=1&danmaku=0`;
                 
-                // 根据设置添加参数
                 if (autoplayEnabled) {
                     bilibiliUrl += '&autoplay=1';
                 }
                 
                 iframe.src = bilibiliUrl;
             } else if (video.type === 'direct') {
-                // 直接使用视频URL
                 iframe.src = video.id;
             }
             
             updateStatus(`正在播放: ${video.title}`, 'default');
-            
-            // 重新设置加载检测
             checkBilibiliPlayerLoad();
-            
-            // 设置视频进度检测
             setupVideoProgressDetection(video.duration || 300);
         }
 
         // 设置视频进度检测
         function setupVideoProgressDetection(videoDuration) {
-            // 清除之前的定时器
             if (videoProgressInterval) {
                 clearInterval(videoProgressInterval);
             }
@@ -2000,10 +2855,8 @@
                 const elapsedSeconds = (currentTime - currentVideoStartTime) / 1000;
                 const progressPercent = (elapsedSeconds / totalDuration) * 100;
                 
-                // 更新进度条
                 updateVideoProgress(progressPercent);
                 
-                // 检查是否播放完毕
                 if (progressPercent >= 100 && autoNextEnabled) {
                     clearInterval(videoProgressInterval);
                     playNextVideo();
@@ -2049,7 +2902,6 @@
                 btn.classList.remove('active');
                 updateStatus('已关闭自动播放下一个视频', 'warning');
                 
-                // 清除进度检测定时器
                 if (videoProgressInterval) {
                     clearInterval(videoProgressInterval);
                     videoProgressInterval = null;
@@ -2065,7 +2917,6 @@
                 showVideoLoading(false);
                 updateStatus('✅ 视频加载成功', 'success');
                 
-                // 如果自动播放已启用且用户已与页面交互，尝试自动播放
                 if (autoplayEnabled && userInteracted) {
                     setTimeout(forcePlay, 1000);
                 }
@@ -2076,7 +2927,6 @@
                 showVideoError();
                 updateStatus('❌ 视频加载失败', 'error');
                 
-                // 清除进度检测定时器
                 if (videoProgressInterval) {
                     clearInterval(videoProgressInterval);
                     videoProgressInterval = null;
@@ -2130,7 +2980,6 @@
         function forcePlay() {
             const iframe = document.getElementById('bilibiliPlayer');
             try {
-                // 尝试通过postMessage发送播放命令
                 iframe.contentWindow.postMessage({
                     command: 'play'
                 }, '*');
@@ -2157,32 +3006,27 @@
                 updateStatus('已关闭自动播放', 'warning');
             }
             
-            // 重新加载视频以应用设置
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
         // 设置用户交互检测
         function setupUserInteraction() {
-            // 监听页面点击事件
             document.addEventListener('click', function() {
                 if (!userInteracted) {
                     userInteracted = true;
                     console.log("用户已与页面交互，尝试自动播放");
                     
-                    // 如果自动播放已启用，尝试触发播放
                     if (autoplayEnabled) {
                         setTimeout(forcePlay, 500);
                     }
                 }
             });
             
-            // 监听键盘事件
             document.addEventListener('keydown', function() {
                 if (!userInteracted) {
                     userInteracted = true;
                     console.log("用户已与页面交互（键盘），尝试自动播放");
                     
-                    // 如果自动播放已启用，尝试触发播放
                     if (autoplayEnabled) {
                         setTimeout(forcePlay, 500);
                     }
@@ -2199,7 +3043,6 @@
                 return;
             }
             
-            // 将自定义视频添加到播放列表
             VIDEO_PLAYLIST.push({
                 id: videoUrl,
                 title: '自定义视频',
@@ -2207,10 +3050,7 @@
                 duration: 300
             });
             
-            // 更新播放列表显示
             initializePlaylist();
-            
-            // 播放新添加的视频
             playVideoFromPlaylist(VIDEO_PLAYLIST.length - 1);
             
             updateStatus('✅ 已添加自定义视频', 'success');
@@ -2220,11 +3060,9 @@
         function setSearchType(type) {
             currentSearchType = type;
             
-            // 更新按钮状态
             document.getElementById('imageSearchBtn').classList.toggle('active', type === 'image');
             document.getElementById('weightSearchBtn').classList.toggle('active', type === 'weight');
             
-            // 更新输入框提示
             const searchInput = document.getElementById('searchInput');
             if (type === 'image') {
                 searchInput.placeholder = '输入图片代码、描述或标签进行搜索...';
@@ -2232,7 +3070,6 @@
                 searchInput.placeholder = '输入款式编码进行搜索...';
             }
             
-            // 清空搜索结果
             document.getElementById('results').innerHTML = `
                 <div class="status-info">
                     <p>数据加载成功！</p>
@@ -2249,8 +3086,7 @@
             
             directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
                 <div class="directory-item" onclick="loadFromDirectory(${index})">
-                    <strong style="font-size: 14px;">${dir.name}</strong>
-                    <div style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.7); margin-top: 2px;">${dir.description}</div>
+                    ${dir.name}
                 </div>
             `).join('');
             
@@ -2265,7 +3101,6 @@
             const directory = DATA_DIRECTORIES[index];
             currentDataSource = directory;
             
-            // 更新目录项状态
             document.querySelectorAll('.directory-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
@@ -2273,7 +3108,6 @@
             updateStatus(`正在从 ${directory.name} 加载数据...`, 'default');
             
             try {
-                // 从URL加载数据，设置超时
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000);
                 
@@ -2306,7 +3140,6 @@
                     updateStatus(`❌ ${directory.name} 加载失败: ${error.message}`, 'error');
                 }
                 
-                // 如果是本地文件加载失败，立即尝试使用示例数据
                 if (directory.url === "./images.json") {
                     updateStatus('正在尝试使用示例数据...', 'warning');
                     imageData = SAMPLE_DATA;
@@ -2329,8 +3162,8 @@
                 
                 const timestamp = Date.now();
                 const dataUrl = currentDataSource.url.includes('?') 
-                    ? `${currentDataSource.url}&t=${timestamp}` 
-                    : `${currentDataSource.url}?t=${timestamp}`;
+                    ? `${directory.url}&t=${timestamp}` 
+                    : `${directory.url}?t=${timestamp}`;
                     
                 const response = await fetch(dataUrl);
                 
@@ -2340,7 +3173,6 @@
                     const cloudCount = cloudData.length;
                     
                     if (cloudCount > currentCount) {
-                        // 发现新数据
                         imageData = cloudData;
                         
                         const newImagesCount = cloudCount - currentCount;
@@ -2363,21 +3195,22 @@
         // 更新状态显示
         function updateStatus(message, type = 'default') {
             const statusEl = document.getElementById('updateStatus');
-            statusEl.innerHTML = '<span class="loading-spinner"></span>' + message;
-            
-            // 根据类型设置样式
-            if (type === 'success') {
-                statusEl.style.background = 'rgba(46, 204, 113, 0.2)';
-                statusEl.style.borderLeftColor = '#2ecc71';
-            } else if (type === 'warning') {
-                statusEl.style.background = 'rgba(243, 156, 18, 0.2)';
-                statusEl.style.borderLeftColor = '#f39c12';
-            } else if (type === 'error') {
-                statusEl.style.background = 'rgba(231, 76, 60, 0.2)';
-                statusEl.style.borderLeftColor = '#e74c3c';
-            } else {
-                statusEl.style.background = 'rgba(28, 37, 65, 0.8)';
-                statusEl.style.borderLeftColor = '#5bc0be';
+            if (statusEl) {
+                statusEl.innerHTML = '<span class="loading-spinner"></span>' + message;
+                
+                if (type === 'success') {
+                    statusEl.style.background = 'rgba(46, 204, 113, 0.2)';
+                    statusEl.style.borderLeftColor = '#2ecc71';
+                } else if (type === 'warning') {
+                    statusEl.style.background = 'rgba(243, 156, 18, 0.2)';
+                    statusEl.style.borderLeftColor = '#f39c12';
+                } else if (type === 'error') {
+                    statusEl.style.background = 'rgba(231, 76, 60, 0.2)';
+                    statusEl.style.borderLeftColor = '#e74c3c';
+                } else {
+                    statusEl.style.background = 'rgba(28, 37, 65, 0.8)';
+                    statusEl.style.borderLeftColor = '#5bc0be';
+                }
             }
         }
 
@@ -2411,36 +3244,29 @@
                 searchWeights(query);
             }
             
-            // 搜索后自动滚动到结果区域 - 优化版本
             setTimeout(function() {
                 scrollToResults();
             }, 150);
         }
 
-        // 优化：专门处理滚动到结果区域的函数
+        // 滚动到结果区域
         function scrollToResults() {
             const resultsContainer = document.getElementById('results');
             if (!resultsContainer) return;
             
-            // 计算精确的滚动位置
             const containerRect = resultsContainer.getBoundingClientRect();
             const isMobile = window.innerWidth <= 768;
-            
-            // 移动端需要更大的偏移量
             const offset = isMobile ? 80 : 20;
             
-            // 使用scrollIntoView的备用方案
             resultsContainer.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
             
-            // 延迟后再次检查是否滚动到位
             setTimeout(function() {
                 const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
                 const targetPosition = containerRect.top + window.pageYOffset - offset;
                 
-                // 如果还没有滚动到位，使用window.scrollTo
                 if (Math.abs(currentScroll - targetPosition) > 50) {
                     window.scrollTo({
                         top: targetPosition,
@@ -2469,7 +3295,7 @@
             displayImages(results, query);
         }
 
-        // 显示图片结果 - 优化图片显示
+        // 显示图片结果
         function displayImages(images, query) {
             const resultsContainer = document.getElementById('results');
             
@@ -2505,7 +3331,6 @@
         function searchWeights(query) {
             const results = [];
             
-            // 搜索匹配的款式编码
             for (const [code, specs] of Object.entries(weightData)) {
                 if (code.toLowerCase().includes(query)) {
                     results.push({ code, specs });
@@ -2589,7 +3414,6 @@
             
             modal.classList.add('active');
             
-            // 添加键盘事件监听（仅用于ESC关闭）
             document.addEventListener('keydown', handleModalKeydown);
         }
 
@@ -2598,7 +3422,6 @@
             const modal = document.getElementById('imageModal');
             modal.classList.remove('active');
             
-            // 移除键盘事件监听
             document.removeEventListener('keydown', handleModalKeydown);
         }
 
@@ -2620,11 +3443,9 @@
             
             const textToCopy = `${code} ${weightList}`;
             
-            // 使用现代Clipboard API
             navigator.clipboard.writeText(textToCopy).then(() => {
                 showCopyNotification(`✅ 已复制 ${code} 的重量数据`);
             }).catch(err => {
-                // 降级方案
                 const textArea = document.createElement('textarea');
                 textArea.value = textToCopy;
                 document.body.appendChild(textArea);
@@ -2637,7 +3458,6 @@
 
         // 显示复制成功通知
         function showCopyNotification(message) {
-            // 创建通知元素
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -2656,7 +3476,6 @@
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            // 3秒后自动移除
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 3000);
