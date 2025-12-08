@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#1a237e">
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-<style>
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -658,7 +658,7 @@
             padding-top: 20px;
         }
         
-        /* 优化后的滚动公告条样式 */
+        /* 优化后的滚动公告条样式 - 改回蓝色 */
         .announcement-bar {
             background: linear-gradient(90deg, #1a237e, #283593);
             color: white;
@@ -1087,6 +1087,20 @@
             height: auto;
             object-fit: contain;
             display: block;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+            touch-action: manipulation;
+            outline: none;
+            border: none;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .image-card img:hover {
+            transform: scale(1.02);
         }
         
         .image-info {
@@ -1322,6 +1336,11 @@
             max-height: 100%;
             object-fit: contain;
             border-radius: 8px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
         }
         
         .modal-info {
@@ -1505,8 +1524,10 @@
                 max-width: 100%;
             }
             
-            .image-card .image-wrapper {
-                height: 130px;
+            .image-card img {
+                -webkit-touch-callout: default;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                min-height: 120px;
             }
             
             .weight-results {
@@ -1558,70 +1579,72 @@
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
-    /* 图片卡片按钮样式 */
-.image-actions {
-    margin-top: 8px;
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
+        
+        /* 复制通知动画 */
+        @keyframes copyNotificationSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
-.copy-btn {
-    padding: 4px 8px;
-    background: linear-gradient(45deg, #5bc0be, #3a506b);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    white-space: nowrap;
-    transition: all 0.3s;
-    flex: 1;
-    max-width: 80px;
-}
+        @keyframes copyNotificationSlideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
 
-.copy-btn:hover {
-    background: linear-gradient(45deg, #7befff, #5bc0be);
-    transform: translateY(-1px);
-}
+        /* 操作指南样式 */
+        .context-instruction {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(28, 37, 65, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid #ffd166;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
 
-/* 模态框按钮样式 */
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
+        .context-instruction-modal {
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(40, 53, 147, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #ffd166;
+            color: white;
+            font-size: 13px;
+        }
 
-.modal-actions button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s;
-}
+        /* 复制通知样式 */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            font-weight: 600;
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            animation: slideIn 0.3s ease;
+        }
 
-.modal-actions button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* 复制通知动画 */
-@keyframes copyNotificationSlideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes copyNotificationSlideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
-}
-</style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* 移除图片按钮样式 */
+        .image-actions {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <!-- 星空背景 -->
@@ -2354,7 +2377,7 @@
             
             try {
                 localStorage.setItem('weatherConfig', JSON.stringify(config));
-                showNotification('✅ 天气配置已保存');
+                showCopyNotification('✅ 天气配置已保存');
                 
                 // 隐藏配置区域
                 document.getElementById('weatherConfigContent').classList.remove('show');
@@ -2362,7 +2385,7 @@
                 // 刷新天气
                 refreshWeather();
             } catch (e) {
-                showNotification('⚠️ 配置保存失败: ' + e.message);
+                showCopyNotification('⚠️ 配置保存失败: ' + e.message);
             }
         }
 
@@ -2417,7 +2440,7 @@
                 document.getElementById('weatherIcon').textContent = '⚠️';
                 
                 // 显示通知
-                showNotification('⚠️ 天气数据获取失败，请检查网络或配置');
+                showCopyNotification('⚠️ 天气数据获取失败，请检查网络或配置');
             }
         }
 
@@ -2602,46 +2625,29 @@
 
         // 刷新天气
         function refreshWeather() {
-            showNotification('🔄 正在刷新天气数据...');
+            showCopyNotification('🔄 正在刷新天气数据...');
             fetchRealWeather();
         }
 
-        // 显示通知
-        function showNotification(message) {
-            const oldNotification = document.querySelector('.weather-notification');
+        // 显示复制通知
+        function showCopyNotification(message) {
+            // 移除旧的通知
+            const oldNotification = document.querySelector('.copy-notification');
             if (oldNotification) {
                 oldNotification.remove();
             }
             
             const notification = document.createElement('div');
-            notification.className = 'weather-notification';
-            notification.style.cssText = `
-                position: fixed;
-                top: 70px;
-                right: 20px;
-                background: linear-gradient(45deg, #4a5fc1, #2a3a8f);
-                color: white;
-                padding: 10px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                z-index: 10000;
-                font-weight: 600;
-                border: 1px solid rgba(123, 239, 255, 0.3);
-                animation: weatherNotificationSlideIn 0.3s ease;
-                font-size: 14px;
-            `;
-            
+            notification.className = 'copy-notification';
             notification.textContent = message;
             document.body.appendChild(notification);
             
+            // 3秒后自动移除
             setTimeout(() => {
-                notification.style.animation = 'weatherNotificationSlideOut 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
-            }, 2000);
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 3000);
         }
 
         // 加载重量数据
@@ -2691,147 +2697,114 @@
         }
 
         // 加载公告
-async function loadAnnouncements() {
-    try {
-        // 优先尝试从根目录读取公告文件
-        const announcementFiles = [
-            './announcements.txt',
-            './announcement.txt', 
-            './notice.txt',
-            './notices.txt',
-            './公告.txt',
-            './公告.md'
-        ];
-        
-        let announcements = [];
-        let fileFound = false;
-        
-        // 依次尝试各个可能的公告文件
-        for (const file of announcementFiles) {
+        async function loadAnnouncements() {
             try {
-                const response = await fetch(file + '?t=' + Date.now());
-                if (response.ok) {
-                    const content = await response.text();
-                    if (content.trim()) {
-                        // 解析公告内容
-                        announcements = parseAnnouncementContent(content);
-                        fileFound = true;
-                        console.log(`✅ 成功加载公告文件: ${file}`);
-                        break;
+                // 优先尝试从根目录读取公告文件
+                const announcementFiles = [
+                    './announcements.txt',
+                    './announcement.txt', 
+                    './notice.txt',
+                    './notices.txt',
+                    './公告.txt',
+                    './公告.md'
+                ];
+                
+                let announcements = [];
+                let fileFound = false;
+                
+                // 依次尝试各个可能的公告文件
+                for (const file of announcementFiles) {
+                    try {
+                        const response = await fetch(file + '?t=' + Date.now());
+                        if (response.ok) {
+                            const content = await response.text();
+                            if (content.trim()) {
+                                // 解析公告内容
+                                announcements = parseAnnouncementContent(content);
+                                fileFound = true;
+                                console.log(`✅ 成功加载公告文件: ${file}`);
+                                break;
+                            }
+                        }
+                    } catch (error) {
+                        console.log(`尝试加载 ${file} 失败:`, error.message);
+                        continue;
                     }
                 }
+                
+                // 如果没有找到公告文件，使用默认公告
+                if (!fileFound || announcements.length === 0) {
+                    announcements = [
+                        { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
+                        { message: "🌤️ 新增真实天气功能，支持实时天气数据", type: "success" },
+                        { message: "⚡ 优化了图片显示效果，图片显示更简洁", type: "info" },
+                        { message: "📅 新增2025年准确农历计算功能", type: "success" },
+                        { message: "📢 提示：在根目录创建 announcements.txt 文件可自定义公告", type: "warning" }
+                    ];
+                    console.log('使用默认公告');
+                }
+                
+                displayAnnouncements(announcements);
+                
             } catch (error) {
-                console.log(`尝试加载 ${file} 失败:`, error.message);
-                continue;
+                console.log('公告加载失败:', error.message);
+                // 使用默认公告作为后备
+                const defaultAnnouncements = [
+                    { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
+                    { message: "📢 公告加载失败，请检查公告文件", type: "warning" }
+                ];
+                displayAnnouncements(defaultAnnouncements);
             }
         }
-        
-        // 如果没有找到公告文件，使用默认公告
-        if (!fileFound || announcements.length === 0) {
-            announcements = [
-                { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
-                { message: "🌤️ 新增真实天气功能，支持实时天气数据", type: "success" },
-                { message: "⚡ 优化了图片显示效果，图片显示更简洁", type: "info" },
-                { message: "📅 新增2025年准确农历计算功能", type: "success" },
-                { message: "📢 提示：在根目录创建 announcements.txt 文件可自定义公告", type: "warning" }
-            ];
-            console.log('使用默认公告');
-        }
-        
-        displayAnnouncements(announcements);
-        
-    } catch (error) {
-        console.log('公告加载失败:', error.message);
-        // 使用默认公告作为后备
-        const defaultAnnouncements = [
-            { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
-            { message: "📢 公告加载失败，请检查公告文件", type: "warning" }
-        ];
-        displayAnnouncements(defaultAnnouncements);
-    }
-}
 
-// 解析公告内容
-function parseAnnouncementContent(content) {
-    const announcements = [];
-    const lines = content.split('\n');
-    
-    for (const line of lines) {
-        const trimmedLine = line.trim();
-        if (!trimmedLine) continue; // 跳过空行
-        
-        // 解析格式：[类型] 公告内容
-        let type = "info";
-        let message = trimmedLine;
-        
-        if (trimmedLine.startsWith('[INFO]') || trimmedLine.startsWith('[info]')) {
-            type = "info";
-            message = trimmedLine.substring(6).trim();
-        } else if (trimmedLine.startsWith('[SUCCESS]') || trimmedLine.startsWith('[success]')) {
-            type = "success";
-            message = trimmedLine.substring(9).trim();
-        } else if (trimmedLine.startsWith('[WARNING]') || trimmedLine.startsWith('[warning]')) {
-            type = "warning";
-            message = trimmedLine.substring(9).trim();
-        } else if (trimmedLine.startsWith('[ERROR]') || trimmedLine.startsWith('[error]')) {
-            type = "error";
-            message = trimmedLine.substring(7).trim();
-        } else if (trimmedLine.startsWith('[更新]')) {
-            type = "success";
-            message = trimmedLine.substring(4).trim();
-        } else if (trimmedLine.startsWith('[重要]')) {
-            type = "warning";
-            message = trimmedLine.substring(4).trim();
+        // 解析公告内容
+        function parseAnnouncementContent(content) {
+            const announcements = [];
+            const lines = content.split('\n');
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (!trimmedLine) continue; // 跳过空行
+                
+                // 解析格式：[类型] 公告内容
+                let type = "info";
+                let message = trimmedLine;
+                
+                if (trimmedLine.startsWith('[INFO]') || trimmedLine.startsWith('[info]')) {
+                    type = "info";
+                    message = trimmedLine.substring(6).trim();
+                } else if (trimmedLine.startsWith('[SUCCESS]') || trimmedLine.startsWith('[success]')) {
+                    type = "success";
+                    message = trimmedLine.substring(9).trim();
+                } else if (trimmedLine.startsWith('[WARNING]') || trimmedLine.startsWith('[warning]')) {
+                    type = "warning";
+                    message = trimmedLine.substring(9).trim();
+                } else if (trimmedLine.startsWith('[ERROR]') || trimmedLine.startsWith('[error]')) {
+                    type = "error";
+                    message = trimmedLine.substring(7).trim();
+                } else if (trimmedLine.startsWith('[更新]')) {
+                    type = "success";
+                    message = trimmedLine.substring(4).trim();
+                } else if (trimmedLine.startsWith('[重要]')) {
+                    type = "warning";
+                    message = trimmedLine.substring(4).trim();
+                }
+                
+                // 移除可能的前缀符号
+                message = message.replace(/^[•\-*>]\s*/, '');
+                
+                if (message) {
+                    announcements.push({
+                        message: message,
+                        type: type
+                    });
+                }
+            }
+            
+            return announcements;
         }
-        
-        // 移除可能的前缀符号
-        message = message.replace(/^[•\-*>]\s*/, '');
-        
-        if (message) {
-            announcements.push({
-                message: message,
-                type: type
-            });
-        }
-    }
-    
-    return announcements;
-}
 
-// 显示公告
-function displayAnnouncements(announcements) {
-    if (!announcements || announcements.length === 0) {
-        document.getElementById('announcementBar').classList.add('hidden');
-        return;
-    }
-    
-    const announcementScroll = document.getElementById('announcementScroll');
-    const announcementBar = document.getElementById('announcementBar');
-    
-    // 将所有公告连接起来，用分隔符隔开
-    const allMessages = announcements.map(ann => ann.message).join('  |  ');
-    announcementScroll.innerHTML = allMessages;
-    
-    // 根据公告类型设置样式
-    const hasWarning = announcements.some(ann => ann.type === 'warning' || ann.type === 'error');
-    const hasSuccess = announcements.some(ann => ann.type === 'success');
-    
-    if (hasWarning) {
-        announcementBar.style.background = 'linear-gradient(90deg, #ff6b6b, #ff9a00)';
-    } else if (hasSuccess) {
-        announcementBar.style.background = 'linear-gradient(90deg, #4caf50, #2e7d32)';
-    } else {
-        announcementBar.style.background = 'linear-gradient(90deg, #1a237e, #283593)';
-    }
-    
-    announcementBar.classList.remove('hidden');
-    
-    // 动态调整滚动速度（根据内容长度）
-    const contentLength = allMessages.length;
-    const duration = Math.max(30, contentLength / 3); // 每3个字符1秒，最少30秒
-    announcementScroll.style.animationDuration = `${duration}s`;
-}
-
+        // 显示公告 - 移除根据公告类型改变颜色的逻辑
         function displayAnnouncements(announcements) {
             if (!announcements || announcements.length === 0) {
                 document.getElementById('announcementBar').classList.add('hidden');
@@ -2841,11 +2814,19 @@ function displayAnnouncements(announcements) {
             const announcementScroll = document.getElementById('announcementScroll');
             const announcementBar = document.getElementById('announcementBar');
             
-            announcementScroll.innerHTML = announcements.map(ann => 
-                `<span class="announcement-item">${ann.message}</span>`
-            ).join('');
+            // 将所有公告连接起来，用分隔符隔开
+            const allMessages = announcements.map(ann => ann.message).join('  |  ');
+            announcementScroll.innerHTML = allMessages;
+            
+            // 保持为蓝色背景，不再根据类型改变颜色
+            announcementBar.style.background = 'linear-gradient(90deg, #1a237e, #283593)';
             
             announcementBar.classList.remove('hidden');
+            
+            // 动态调整滚动速度（根据内容长度）
+            const contentLength = allMessages.length;
+            const duration = Math.max(30, contentLength / 3); // 每3个字符1秒，最少30秒
+            announcementScroll.style.animationDuration = `${duration}s`;
         }
 
         function closeAnnouncement() {
@@ -3339,6 +3320,8 @@ function displayAnnouncements(announcements) {
             }, 300);
         }
 
+        // ==================== 修改的关键函数 ====================
+        
         // 搜索图片
         function searchImages(query) {
             if (!imageData || imageData.length === 0) {
@@ -3358,43 +3341,79 @@ function displayAnnouncements(announcements) {
             displayImages(results, query);
         }
 
-        // 显示图片结果 - 添加复制图片按钮
-function displayImages(images, query) {
-    const resultsContainer = document.getElementById('results');
-    
-    if (images.length === 0) {
-        resultsContainer.innerHTML = `
-            <div class="status-info">
-                <p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p>
-                <p>数据库中共有 ${imageData.length} 张图片</p>
-            </div>
-        `;
-        return;
-    }
-    
-    resultsContainer.innerHTML = `
-        <div class="image-results">
-            ${images.map(img => `
-                <div class="image-card">
-                    <div class="image-wrapper">
-                        <img src="${img.url}" alt="${img.code}" 
-                             id="img-${img.code}"
-                             onerror="handleImageError(this, '${img.code}')"
-                             loading="lazy">
+        // 显示图片结果 - 移除操作指南，只显示图片
+        function displayImages(images, query) {
+            const resultsContainer = document.getElementById('results');
+            
+            if (images.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="status-info">
+                        <p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p>
+                        <p>数据库中共有 ${imageData.length} 张图片</p>
                     </div>
-                    <div class="image-info">
-                        <div class="image-code">${img.code}</div>
-                        <div class="image-actions">
-                            <button class="copy-btn" onclick="copyImageToClipboard('${img.url}', '${img.code}')" title="复制图片">
-                                🖼️ 复制图片
-                            </button>
+                `;
+                return;
+            }
+            
+            resultsContainer.innerHTML = `
+                <div class="image-results">
+                    ${images.map(img => `
+                        <div class="image-card" onclick="openImageModal('${img.url}', '${img.code}', '${img.description || ''}')">
+                            <div class="image-wrapper">
+                                <img src="${img.url}" alt="${img.code}" 
+                                     id="img-${img.code}"
+                                     onerror="handleImageError(this, '${img.code}')"
+                                     loading="lazy"
+                                     data-url="${img.url}"
+                                     data-code="${img.code}">
+                            </div>
+                            <div class="image-info">
+                                <div class="image-code">${img.code}</div>
+                            </div>
                         </div>
-                    </div>
+                    `).join('')}
                 </div>
-            `).join('')}
+            `;
+        }
+
+        // 图片错误处理
+        function handleImageError(imgElement, code) {
+            console.log(`图片加载失败: ${code} - ${imgElement.src}`);
+            imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWMyNTQxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzViYzBiZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
+            imgElement.alt = '图片加载失败';
+        }
+
+        // 修改模态框，移除操作指南
+        function openImageModal(imageUrl, code, description = '') {
+    const modal = document.getElementById('imageModal');
+    
+    modal.innerHTML = `
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-content">
+            <div class="modal-image-container" style="padding: 0;">
+                <img id="modalImage" src="${imageUrl}" alt="${code}" 
+                     style="width: 100%; height: 100%; object-fit: contain; cursor: default;">
+            </div>
         </div>
     `;
+    
+    modal.classList.add('active');
+    document.addEventListener('keydown', handleModalKeydown);
 }
+
+        // 模态框键盘事件处理
+        function handleModalKeydown(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.removeEventListener('keydown', handleModalKeydown);
+        }
 
         // 搜索重量
         function searchWeights(query) {
@@ -3465,53 +3484,6 @@ function displayImages(images, query) {
             `;
         }
 
-        // 处理图片加载错误
-        function handleImageError(imgElement, code) {
-            console.log(`图片加载失败: ${code} - ${imgElement.src}`);
-            imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWMyNTQxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzViYzBiZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
-            imgElement.alt = '图片加载失败';
-        }
-
-        // 修改模态框中的按钮
-function openImageModal(imageUrl, code, description = '') {
-    const modal = document.getElementById('imageModal');
-    
-    // 在模态框中添加复制图片按钮
-    modal.innerHTML = `
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <div class="modal-content">
-            <div class="modal-image-container">
-                <img id="modalImage" src="${imageUrl}" alt="${code}">
-            </div>
-            <div class="modal-info">
-                <div class="modal-code">${code}</div>
-                ${description ? `<div class="modal-description">${description}</div>` : ''}
-                <div class="modal-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="copyImageToClipboard('${imageUrl}', '${code}')" 
-                            style="padding: 8px 16px; background: linear-gradient(45deg, #5bc0be, #3a506b); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
-                        🖼️ 复制图片
-                    </button>
-                    <button onclick="downloadImage('${imageUrl}', '${code}')" 
-                            style="padding: 8px 16px; background: linear-gradient(45deg, #4caf50, #2e7d32); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
-                        💾 下载图片
-                    </button>
-                    <button onclick="copyToClipboard('${imageUrl}', '图片链接')" 
-                            style="padding: 8px 16px; background: linear-gradient(45deg, #9d4edd, #560bad); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
-                        🔗 复制链接
-                    </button>
-                    <button onclick="copyToClipboard('${code}', '图片代码')" 
-                            style="padding: 8px 16px; background: linear-gradient(45deg, #ff6b6b, #ff9a00); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
-                        📋 复制代码
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('active');
-    document.addEventListener('keydown', handleModalKeydown);
-}
-
         // 复制重量数据
         function copyWeightData(code) {
             const specs = weightData[code];
@@ -3536,29 +3508,20 @@ function openImageModal(imageUrl, code, description = '') {
             });
         }
 
-        // 显示复制成功通知
-        function showCopyNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #2ecc71, #27ae60);
-                color: white;
-                padding: 12px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                z-index: 10000;
-                font-weight: 600;
-                border: 1px solid rgba(123, 239, 255, 0.3);
-            `;
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 3000);
+        // 通用复制函数（用于复制文本）
+        function copyToClipboard(text, type = '内容') {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+            }).catch(err => {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+            });
         }
 
         // 回车键搜索
@@ -3570,138 +3533,6 @@ function openImageModal(imageUrl, code, description = '') {
 
         // 页面加载时初始化
         initialize();
-    // ==================== 图片复制功能 ====================
-
-// 复制图片到剪贴板
-async function copyImageToClipboard(imageUrl, imageCode) {
-    try {
-        // 显示加载状态
-        showCopyNotification('🔄 正在准备复制图片...');
-        
-        // 获取图片数据
-        const response = await fetch(imageUrl);
-        if (!response.ok) {
-            throw new Error(`图片加载失败: ${response.status}`);
-        }
-        
-        // 将响应转换为Blob
-        const blob = await response.blob();
-        
-        // 创建一个图片元素用于绘制到canvas
-        const img = new Image();
-        img.crossOrigin = 'anonymous'; // 处理跨域问题
-        
-        // 等待图片加载
-        await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = () => reject(new Error('图片加载失败'));
-            img.src = imageUrl;
-            
-            // 设置超时
-            setTimeout(() => reject(new Error('图片加载超时')), 10000);
-        });
-        
-        // 创建canvas
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        
-        // 绘制图片到canvas
-        ctx.drawImage(img, 0, 0);
-        
-        // 将canvas转换为Blob
-        canvas.toBlob(async (blob) => {
-            try {
-                // 使用Clipboard API复制图片
-                const item = new ClipboardItem({
-                    [blob.type]: blob
-                });
-                
-                await navigator.clipboard.write([item]);
-                showCopyNotification(`✅ 已复制图片: ${imageCode}`);
-            } catch (clipboardError) {
-                // 如果Clipboard API失败，尝试降级方案
-                console.log('Clipboard API失败，尝试备用方案:', clipboardError);
-                fallbackCopyImage(blob, imageCode);
-            }
-        });
-        
-    } catch (error) {
-        console.error('复制图片失败:', error);
-        showCopyNotification(`❌ 复制图片失败: ${error.message}`);
-    }
-}
-
-// 备用复制方案
-function fallbackCopyImage(blob, imageCode) {
-    try {
-        // 创建一个临时链接用于复制
-        const tempLink = document.createElement('a');
-        tempLink.href = URL.createObjectURL(blob);
-        tempLink.download = `${imageCode}.png`;
-        
-        // 创建一个临时容器
-        const tempContainer = document.createElement('div');
-        tempContainer.style.position = 'fixed';
-        tempContainer.style.left = '-9999px';
-        tempContainer.appendChild(tempLink);
-        document.body.appendChild(tempContainer);
-        
-        // 触发下载
-        tempLink.click();
-        
-        // 清理
-        setTimeout(() => {
-            document.body.removeChild(tempContainer);
-            URL.revokeObjectURL(tempLink.href);
-        }, 100);
-        
-        showCopyNotification(`✅ 图片已准备下载: ${imageCode}`);
-        
-    } catch (error) {
-        console.error('备用复制方案失败:', error);
-        showCopyNotification('❌ 无法复制图片，请右键另存为');
-    }
-}
-
-// 下载图片函数
-function downloadImage(url, filename) {
-    showCopyNotification('🔄 正在下载图片...');
-    
-    fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename + '.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-            showCopyNotification(`✅ ${filename} 图片下载已开始`);
-        })
-        .catch(error => {
-            console.error('下载失败:', error);
-            showCopyNotification('❌ 图片下载失败');
-        });
-}
-
-// 通用复制函数（用于复制文本）
-function copyToClipboard(text, type = '内容') {
-    navigator.clipboard.writeText(text).then(() => {
-        showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
-    }).catch(err => {
-        // 降级方案
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
-    });
-}
-</script>
+    </script>
 </body>
 </html>
