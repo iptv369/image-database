@@ -23,7 +23,7 @@
         /* 星空背景 */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             background: #0a0e2a;
@@ -335,7 +335,7 @@
             }
         }
         
-        /* 右侧日历区域 */
+        /* ==================== 日历容器修复 - 添加溢出控制 ==================== */
         .calendar-container {
             position: fixed;
             right: 20px;
@@ -350,6 +350,11 @@
             border: 1px solid rgba(123, 239, 255, 0.3);
             z-index: 0;
             display: none;
+            /* 修复溢出问题 - 添加以下属性 */
+            min-width: 280px;
+            max-width: 90vw;
+            overflow: hidden;
+            box-sizing: border-box;
         }
         
         @media (min-width: 1200px) {
@@ -564,12 +569,16 @@
             font-weight: 600;
         }
         
-        /* 日历网格 */
+        /* ==================== 日历网格修复 - 防止数字溢出 ==================== */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 8px;
             margin-bottom: 20px;
+            /* 修复溢出问题 - 添加以下属性 */
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         
         .calendar-day {
@@ -592,6 +601,14 @@
             background: rgba(28, 37, 65, 0.5);
             border: 1px solid rgba(123, 239, 255, 0.1);
             color: rgba(255, 255, 255, 0.9);
+            /* 修复溢出问题 - 添加以下属性 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .calendar-date:hover {
@@ -1649,6 +1666,12 @@
         font-size: 13px;
         text-align: center;
     }
+    
+    /* ==================== 移动端日历适配 ==================== */
+    /* 隐藏桌面端日历（在移动端显示另一个版本） */
+    .calendar-container {
+        display: none !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1692,6 +1715,40 @@
         padding: 7px !important;
         font-size: 12px !important;
         margin-top: 10px !important;
+    }
+}
+
+/* ==================== 平板端日历适配 ==================== */
+@media (max-width: 1024px) and (min-width: 769px) {
+    /* 在平板设备上，日历也需要防止溢出 */
+    .calendar-container {
+        min-width: 260px;
+        padding: 20px;
+    }
+    
+    .calendar-date {
+        padding: 10px 6px;
+        font-size: 14px;
+        min-height: 40px;
+    }
+    
+    .calendar-day {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* ==================== 中屏幕适配 (1200px以下) ==================== */
+@media (max-width: 1200px) and (min-width: 1025px) {
+    /* 中等屏幕下，日历适当缩小 */
+    .calendar-container {
+        width: 300px;
+        padding: 20px;
+    }
+    
+    .calendar-date {
+        padding: 11px 7px;
+        font-size: 15px;
     }
 }
         
