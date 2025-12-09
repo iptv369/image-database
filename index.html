@@ -1471,7 +1471,7 @@
             }
         }
         
-/* ==================== 移动端适配 ==================== */
+/* ==================== 移动端适配 (768px以下) ==================== */
 @media (max-width: 768px) {
     body {
         padding: 15px;
@@ -1674,23 +1674,324 @@
     }
 }
 
+/* ==================== 平板端适配 (768px-1024px) ==================== */
+@media (max-width: 1024px) and (min-width: 769px) {
+    body {
+        padding: 20px;
+    }
+    
+    .main-content-area {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* 平板端公告栏 */
+    .announcement-bar {
+        padding: 8px 28px 8px 15px;
+        min-height: 38px;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+    
+    .announcement-content {
+        height: 20px;
+    }
+    
+    .announcement-scroll {
+        font-size: 12px;
+    }
+    
+    .search-container {
+        padding: 18px;
+        margin-top: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    .search-controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .search-input-container {
+        min-width: 60%;
+    }
+    
+    button {
+        width: auto;
+        margin: 0;
+    }
+    
+    /* ========== 平板端视频播放器优化（不隐藏）========== */
+    .video-container {
+        display: flex !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    
+    .main-content {
+        flex-direction: column;
+    }
+    
+    .results-container {
+        min-height: auto;
+        width: 100%;
+        scroll-margin-top: 80px;
+        padding: 18px;
+    }
+    
+    /* 平板端调整视频布局 */
+    .video-wrapper {
+        min-height: 250px;
+        height: 300px;
+    }
+    
+    .video-controls {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .video-controls button {
+        padding: 8px 12px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .playback-controls {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .playback-controls button {
+        padding: 6px 10px;
+        font-size: 11px;
+        flex: 1;
+        min-width: 140px;
+    }
+    
+    .video-nav-controls {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .video-nav-controls button {
+        padding: 6px 10px;
+        font-size: 11px;
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .playlist-items {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .playlist-item {
+        padding: 4px 8px;
+        font-size: 10px;
+        flex: 1;
+        min-width: 60px;
+        text-align: center;
+    }
+    
+    /* ========== 平板端图片显示优化 ========== */
+    .image-results {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px;
+        justify-items: center;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .image-card {
+        width: 100% !important;
+        max-width: 600px !important;
+        height: 280px !important;
+        margin: 0 auto 15px !important;
+    }
+    
+    .image-card .image-wrapper {
+        height: 230px !important;
+    }
+    
+    .image-info {
+        min-height: 50px !important;
+        padding: 10px !important;
+    }
+    
+    .image-code {
+        font-size: 1.1rem;
+    }
+    
+    /* ========== 平板端重量搜索显示优化 ========== */
+    .weight-results {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+        padding: 0 !important;
+        width: 100%;
+    }
+    
+    .weight-card {
+        width: 100% !important;
+        max-width: 600px !important;
+        height: 280px !important;
+        margin: 0 auto 15px !important;
+        border-radius: 10px !important;
+    }
+    
+    .weight-header {
+        height: 50px !important;
+        padding: 12px 15px !important;
+        font-size: 15px !important;
+    }
+    
+    .weight-header span {
+        font-size: 17px !important;
+        font-weight: bold !important;
+    }
+    
+    .weight-header button {
+        padding: 7px 12px !important;
+        font-size: 13px !important;
+    }
+    
+    .weight-content {
+        padding: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .weight-specs {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+        margin-top: 8px !important;
+    }
+    
+    .weight-spec-item {
+        padding: 8px !important;
+        text-align: center !important;
+        border-radius: 6px !important;
+    }
+    
+    .weight-spec-name {
+        font-size: 12px !important;
+        margin-bottom: 3px !important;
+    }
+    
+    .weight-spec-value {
+        font-size: 13px !important;
+        font-weight: bold !important;
+    }
+    
+    .copy-all-btn {
+        padding: 9px !important;
+        font-size: 14px !important;
+        margin-top: 12px !important;
+        border-radius: 6px !important;
+    }
+    
+    /* 平板端目录 */
+    .directory-container {
+        padding: 12px;
+    }
+    
+    .directory-container h3 {
+        font-size: 15px;
+    }
+    
+    .directory-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .directory-item {
+        min-width: 120px;
+        padding: 12px;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    /* ========== 平板端日历优化 ========== */
+    .calendar-container {
+        display: none !important; /* 平板端隐藏日历，给视频和搜索结果更多空间 */
+    }
+}
+
+/* ==================== 大平板端适配 (900px-1024px) - 两列布局 ==================== */
+@media (max-width: 1024px) and (min-width: 900px) {
+    /* 在大平板上显示两列布局 */
+    .main-content {
+        flex-direction: row !important;
+        gap: 20px;
+    }
+    
+    .video-container {
+        width: 45% !important;
+        min-width: 45% !important;
+    }
+    
+    .results-container {
+        width: 55% !important;
+        flex: 1;
+    }
+    
+    /* 调整视频高度 */
+    .video-wrapper {
+        height: 250px;
+    }
+}
+
+/* ==================== 小平板端适配 (768px-899px) ==================== */
+@media (max-width: 899px) and (min-width: 769px) {
+    /* 在小平板上保持单列布局，但调整视频大小 */
+    .video-wrapper {
+        height: 280px;
+    }
+}
+
+/* ==================== 超小屏幕手机适配 (480px以下) ==================== */
 @media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+    
     .image-results {
         grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0 5px;
     }
     
     .image-card {
         height: 200px !important;
+        margin: 0 auto 12px !important;
     }
     
     .image-card .image-wrapper {
         height: 160px !important;
     }
     
+    .image-info {
+        min-height: 35px !important;
+        padding: 6px !important;
+    }
+    
+    .image-code {
+        font-size: 0.9rem;
+    }
+    
     /* ========== 超小屏幕重量搜索优化 ========== */
     .weight-card {
-        height: 200px !important;           /* 更小的高度 */
+        height: 200px !important;
         margin: 0 auto 10px !important;
+        border-radius: 6px !important;
     }
     
     .weight-header {
@@ -1702,53 +2003,80 @@
         font-size: 15px !important;
     }
     
+    .weight-header button {
+        padding: 5px 8px !important;
+        font-size: 11px !important;
+    }
+    
+    .weight-content {
+        padding: 10px !important;
+    }
+    
     .weight-specs {
-        grid-template-columns: repeat(2, 1fr) !important; /* 改为2列 */
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 5px !important;
+        margin-top: 5px !important;
     }
     
     .weight-spec-item {
         padding: 5px !important;
+        border-radius: 4px !important;
+    }
+    
+    .weight-spec-name {
+        font-size: 10px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    .weight-spec-value {
+        font-size: 11px !important;
     }
     
     .copy-all-btn {
         padding: 7px !important;
         font-size: 12px !important;
         margin-top: 10px !important;
-    }
-}
-
-/* ==================== 平板端日历适配 ==================== */
-@media (max-width: 1024px) and (min-width: 769px) {
-    /* 在平板设备上，日历也需要防止溢出 */
-    .calendar-container {
-        min-width: 260px;
-        padding: 20px;
+        border-radius: 4px !important;
     }
     
-    .calendar-date {
-        padding: 10px 6px;
-        font-size: 14px;
-        min-height: 40px;
+    /* 搜索区域超小屏幕优化 */
+    .search-container {
+        padding: 12px;
     }
     
-    .calendar-day {
-        padding: 8px;
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    .search-type-btn {
+        padding: 8px 12px;
         font-size: 13px;
     }
-}
-
-/* ==================== 中屏幕适配 (1200px以下) ==================== */
-@media (max-width: 1200px) and (min-width: 1025px) {
-    /* 中等屏幕下，日历适当缩小 */
-    .calendar-container {
-        width: 300px;
-        padding: 20px;
+    
+    .search-controls {
+        gap: 8px;
     }
     
-    .calendar-date {
-        padding: 11px 7px;
-        font-size: 15px;
+    #searchInput {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    button {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* 目录超小屏幕优化 */
+    .directory-list {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .directory-item {
+        padding: 8px;
+        font-size: 12px;
+        min-width: auto;
     }
 }
         
@@ -3448,7 +3776,7 @@
                 <div class="status-info">
                     <p>数据加载成功！</p>
                     <p>请选择搜索类型并输入关键词进行搜索</p>
-                </div>
+            </div>
             `;
         }
 
