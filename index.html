@@ -1035,97 +1035,98 @@
             width: 100%;
         }
         
-        /* 优化搜索小图 - 简洁无字体干扰 */
-        .image-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            flex: 1;
-            align-items: start;
-            justify-items: center;
-        }
-        
-        .image-card {
-            border: 1px solid rgba(123, 239, 255, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            background: rgba(28, 37, 65, 0.8);
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            height: 240px;
-            position: relative;
-            width: 100%;
-            max-width: 240px;
-        }
-        
-        .image-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
-            border-color: #5bc0be;
-        }
-        
-        /* 修复图片显示问题 - 简洁无字体 */
-        .image-card .image-wrapper {
-            width: 100%;
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background-color: rgba(28, 37, 65, 0.8);
-            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
-        }
-        
-        .image-card img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            display: block;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            pointer-events: auto;
-            touch-action: manipulation;
-            outline: none;
-            border: none;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .image-card img:hover {
-            transform: scale(1.02);
-        }
-        
-        .image-info {
-            padding: 10px;
-            text-align: center;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 80px;
-        }
-        
-        .image-code {
-            font-weight: bold;
-            font-size: 1rem;
-            color: #7befff;
-            margin-bottom: 4px;
-            word-break: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-        }
-        
+ /* 优化搜索小图 - 电脑端调整为700x300 */
+.image-results {
+    display: flex;               /* 改为flex布局 */
+    flex-direction: column;      /* 垂直排列 */
+    gap: 15px;                   /* 卡片间距 */
+    margin-top: 20px;
+    flex: 1;
+    align-items: center;         /* 居中对齐 */
+    justify-items: center;
+    width: 100%;
+}
+
+.image-card {
+    border: 1px solid rgba(123, 239, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background: rgba(28, 37, 65, 0.8);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 300px;               /* ← 修改为300px高度 */
+    position: relative;
+    width: 700px;               /* ← 修改为700px宽度 */
+    max-width: 700px;           /* ← 修改为700px最大宽度 */
+    margin: 0 auto;              /* ← 添加水平居中 */
+}
+
+.image-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
+    border-color: #5bc0be;
+}
+
+/* 修复图片显示问题 - 电脑端大图 */
+.image-card .image-wrapper {
+    width: 100%;
+    height: 250px;               /* ← 修改为250px (300-50) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(28, 37, 65, 0.8);
+    border-bottom: 1px solid rgba(123, 239, 255, 0.2);
+}
+
+.image-card img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;         /* ← 保持图片比例 */
+    display: block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: auto;
+    touch-action: manipulation;
+    outline: none;
+    border: none;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.image-card img:hover {
+    transform: scale(1.02);
+}
+
+.image-info {
+    padding: 10px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 50px;            /* ← 固定文字区域高度 */
+}
+
+.image-code {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #7befff;
+    margin-bottom: 4px;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}  
         .status-info {
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
@@ -1217,73 +1218,85 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* 重量结果显示 */
-        .weight-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .weight-card {
-            border: 1px solid rgba(123, 239, 255, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            background: rgba(28, 37, 65, 0.8);
-        }
-        
-        .weight-header {
-            background: linear-gradient(45deg, #4caf50, #2e7d32);
-            color: white;
-            padding: 12px 15px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .weight-content {
-            padding: 15px;
-        }
-        
-        .weight-specs {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .weight-spec-item {
-            text-align: center;
-            padding: 8px;
-            background: rgba(40, 53, 147, 0.8);
-            border-radius: 6px;
-        }
-        
-        .weight-spec-name {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 4px;
-        }
-        
-        .weight-spec-value {
-            font-weight: bold;
-            color: #7befff;
-            font-size: 0.9rem;
-        }
-        
-        .copy-all-btn {
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
+        /* ==================== 重量结果区域 - 调整为电脑端700x300 ==================== */
+
+.weight-results {
+    display: flex;               /* 改为flex布局 */
+    flex-direction: column;      /* 垂直排列 */
+    gap: 15px;                   /* 卡片间距 */
+    margin-top: 15px;
+    align-items: center;         /* 居中对齐 */
+}
+
+.weight-card {
+    border: 1px solid rgba(123, 239, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background: rgba(28, 37, 65, 0.8);
+    width: 700px;               /* ← 宽度700px */
+    height: 300px;              /* ← 高度300px */
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;             /* ← 水平居中 */
+}
+
+.weight-header {
+    background: linear-gradient(45deg, #4caf50, #2e7d32);
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;               /* ← 固定头部高度 */
+}
+
+.weight-content {
+    padding: 15px;
+    flex: 1;                    /* ← 填满剩余空间 */
+    display: flex;
+    flex-direction: column;
+}
+
+.weight-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+    flex: 1;                    /* ← 规格区域可伸缩 */
+}
+
+.weight-spec-item {
+    text-align: center;
+    padding: 8px;
+    background: rgba(40, 53, 147, 0.8);
+    border-radius: 6px;
+}
+
+.weight-spec-name {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 4px;
+}
+
+.weight-spec-value {
+    font-weight: bold;
+    color: #7befff;
+    font-size: 0.9rem;
+}
+
+.copy-all-btn {
+    background: linear-gradient(45deg, #5bc0be, #3a506b);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
         
         /* 图片模态框 */
         .image-modal {
@@ -1441,133 +1454,246 @@
             }
         }
         
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
-            .main-content-area {
-                width: 100%;
-                max-width: 100%;
-            }
-            
-            /* 移动端公告栏 */
-            .announcement-bar {
-                padding: 6px 25px 6px 12px;
-                min-height: 36px;
-                font-size: 12px;
-                margin-bottom: 12px;
-            }
-            
-            .announcement-content {
-                height: 18px;
-            }
-            
-            .announcement-scroll {
-                font-size: 11px;
-            }
-            
-            .announcement-close {
-                width: 20px;
-                height: 20px;
-                font-size: 14px;
-            }
-            
-            .search-container {
-                padding: 15px;
-                margin-top: 10px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            .search-controls {
-                flex-direction: column;
-            }
-            
-            .search-input-container {
-                min-width: 100%;
-            }
-            
-            button {
-                width: 100%;
-                margin: 5px 0;
-            }
-            
-            /* 移动端隐藏视频播放器 */
-            .video-container {
-                display: none !important;
-            }
-            
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .results-container {
-                min-height: auto;
-                width: 100%;
-                scroll-margin-top: 80px;
-                padding: 15px;
-            }
-            
-            /* 移动端图片显示 */
-            .image-results {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                justify-items: center;
-            }
-            
-            .image-card {
-                height: 200px;
-                max-width: 100%;
-            }
-            
-            .image-card img {
-                -webkit-touch-callout: default;
-                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-                min-height: 120px;
-            }
-            
-            .weight-results {
-                grid-template-columns: 1fr;
-            }
-            
-            /* 移动端目录 */
-            .directory-container {
-                padding: 10px;
-            }
-            
-            .directory-container h3 {
-                font-size: 14px;
-            }
-            
-            .directory-list {
-                flex-direction: column;
-            }
-            
-            .directory-item {
-                min-width: auto;
-                padding: 10px;
-                font-size: 13px;
-                text-align: center;
-            }
-        }
+/* ==================== 移动端适配 ==================== */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .main-content-area {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* 移动端公告栏 */
+    .announcement-bar {
+        padding: 6px 25px 6px 12px;
+        min-height: 36px;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .announcement-content {
+        height: 18px;
+    }
+    
+    .announcement-scroll {
+        font-size: 11px;
+    }
+    
+    .announcement-close {
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+    }
+    
+    .search-container {
+        padding: 15px;
+        margin-top: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .search-controls {
+        flex-direction: column;
+    }
+    
+    .search-input-container {
+        min-width: 100%;
+    }
+    
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    /* 移动端隐藏视频播放器 */
+    .video-container {
+        display: none !important;
+    }
+    
+    .main-content {
+        flex-direction: column;
+    }
+    
+    .results-container {
+        min-height: auto;
+        width: 100%;
+        scroll-margin-top: 80px;
+        padding: 15px;
+    }
+    
+    /* 移动端图片显示 */
+    .image-results {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px;
+        justify-items: center;
+        padding: 0 10px;
+    }
+    
+    .image-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 220px !important;
+        margin: 0 auto 15px !important;
+    }
+    
+    .image-card .image-wrapper {
+        height: 180px !important;
+    }
+    
+    .image-info {
+        min-height: 40px !important;
+        padding: 8px !important;
+    }
+    
+    /* ========== 移动端重量搜索显示修改 ========== */
+    .weight-results {
+        display: flex !important;           /* 改为flex布局 */
+        flex-direction: column !important;   /* 垂直排列 */
+        gap: 12px !important;                /* 卡片间距 */
+        padding: 0 10px !important;         /* 左右内边距 */
+    }
+    
+    .weight-card {
+        width: 100% !important;             /* 满宽显示 */
+        max-width: 100% !important;
+        height: 220px !important;           /* 移动端高度 */
+        margin: 0 auto 12px !important;     /* 底部间距 */
+        border-radius: 8px !important;      /* 圆角 */
+    }
+    
+    .weight-header {
+        height: 45px !important;            /* 固定头部高度 */
+        padding: 10px 12px !important;      /* 内边距 */
+        font-size: 14px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    .weight-header span {
+        font-size: 16px !important;         /* 产品代码字体大小 */
+        font-weight: bold !important;
+    }
+    
+    .weight-header button {
+        padding: 6px 10px !important;       /* 按钮内边距 */
+        font-size: 12px !important;         /* 按钮字体大小 */
+        white-space: nowrap !important;     /* 按钮文字不换行 */
+    }
+    
+    .weight-content {
+        padding: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .weight-specs {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important; /* 固定3列 */
+        gap: 6px !important;                /* 间距 */
+        margin-top: 5px !important;
+    }
+    
+    .weight-spec-item {
+        padding: 6px !important;
+        text-align: center !important;
+        border-radius: 4px !important;
+    }
+    
+    .weight-spec-name {
+        font-size: 11px !important;         /* 规格名称字体 */
+        margin-bottom: 2px !important;
+    }
+    
+    .weight-spec-value {
+        font-size: 12px !important;         /* 重量值字体 */
+        font-weight: bold !important;
+    }
+    
+    .copy-all-btn {
+        padding: 8px !important;
+        font-size: 13px !important;
+        margin-top: 12px !important;
+        border-radius: 4px !important;
+    }
+    
+    /* 完整重量信息区域 */
+    .weight-content > div[style*="background: rgba"] {
+        margin-top: 8px !important;
+        padding: 6px !important;
+        font-size: 11px !important;
+        border-radius: 4px !important;
+    }
+    
+    /* 移动端目录 */
+    .directory-container {
+        padding: 10px;
+    }
+    
+    .directory-container h3 {
+        font-size: 14px;
+    }
+    
+    .directory-list {
+        flex-direction: column;
+    }
+    
+    .directory-item {
+        min-width: auto;
+        padding: 10px;
+        font-size: 13px;
+        text-align: center;
+    }
+}
 
-        @media (max-width: 480px) {
-            .image-results {
-                grid-template-columns: 1fr;
-            }
-            
-            .image-card {
-                height: 220px;
-            }
-            
-            .image-card .image-wrapper {
-                height: 150px;
-            }
-        }
+@media (max-width: 480px) {
+    .image-results {
+        grid-template-columns: 1fr;
+    }
+    
+    .image-card {
+        height: 200px !important;
+    }
+    
+    .image-card .image-wrapper {
+        height: 160px !important;
+    }
+    
+    /* ========== 超小屏幕重量搜索优化 ========== */
+    .weight-card {
+        height: 200px !important;           /* 更小的高度 */
+        margin: 0 auto 10px !important;
+    }
+    
+    .weight-header {
+        height: 40px !important;
+        padding: 8px 10px !important;
+    }
+    
+    .weight-header span {
+        font-size: 15px !important;
+    }
+    
+    .weight-specs {
+        grid-template-columns: repeat(2, 1fr) !important; /* 改为2列 */
+        gap: 5px !important;
+    }
+    
+    .weight-spec-item {
+        padding: 5px !important;
+    }
+    
+    .copy-all-btn {
+        padding: 7px !important;
+        font-size: 12px !important;
+        margin-top: 10px !important;
+    }
+}
         
         /* 天气通知动画 */
         @keyframes weatherNotificationSlideIn {
@@ -3493,7 +3619,7 @@
                 `${spec}: ${weight}`
             ).join('  ');
             
-            const textToCopy = `${code} ${weightList}`;
+            const textToCopy = `${code}克重 ${weightList}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 showCopyNotification(`✅ 已复制 ${code} 的重量数据`);
