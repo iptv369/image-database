@@ -14,7 +14,93 @@
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
-        * {
+        /* 优化播放列表项 - 缩小按钮 */
+.playlist-item {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+    min-width: 50px !important;
+    text-align: center !important;
+}
+
+/* ==================== 全屏时间显示优化 ==================== */
+.fullscreen-time-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(10, 14, 42, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fullscreen-time-display:hover {
+    background: rgba(10, 14, 42, 0.98);
+}
+
+.time-main {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: rgba(123, 239, 255, 0.9);
+    text-shadow: 0 0 20px rgba(123, 239, 255, 0.5);
+    margin-bottom: 5px;
+    animation: timePulse 2s infinite;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* 移动端时间显示调整 */
+@media (max-width: 768px) {
+    .time-main {
+        font-size: 2.5rem;
+    }
+    
+    /* 横屏时时间显示更大 */
+    @media (orientation: landscape) {
+        .time-main {
+            font-size: 3rem;
+        }
+    }
+}
+
+.time-hint {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(28, 37, 65, 0.6);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(123, 239, 255, 0.3);
+    margin-top: 20px;
+    animation: hintFade 3s infinite;
+    text-align: center;
+    max-width: 90%;
+}
+
+@keyframes timePulse {
+    0%, 100% { 
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes hintFade {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+* {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -883,6 +969,10 @@
             flex: 1;
             background: #000;
             min-height: 200px;
+            /* 添加响应式尺寸调整 */
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s ease;
         }
         
         .video-wrapper iframe {
@@ -890,6 +980,171 @@
             height: 100%;
             border: none;
             display: block;
+        }
+        
+        /* 视频密码锁覆盖层 */
+        .video-lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 42, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative; /* 添加相对定位，用于倒计时绝对定位 */
+        }
+        
+        /* 倒计时显示样式 */
+        .password-countdown {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: rgba(123, 239, 255, 0.8);
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s;
+            z-index: 101;
+        }
+        
+        .password-countdown.warning {
+            color: #ffd166;
+            background: rgba(255, 209, 102, 0.1);
+            border-color: rgba(255, 209, 102, 0.5);
+        }
+        
+        .password-countdown.danger {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border-color: rgba(255, 107, 107, 0.5);
+            animation: pulseWarning 1s infinite;
+        }
+        
+        @keyframes pulseWarning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .lock-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #7befff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .lock-title {
+            color: #7befff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .lock-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .password-input-container {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(28, 37, 65, 0.9);
+            border: 2px solid rgba(123, 239, 255, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #5bc0be;
+            box-shadow: 0 0 15px rgba(91, 192, 190, 0.5);
+        }
+        
+        .password-input.error {
+            border-color: #ff6b6b;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .password-error {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            min-height: 20px;
+            text-align: center;
+        }
+        
+        .password-hint {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            margin-top: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .password-hint:hover {
+            color: #ffd166;
+        }
+        
+        .unlock-button {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .unlock-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(91, 192, 190, 0.4);
+            background: linear-gradient(45deg, #7befff, #5bc0be);
+        }
+        
+        .unlock-button:active {
+            transform: translateY(0);
         }
         
         .video-controls {
@@ -1526,20 +1781,100 @@
         margin: 5px 0;
     }
     
-    /* 移动端隐藏视频播放器 */
-    .video-container {
-        display: none !important;
+    /* 移动端竖屏隐藏视频容器 */
+    @media (orientation: portrait) {
+        .video-container {
+            display: none !important;
+        }
+        
+        .main-content {
+            flex-direction: column;
+        }
+        
+        .results-container {
+            min-height: auto;
+            width: 100%;
+            scroll-margin-top: 80px;
+            padding: 15px;
+        }
     }
     
-    .main-content {
-        flex-direction: column;
-    }
-    
-    .results-container {
-        min-height: auto;
-        width: 100%;
-        scroll-margin-top: 80px;
-        padding: 15px;
+    /* 移动端横屏显示视频容器 */
+    @media (orientation: landscape) {
+        .video-container {
+            display: flex !important;
+            width: 45% !important;
+            min-width: 45% !important;
+            margin-bottom: 15px;
+            padding: 12px;
+        }
+        
+        .main-content {
+            flex-direction: row !important;
+            gap: 15px;
+        }
+        
+        .results-container {
+            width: 55% !important;
+            flex: 1;
+            min-height: auto;
+            padding: 12px;
+        }
+        
+        .video-wrapper {
+            min-height: 180px;
+            height: 220px;
+        }
+        
+        /* 移动端横屏视频控制优化 */
+        .video-controls {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .video-controls button {
+            padding: 6px 10px;
+            font-size: 11px;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .playback-controls {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .playback-controls button {
+            padding: 5px 8px;
+            font-size: 10px;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .video-nav-controls {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .video-nav-controls button {
+            padding: 5px 8px;
+            font-size: 10px;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .playlist-items {
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        
+        .playlist-item {
+            padding: 3px 6px;
+            font-size: 9px;
+            flex: 1;
+            min-width: 50px;
+            text-align: center;
+        }
     }
     
     /* 移动端图片显示 */
@@ -1551,15 +1886,32 @@
         padding: 0 10px;
     }
     
-    .image-card {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 220px !important;
-        margin: 0 auto 15px !important;
+    /* 竖屏样式 */
+    @media (orientation: portrait) {
+        .image-card {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 220px !important;
+            margin: 0 auto 15px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 180px !important;
+        }
     }
     
-    .image-card .image-wrapper {
-        height: 180px !important;
+    /* 横屏样式 */
+    @media (orientation: landscape) {
+        .image-card {
+            width: 95% !important;
+            max-width: 95% !important;
+            height: 250px !important;  /* 横屏时增加高度 */
+            margin: 0 auto 15px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 210px !important;  /* 横屏时增加图片区域高度 */
+        }
     }
     
     .image-info {
@@ -1575,18 +1927,53 @@
         padding: 0 10px !important;         /* 左右内边距 */
     }
     
-    .weight-card {
-        width: 100% !important;             /* 满宽显示 */
-        max-width: 100% !important;
-        height: 220px !important;           /* 移动端高度 */
-        margin: 0 auto 12px !important;     /* 底部间距 */
-        border-radius: 8px !important;      /* 圆角 */
+    /* 竖屏样式 */
+    @media (orientation: portrait) {
+        .weight-card {
+            width: 100% !important;             /* 满宽显示 */
+            max-width: 100% !important;
+            height: 220px !important;           /* 竖屏高度 */
+            margin: 0 auto 12px !important;     /* 底部间距 */
+            border-radius: 8px !important;      /* 圆角 */
+        }
+        
+        .weight-header {
+            height: 45px !important;            /* 固定头部高度 */
+            padding: 10px 12px !important;      /* 内边距 */
+            font-size: 14px !important;
+        }
+        
+        .weight-specs {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important; /* 竖屏3列 */
+            gap: 6px !important;
+        }
+    }
+    
+    /* 横屏样式 */
+    @media (orientation: landscape) {
+        .weight-card {
+            width: 95% !important;
+            max-width: 95% !important;
+            height: 240px !important;           /* 横屏增加高度 */
+            margin: 0 auto 15px !important;
+            border-radius: 10px !important;
+        }
+        
+        .weight-header {
+            height: 50px !important;            /* 横屏增加头部高度 */
+            padding: 12px 15px !important;
+            font-size: 15px !important;
+        }
+        
+        .weight-specs {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important; /* 横屏4列 */
+            gap: 8px !important;
+        }
     }
     
     .weight-header {
-        height: 45px !important;            /* 固定头部高度 */
-        padding: 10px 12px !important;      /* 内边距 */
-        font-size: 14px !important;
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
@@ -1607,13 +1994,6 @@
         padding: 12px !important;
         display: flex !important;
         flex-direction: column !important;
-    }
-    
-    .weight-specs {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important; /* 固定3列 */
-        gap: 6px !important;                /* 间距 */
-        margin-top: 5px !important;
     }
     
     .weight-spec-item {
@@ -1674,7 +2054,7 @@
     }
 }
 
-平板端适配 (768px-1024px) ==================== */
+/* ==================== 平板端适配 (768px-1024px) ==================== */
 @media (max-width: 1024px) and (min-width: 769px) {
     body {
         padding: 20px;
@@ -1724,42 +2104,25 @@
         margin: 0;
     }
     
-    /* ========== 平板端竖屏 - 隐藏视频播放器 ========== */
-    @media (orientation: portrait) {
-        .video-container {
-            display: none !important;
-        }
-        
-        .main-content {
-            flex-direction: column;
-        }
-        
-        .results-container {
-            min-height: auto;
-            width: 100%;
-            scroll-margin-top: 80px;
-            padding: 18px;
-        }
-    }
-    
     /* ========== 平板端横屏 - 显示视频播放器 ========== */
     @media (orientation: landscape) {
         .video-container {
             display: flex !important;
-            width: 100% !important;
-            min-width: 100% !important;
+            width: 45% !important;
+            min-width: 45% !important;
             margin-bottom: 20px;
             padding: 15px;
         }
         
         .main-content {
-            flex-direction: column;
+            flex-direction: row !important;
+            gap: 20px;
         }
         
         .results-container {
+            width: 55% !important;
+            flex: 1;
             min-height: auto;
-            width: 100%;
-            scroll-margin-top: 80px;
             padding: 18px;
         }
         
@@ -1819,6 +2182,24 @@
         }
     }
     
+    /* ========== 平板端竖屏 - 隐藏视频播放器 ========== */
+    @media (orientation: portrait) {
+        .video-container {
+            display: none !important;
+        }
+        
+        .main-content {
+            flex-direction: column;
+        }
+        
+        .results-container {
+            min-height: auto;
+            width: 100%;
+            scroll-margin-top: 80px;
+            padding: 18px;
+        }
+    }
+    
     /* ========== 平板端图片显示优化 ========== */
     .image-results {
         display: flex !important;
@@ -1829,15 +2210,32 @@
         width: 100%;
     }
     
-    .image-card {
-        width: 100% !important;
-        max-width: 600px !important;
-        height: 280px !important;
-        margin: 0 auto 15px !important;
+    /* 平板竖屏 */
+    @media (orientation: portrait) {
+        .image-card {
+            width: 100% !important;
+            max-width: 600px !important;
+            height: 280px !important;
+            margin: 0 auto 15px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 230px !important;
+        }
     }
     
-    .image-card .image-wrapper {
-        height: 230px !important;
+    /* 平板横屏 */
+    @media (orientation: landscape) {
+        .image-card {
+            width: 90% !important;
+            max-width: 700px !important;
+            height: 320px !important;  /* 横屏增加高度 */
+            margin: 0 auto 15px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 270px !important;  /* 横屏增加图片区域高度 */
+        }
     }
     
     .image-info {
@@ -1858,18 +2256,54 @@
         width: 100%;
     }
     
-    .weight-card {
-        width: 100% !important;
-        max-width: 600px !important;
-        height: 280px !important;
-        margin: 0 auto 15px !important;
-        border-radius: 10px !important;
+    /* 平板竖屏 */
+    @media (orientation: portrait) {
+        .weight-card {
+            width: 100% !important;
+            max-width: 600px !important;
+            height: 280px !important;
+            margin: 0 auto 15px !important;
+            border-radius: 10px !important;
+        }
+        
+        .weight-header {
+            height: 50px !important;
+        }
+        
+        .weight-specs {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+        }
+    }
+    
+    /* 平板横屏 */
+    @media (orientation: landscape) {
+        .weight-card {
+            width: 90% !important;
+            max-width: 700px !important;
+            height: 300px !important;  /* 横屏增加高度 */
+            margin: 0 auto 15px !important;
+            border-radius: 10px !important;
+        }
+        
+        .weight-header {
+            height: 55px !important;  /* 横屏增加头部高度 */
+            padding: 12px 20px !important;
+        }
+        
+        .weight-specs {
+            display: grid !important;
+            grid-template-columns: repeat(5, 1fr) !important;  /* 横屏5列 */
+            gap: 10px !important;
+        }
     }
     
     .weight-header {
-        height: 50px !important;
         padding: 12px 15px !important;
         font-size: 15px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
     
     .weight-header span {
@@ -1886,13 +2320,6 @@
         padding: 15px !important;
         display: flex !important;
         flex-direction: column !important;
-    }
-    
-    .weight-specs {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 8px !important;
-        margin-top: 8px !important;
     }
     
     .weight-spec-item {
@@ -1941,39 +2368,26 @@
     
     /* ========== 平板端日历优化 ========== */
     .calendar-container {
-        display: none !important; /* 平板端隐藏日历，给视频和搜索结果更多空间 */
+        display: none !important;
     }
 }
 
-/* ==================== 平板横屏时的大屏优化 ==================== */
-@media (max-width: 1024px) and (min-width: 900px) and (orientation: landscape) {
-    /* 在横屏大平板上显示两列布局 */
-    .main-content {
-        flex-direction: row !important;
-        gap: 20px;
+/* ==================== 桌面端适配 (1024px以上) ==================== */
+@media (min-width: 1025px) {
+    .video-container {
+        display: flex !important;
+        width: 35% !important;
+        min-width: 320px !important;
     }
     
-    .video-container {
-        width: 45% !important;
-        min-width: 45% !important;
+    .main-content {
+        flex-direction: row !important;
+        gap: 25px !important;
     }
     
     .results-container {
-        width: 55% !important;
-        flex: 1;
-    }
-    
-    /* 调整视频高度 */
-    .video-wrapper {
-        height: 250px;
-    }
-}
-
-/* ==================== 平板横屏时的小屏优化 ==================== */
-@media (max-width: 899px) and (min-width: 769px) and (orientation: landscape) {
-    /* 在横屏小平板上保持单列布局，但调整视频大小 */
-    .video-wrapper {
-        height: 280px;
+        flex: 1 !important;
+        min-height: 450px !important;
     }
 }
 
@@ -1984,18 +2398,32 @@
     }
     
     .image-results {
-        grid-template-columns: 1fr;
         gap: 10px;
         padding: 0 5px;
     }
     
-    .image-card {
-        height: 200px !important;
-        margin: 0 auto 12px !important;
+    /* 超小屏幕竖屏 */
+    @media (orientation: portrait) {
+        .image-card {
+            height: 200px !important;
+            margin: 0 auto 12px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 160px !important;
+        }
     }
     
-    .image-card .image-wrapper {
-        height: 160px !important;
+    /* 超小屏幕横屏 */
+    @media (orientation: landscape) {
+        .image-card {
+            height: 180px !important;  /* 超小屏横屏高度较小 */
+            margin: 0 auto 10px !important;
+        }
+        
+        .image-card .image-wrapper {
+            height: 140px !important;
+        }
     }
     
     .image-info {
@@ -2008,15 +2436,46 @@
     }
     
     /* ========== 超小屏幕重量搜索优化 ========== */
-    .weight-card {
-        height: 200px !important;
-        margin: 0 auto 10px !important;
-        border-radius: 6px !important;
+    .weight-results {
+        gap: 8px !important;
+        padding: 0 5px !important;
     }
     
-    .weight-header {
-        height: 40px !important;
-        padding: 8px 10px !important;
+    /* 超小屏幕竖屏 */
+    @media (orientation: portrait) {
+        .weight-card {
+            height: 200px !important;
+            margin: 0 auto 10px !important;
+            border-radius: 6px !important;
+        }
+        
+        .weight-header {
+            height: 40px !important;
+        }
+        
+        .weight-specs {
+            grid-template-columns: repeat(2, 1fr) !important; /* 超小屏竖屏2列 */
+            gap: 5px !important;
+        }
+    }
+    
+    /* 超小屏幕横屏 */
+    @media (orientation: landscape) {
+        .weight-card {
+            height: 190px !important;
+            margin: 0 auto 8px !important;
+            border-radius: 6px !important;
+        }
+        
+        .weight-header {
+            height: 42px !important;
+            padding: 8px 10px !important;
+        }
+        
+        .weight-specs {
+            grid-template-columns: repeat(3, 1fr) !important; /* 超小屏横屏3列 */
+            gap: 4px !important;
+        }
     }
     
     .weight-header span {
@@ -2030,12 +2489,6 @@
     
     .weight-content {
         padding: 10px !important;
-    }
-    
-    .weight-specs {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 5px !important;
-        margin-top: 5px !important;
     }
     
     .weight-spec-item {
@@ -2348,6 +2801,38 @@
             <div class="video-container">
                 <h2>🎬 视频教程</h2>
                 <div class="video-wrapper">
+                    <!-- 全屏时间显示 -->
+                    <div id="fullscreenTimeDisplay" onclick="showPasswordInput()">
+                        <div class="time-main" id="timeMain">00:00:00</div>
+                        <div class="time-hint">点击输入密码解锁视频区域</div>
+                    </div>
+                    
+                    <!-- 视频密码锁覆盖层 -->
+                    <div class="video-lock-overlay" id="videoLockOverlay" style="display: none;">
+                        <!-- 添加倒计时显示器 -->
+                        <div class="password-countdown" id="passwordCountdown" style="display: none;">
+                            <span>⏰</span>
+                            <span id="countdownTimer">30</span>秒后返回
+                        </div>
+                        
+                        <div class="lock-icon">🔒</div>
+                        <div class="lock-title">视频区域已锁定</div>
+                        <div class="lock-description">
+                            请输入密码解锁视频区域
+                        </div>
+                        <div class="password-input-container">
+                            <input type="password" class="password-input" id="videoPassword" 
+                                   placeholder="请输入密码" maxlength="20" autocomplete="off">
+                            <div class="password-error" id="passwordError"></div>
+                        </div>
+                        <button class="unlock-button" onclick="unlockVideo()">
+                            🔓 解锁视频
+                        </button>
+                        <div class="password-hint" onclick="showPasswordHint()">
+                            💡 忘记密码？点击查看提示
+                        </div>
+                    </div>
+                    
                     <div class="video-loading" id="videoLoading" style="display: none;">
                         <div>视频加载中...</div>
                     </div>
@@ -2390,12 +2875,10 @@
                     </div>
                 </div>
                 
-                <!-- 视频控制按钮 -->
-                <div class="video-controls">
-                    <button onclick="reloadBilibiliVideo()" style="background: linear-gradient(45deg, #f44336, #c62828);">🔄 重新加载</button>
-                    <button onclick="openInNewTab()" style="background: linear-gradient(45deg, #9d4edd, #560bad);">🔗 在新窗口打开</button>
-                    <button onclick="forcePlay()" style="background: linear-gradient(45deg, #4caf50, #2e7d32);">▶️ 强制播放</button>
-                </div>
+                <!-- 视频控制按钮 - 仅保留重新锁定 -->
+<div class="video-controls">
+    <button onclick="lockVideoArea()" style="background: linear-gradient(45deg, #283593, #1a237e); width: 100%;">🔒 重新锁定</button>
+</div>
                 
                 <!-- 自定义视频源区域 -->
                 <div style="margin-top: 15px; padding: 10px; background: rgba(28, 37, 65, 0.8); border-radius: 8px;">
@@ -2505,7 +2988,7 @@
                 duration: 240
             },
             {
-                id: 'https://api.qemao.com/api/douyin',
+                id: 'https://api.qemao.com/api/douyin?mute=1',
                 title: '抖音视频源',
                 type: 'direct',
                 duration: 300
@@ -2521,12 +3004,18 @@
             fallbackApi: "https://api.open-meteo.com/v1/forecast"
         };
 
-        let imageData = [];
-        let currentSearchType = 'image';
-        let currentDataSource = null;
-        let currentWeatherCity = "东莞";
-        let weatherApiKey = "";
-        let weatherUpdateTimer = null;
+        // 视频密码配置
+        const VIDEO_PASSWORD = "988968"; // 默认密码
+        const PASSWORD_HINT = "默认密码是6个数字";
+        let videoUnlocked = false;
+        let unlockAttempts = 0;
+        const MAX_UNLOCK_ATTEMPTS = 5;
+
+        // 倒计时相关变量
+        let autoReturnTimer = null; // 自动返回定时器
+        let countdownInterval = null; // 倒计时更新间隔
+        let remainingTime = 30; // 剩余时间（秒）
+        let countdownActive = false; // 倒计时是否激活
 
         // 视频播放控制状态
         let autoplayEnabled = true;
@@ -2536,75 +3025,198 @@
         let videoProgressInterval = null;
         let currentVideoStartTime = 0;
 
+        let imageData = [];
+        let currentSearchType = 'image';
+        let currentDataSource = null;
+        let currentWeatherCity = "东莞";
+        let weatherApiKey = "";
+        let weatherUpdateTimer = null;
+
+        // ==================== 倒计时相关函数 ====================
+
+        // 重置倒计时
+        function resetAutoReturnCountdown() {
+            // 清除所有定时器
+            if (autoReturnTimer) {
+                clearTimeout(autoReturnTimer);
+                autoReturnTimer = null;
+            }
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            // 重置剩余时间
+            remainingTime = 30;
+            countdownActive = false;
+            
+            // 更新显示
+            updateCountdownDisplay();
+        }
+
+        // 开始倒计时
+        function startAutoReturnCountdown() {
+            // 如果已经在倒计时，先重置
+            if (countdownActive) {
+                resetAutoReturnCountdown();
+            }
+            
+            countdownActive = true;
+            
+            // 设置30秒后自动返回
+            autoReturnTimer = setTimeout(() => {
+                showFullscreenTimeDisplay();
+                showCopyNotification('⏰ 30秒未操作，已自动返回时间显示');
+                countdownActive = false;
+            }, 30000); // 30秒
+            
+            // 每秒更新一次倒计时显示
+            countdownInterval = setInterval(() => {
+                remainingTime--;
+                updateCountdownDisplay();
+                
+                // 如果倒计时结束，清除间隔
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    countdownActive = false;
+                }
+            }, 1000);
+        }
+
+        // 更新倒计时显示
+        function updateCountdownDisplay() {
+            const countdownEl = document.getElementById('passwordCountdown');
+            const timerEl = document.getElementById('countdownTimer');
+            
+            if (!countdownEl || !timerEl) return;
+            
+            // 更新显示的时间
+            timerEl.textContent = remainingTime;
+            
+            // 根据剩余时间更新样式
+            countdownEl.classList.remove('warning', 'danger');
+            
+            if (remainingTime <= 10 && remainingTime > 5) {
+                // 最后10-6秒显示警告样式
+                countdownEl.classList.add('warning');
+            }
+            
+            if (remainingTime <= 5) {
+                // 最后5秒显示危险样式
+                countdownEl.classList.add('danger');
+            }
+        }
+
+        // ==================== 时间显示功能优化 ====================
+        function updateFullscreenTimeDisplay() {
+            const now = new Date();
+            
+            // 更新主时间 - 只显示时分秒
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('timeMain').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        function initFullscreenTimeDisplay() {
+            updateFullscreenTimeDisplay(); // 立即更新一次
+            setInterval(updateFullscreenTimeDisplay, 1000); // 每秒更新一次
+        }
+
+        // 显示密码输入框
+        function showPasswordInput() {
+            document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+            document.getElementById('videoLockOverlay').style.display = 'flex';
+            document.getElementById('videoPassword').focus();
+            
+            // 重置倒计时
+            resetAutoReturnCountdown();
+            
+            // 显示倒计时显示器
+            const countdownEl = document.getElementById('passwordCountdown');
+            if (countdownEl) {
+                countdownEl.style.display = 'flex';
+            }
+            updateCountdownDisplay();
+            
+            // 开始倒计时
+            startAutoReturnCountdown();
+        }
+
+        // 显示全屏时间显示
+        function showFullscreenTimeDisplay() {
+            // 重置和清除倒计时
+            resetAutoReturnCountdown();
+            
+            // 隐藏倒计时显示器
+            const countdownEl = document.getElementById('passwordCountdown');
+            if (countdownEl) {
+                countdownEl.style.display = 'none';
+            }
+            
+            // 显示时间显示
+            document.getElementById('videoLockOverlay').style.display = 'none';
+            document.getElementById('fullscreenTimeDisplay').style.display = 'flex';
+        }
+
         // ==================== 简单准确的农历计算 ====================
         function getAccurateLunarDate(year, month, day) {
             // 2025年准确的农历数据表
             const lunarData2025 = {
-                // 1月
                 '2025-01-01': '甲辰年腊月初二',
                 '2025-01-29': '甲辰年腊月三十', // 除夕
                 '2025-01-30': '乙巳年正月初一', // 春节
                 
-                // 2月
                 '2025-02-10': '乙巳年正月十二',
                 '2025-02-20': '乙巳年正月廿二',
                 '2025-02-28': '乙巳年正月三十',
                 
-                // 3月
                 '2025-03-01': '乙巳年二月初二',
                 '2025-03-10': '乙巳年二月十一',
                 '2025-03-20': '乙巳年二月廿一',
                 '2025-03-30': '乙巳年三月初一',
                 
-                // 4月
                 '2025-04-01': '乙巳年三月初三',
                 '2025-04-10': '乙巳年三月十二',
                 '2025-04-20': '乙巳年三月廿二',
                 '2025-04-30': '乙巳年四月初三',
                 
-                // 5月
                 '2025-05-01': '乙巳年四月初四',
                 '2025-05-10': '乙巳年四月十三',
                 '2025-05-20': '乙巳年四月廿三',
                 '2025-05-30': '乙巳年五月初三',
                 
-                // 6月
                 '2025-06-01': '乙巳年五月初五',
                 '2025-06-10': '乙巳年五月十四',
                 '2025-06-20': '乙巳年五月廿四',
                 '2025-06-30': '乙巳年闰五月初四', // 2025年有闰六月
                 
-                // 7月
                 '2025-07-01': '乙巳年闰五月初五',
                 '2025-07-10': '乙巳年闰五月十四',
                 '2025-07-20': '乙巳年闰五月廿四',
                 '2025-07-30': '乙巳年六月初五',
                 
-                // 8月
                 '2025-08-01': '乙巳年六月初七',
                 '2025-08-10': '乙巳年六月十六',
                 '2025-08-20': '乙巳年六月廿六',
                 '2025-08-30': '乙巳年七月初七',
                 
-                // 9月
                 '2025-09-01': '乙巳年七月初九',
                 '2025-09-10': '乙巳年七月十八',
                 '2025-09-20': '乙巳年七月廿八',
                 '2025-09-30': '乙巳年八月初八',
                 
-                // 10月
                 '2025-10-01': '乙巳年八月初九',
                 '2025-10-10': '乙巳年八月十八',
                 '2025-10-20': '乙巳年八月廿八',
                 '2025-10-30': '乙巳年九月初九',
                 
-                // 11月
                 '2025-11-01': '乙巳年九月十一',
                 '2025-11-10': '乙巳年九月二十',
                 '2025-11-20': '乙巳年九月三十',
                 '2025-11-30': '乙巳年十月初十',
                 
-                // 12月
                 '2025-12-01': '乙巳年十月十一',
                 '2025-12-10': '乙巳年十月二十',
                 '2025-12-20': '乙巳年十月三十',
@@ -2615,37 +3227,31 @@
 
             const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             
-            // 如果有精确匹配，直接返回
             if (lunarData2025[dateStr]) {
                 return lunarData2025[dateStr];
             }
             
-            // 如果没有精确匹配，查找最近的数据进行计算
             const dateObj = new Date(year, month - 1, day);
             
-            // 2025年春节是1月29日
             const springFestival2025 = new Date(2025, 0, 29);
             const diffDays = Math.floor((dateObj - springFestival2025) / (1000 * 60 * 60 * 24));
             
             if (diffDays >= 0) {
-                // 春节之后，属于乙巳年
                 const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
                                        "七月", "八月", "九月", "十月", "冬月", "腊月"];
                 const lunarDayNames = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
                                      "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
                                      "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
                 
-                // 2025年农历月份天数（包括闰六月）
                 const lunarMonthDays = [
                     30, 29, 30, 29, 30, 29, 30, 29, 30, 29,  // 正月至五月
-                    30,  // 闰六月（2025年有闰六月）
+                    30,  // 闰六月
                     30, 29, 30, 29, 30, 29, 30, 29, 30, 29  // 六月至腊月
                 ];
                 
                 let remainingDays = diffDays;
                 let lunarMonth = 0;
                 
-                // 计算农历月份
                 while (remainingDays >= lunarMonthDays[lunarMonth]) {
                     remainingDays -= lunarMonthDays[lunarMonth];
                     lunarMonth++;
@@ -2653,24 +3259,22 @@
                 
                 const lunarDay = remainingDays + 1;
                 
-                // 处理闰月显示
                 let monthDisplay = "";
                 if (lunarMonth === 5) { // 第六个月是闰六月
                     monthDisplay = "闰六月";
                 } else if (lunarMonth > 5) {
-                    monthDisplay = lunarMonthNames[lunarMonth - 1]; // 闰月后的月份减1
+                    monthDisplay = lunarMonthNames[lunarMonth - 1];
                 } else {
                     monthDisplay = lunarMonthNames[lunarMonth];
                 }
                 
                 return `乙巳年${monthDisplay}${lunarDayNames[lunarDay - 1]}`;
             } else {
-                // 春节之前，属于甲辰年
                 return "甲辰年腊月";
             }
         }
 
-        // 获取节气（简化版）
+        // 获取节气
         function getSolarTerm(year, month, day) {
             const solarTerms = ["小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", 
                               "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", 
@@ -2680,17 +3284,15 @@
             const startOfYear = new Date(year, 0, 1);
             const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
             
-            // 节气近似计算（每15天一个节气）
             const termIndex = Math.floor((dayOfYear - 1) / 15) % 24;
             return solarTerms[termIndex] || "--";
         }
 
-        // 获取宜忌（简化版）
+        // 获取宜忌
         function getYiJi(year, month, day) {
             const yiItems = ["祭祀", "祈福", "求嗣", "开光", "出行", "解除", "交易", "立券", "纳财", "安床"];
             const jiItems = ["嫁娶", "安葬", "破土", "开市", "入宅", "动土", "作灶", "栽种"];
             
-            // 基于日期的简单计算
             const dateNum = year * 10000 + month * 100 + day;
             const yiIndex = dateNum % yiItems.length;
             const jiIndex = dateNum % jiItems.length;
@@ -2701,6 +3303,162 @@
             };
         }
 
+        // ==================== 视频密码功能 ====================
+        function unlockVideo() {
+            const passwordInput = document.getElementById('videoPassword');
+            const passwordError = document.getElementById('passwordError');
+            const inputPassword = passwordInput.value.trim();
+            
+            // 清除之前的错误信息
+            passwordError.textContent = '';
+            passwordInput.classList.remove('error');
+            
+            // 重置倒计时（因为用户有操作）
+            resetAutoReturnCountdown();
+            
+            if (!inputPassword) {
+                passwordError.textContent = '请输入密码';
+                passwordInput.classList.add('error');
+                // 如果输入为空，重新开始倒计时
+                startAutoReturnCountdown();
+                return;
+            }
+            
+            unlockAttempts++;
+            
+            // 检查密码
+            if (inputPassword === VIDEO_PASSWORD) {
+                videoUnlocked = true;
+                unlockAttempts = 0;
+                
+                // 隐藏密码锁和倒计时
+                document.getElementById('videoLockOverlay').style.display = 'none';
+                const countdownEl = document.getElementById('passwordCountdown');
+                if (countdownEl) {
+                    countdownEl.style.display = 'none';
+                }
+                
+                // 显示成功消息
+                showCopyNotification('✅ 视频区域已解锁');
+                
+                // 初始化视频播放器
+                initializeVideoPlayback();
+                
+                // 保存解锁状态到localStorage
+                try {
+                    localStorage.setItem('videoUnlocked', 'true');
+                    localStorage.setItem('videoUnlockTime', Date.now().toString());
+                } catch (e) {
+                    console.log('本地存储不可用');
+                }
+            } else {
+                passwordError.textContent = `密码错误 (尝试次数: ${unlockAttempts}/${MAX_UNLOCK_ATTEMPTS})`;
+                passwordInput.classList.add('error');
+                
+                // 清空输入框并重新聚焦
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                // 重新开始倒计时（因为用户有操作，但密码错误）
+                resetAutoReturnCountdown();
+                startAutoReturnCountdown();
+                
+                // 检查是否超过最大尝试次数
+                if (unlockAttempts >= MAX_UNLOCK_ATTEMPTS) {
+                    passwordError.textContent = '尝试次数过多，请稍后再试';
+                    passwordInput.disabled = true;
+                    document.querySelector('.unlock-button').disabled = true;
+                    
+                    // 15分钟后重置
+                    setTimeout(() => {
+                        unlockAttempts = 0;
+                        passwordInput.disabled = false;
+                        document.querySelector('.unlock-button').disabled = false;
+                        passwordError.textContent = '';
+                        showCopyNotification('🔓 可以重新尝试解锁');
+                    }, 15 * 60 * 1000);
+                }
+            }
+        }
+
+        function showPasswordHint() {
+            const passwordError = document.getElementById('passwordError');
+            passwordError.textContent = PASSWORD_HINT;
+            passwordError.style.color = '#ffd166';
+            
+            // 重置倒计时（因为用户有操作）
+            resetAutoReturnCountdown();
+            startAutoReturnCountdown();
+            
+            // 3秒后清除提示
+            setTimeout(() => {
+                passwordError.textContent = '';
+            }, 3000);
+        }
+
+        function lockVideoArea() {
+            // 重置倒计时
+            resetAutoReturnCountdown();
+            
+            // 隐藏倒计时显示器
+            const countdownEl = document.getElementById('passwordCountdown');
+            if (countdownEl) {
+                countdownEl.style.display = 'none';
+            }
+            
+            videoUnlocked = false;
+            showFullscreenTimeDisplay();
+            
+            // 停止视频
+            const iframe = document.getElementById('bilibiliPlayer');
+            iframe.src = '';
+            
+            // 停止进度检测
+            if (videoProgressInterval) {
+                clearInterval(videoProgressInterval);
+                videoProgressInterval = null;
+            }
+            
+            // 清除本地存储
+            try {
+                localStorage.removeItem('videoUnlocked');
+                localStorage.removeItem('videoUnlockTime');
+            } catch (e) {
+                console.log('本地存储不可用');
+            }
+            
+            showCopyNotification('🔒 视频区域已锁定');
+        }
+
+        function checkVideoUnlockStatus() {
+            try {
+                const savedUnlocked = localStorage.getItem('videoUnlocked');
+                const unlockTime = localStorage.getItem('videoUnlockTime');
+                
+                if (savedUnlocked === 'true' && unlockTime) {
+                    const unlockTimeNum = parseInt(unlockTime);
+                    const now = Date.now();
+                    const minutesSinceUnlock = (now - unlockTimeNum) / (1000 * 60); // 改为分钟
+                    
+                    // 如果解锁时间在1分钟内，自动解锁
+                    if (minutesSinceUnlock < 1) {
+                        videoUnlocked = true;
+                        document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+                        initializeVideoPlayback();
+                        console.log('视频区域自动解锁（1分钟内）');
+                        return true;
+                    } else {
+                        // 超过1分钟，清除状态
+                        localStorage.removeItem('videoUnlocked');
+                        localStorage.removeItem('videoUnlockTime');
+                    }
+                }
+            } catch (e) {
+                console.log('检查解锁状态失败');
+            }
+            return false;
+        }
+
         // ==================== 初始化函数 ====================
         async function initialize() {
             // 创建星空背景
@@ -2709,6 +3467,9 @@
             
             // 初始化日历
             initializeCalendar();
+            
+            // 初始化全屏时间显示
+            initFullscreenTimeDisplay();
             
             // 加载天气配置并初始化天气
             loadWeatherConfig();
@@ -2728,12 +3489,75 @@
             // 立即尝试加载本地数据文件
             loadFromDirectory(0);
             
-            // 初始化视频播放器
-            initializeVideoPlayer();
+            // 检查视频解锁状态
+            if (!checkVideoUnlockStatus()) {
+                // 检查是否应该显示视频
+                if (shouldShowVideoPlayer()) {
+                    document.querySelector('.video-container').style.display = 'flex';
+                } else {
+                    document.querySelector('.video-container').style.display = 'none';
+                }
+            }
             
             // 设置天气刷新按钮事件
             document.getElementById('weatherRefreshBtn').addEventListener('click', function() {
                 refreshWeather();
+            });
+            
+            // 添加密码输入框回车事件
+            document.getElementById('videoPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    unlockVideo();
+                }
+            });
+            
+            // 设置密码输入框事件监听器
+            setupPasswordInputListeners();
+            
+            // 初始化时检查一次显示状态
+            handleResize();
+        }
+
+        // 视频播放器初始化
+        function initializeVideoPlayback() {
+            if (!videoUnlocked) return;
+            
+            // 隐藏全屏时间显示
+            document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+            
+            initializePlaylist();
+            setupUserInteraction();
+            playVideoFromPlaylist(currentPlaylistIndex);
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('orientationchange', handleResize);
+        }
+
+        // 设置密码输入框事件监听器
+        function setupPasswordInputListeners() {
+            const passwordInput = document.getElementById('videoPassword');
+            
+            if (!passwordInput) return;
+            
+            // 输入框获得焦点时重置倒计时
+            passwordInput.addEventListener('focus', function() {
+                resetAutoReturnCountdown();
+                startAutoReturnCountdown();
+            });
+            
+            // 输入内容时重置倒计时
+            passwordInput.addEventListener('input', function() {
+                resetAutoReturnCountdown();
+                startAutoReturnCountdown();
+            });
+            
+            // 键盘事件（除了Tab键）
+            passwordInput.addEventListener('keydown', function(e) {
+                if (e.key !== 'Tab') {
+                    resetAutoReturnCountdown();
+                    startAutoReturnCountdown();
+                }
             });
         }
 
@@ -2797,20 +3621,16 @@
             document.getElementById('currentDate').textContent = `${month + 1}月${date}日`;
             document.getElementById('weekDay').textContent = `星期${weekDays[day]}`;
             
-            // 使用准确的农历计算
             const lunarDate = getAccurateLunarDate(year, month + 1, date);
             document.getElementById('lunarDate').textContent = `农历${lunarDate}`;
             
-            // 获取节气
             const solarTerm = getSolarTerm(year, month + 1, date);
             document.getElementById('solarTerm').textContent = solarTerm;
             
-            // 获取宜忌
             const { yi, ji } = getYiJi(year, month + 1, date);
             document.getElementById('yiContent').textContent = yi;
             document.getElementById('jiContent').textContent = ji;
             
-            // 生成日历
             generateCalendar(year, month);
         }
 
@@ -2818,20 +3638,16 @@
         function generateCalendar(year, month) {
             const calendarGrid = document.getElementById('calendarDays');
             
-            // 清空现有日期（保留星期标题）
             while (calendarGrid.children.length > 7) {
                 calendarGrid.removeChild(calendarGrid.lastChild);
             }
             
-            // 获取当月第一天
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
             const daysInMonth = lastDay.getDate();
             
-            // 第一天是星期几
             const firstDayIndex = firstDay.getDay();
             
-            // 添加上个月的最后几天
             const prevMonthLastDay = new Date(year, month, 0).getDate();
             for (let i = firstDayIndex - 1; i >= 0; i--) {
                 const day = prevMonthLastDay - i;
@@ -2841,21 +3657,18 @@
                 calendarGrid.appendChild(dateElement);
             }
             
-            // 添加当月日期
             const today = new Date();
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateElement = document.createElement('div');
                 dateElement.className = 'calendar-date';
                 dateElement.textContent = day;
                 
-                // 检查是否是今天
                 if (year === today.getFullYear() && 
                     month === today.getMonth() && 
                     day === today.getDate()) {
                     dateElement.classList.add('today');
                 }
                 
-                // 检查是否是周末
                 const dayIndex = (firstDayIndex + day - 1) % 7;
                 if (dayIndex === 0 || dayIndex === 6) {
                     dateElement.classList.add('weekend');
@@ -2864,8 +3677,7 @@
                 calendarGrid.appendChild(dateElement);
             }
             
-            // 添加下个月的开始几天
-            const totalCells = 42; // 6行 * 7天
+            const totalCells = 42;
             const remainingCells = totalCells - (firstDayIndex + daysInMonth);
             for (let day = 1; day <= remainingCells; day++) {
                 const dateElement = document.createElement('div');
@@ -2884,12 +3696,11 @@
                     weatherApiKey = config.apiKey || "";
                     currentWeatherCity = config.city || "东莞";
                     
-                    // 更新输入框
                     document.getElementById('weatherApiKey').value = weatherApiKey;
                     document.getElementById('weatherCity').value = currentWeatherCity;
                 }
             } catch (e) {
-                console.log('天气配置加载失败，使用默认设置');
+                console.log('天气配置加载失败');
             }
         }
 
@@ -2910,10 +3721,7 @@
                 localStorage.setItem('weatherConfig', JSON.stringify(config));
                 showCopyNotification('✅ 天气配置已保存');
                 
-                // 隐藏配置区域
                 document.getElementById('weatherConfigContent').classList.remove('show');
-                
-                // 刷新天气
                 refreshWeather();
             } catch (e) {
                 showCopyNotification('⚠️ 配置保存失败: ' + e.message);
@@ -2928,7 +3736,6 @@
 
         // 初始化真实天气
         async function initializeRealWeather() {
-            // 先显示加载状态
             document.getElementById('weatherLocation').textContent = currentWeatherCity;
             document.getElementById('weatherTemp').textContent = '--°C';
             document.getElementById('weatherIcon').textContent = '⏳';
@@ -2937,10 +3744,8 @@
             document.getElementById('weatherWind').textContent = '--m/s';
             document.getElementById('weatherFeelsLike').textContent = '--°C';
             
-            // 获取天气数据
             await fetchRealWeather();
             
-            // 设置定时刷新（每30分钟刷新一次）
             if (weatherUpdateTimer) {
                 clearInterval(weatherUpdateTimer);
             }
@@ -2952,25 +3757,20 @@
             try {
                 let weatherData;
                 
-                // 如果有用户提供的API密钥，使用和风天气API
                 if (weatherApiKey) {
                     weatherData = await fetchHeWeatherData();
                 } else {
-                    // 否则使用免费API
                     weatherData = await fetchFreeWeatherData();
                 }
                 
-                // 更新显示
                 updateWeatherDisplayWithRealData(weatherData);
                 
             } catch (error) {
                 console.error('天气数据获取失败:', error);
                 
-                // 显示错误信息
                 document.getElementById('weatherDescription').textContent = '天气数据获取失败';
                 document.getElementById('weatherIcon').textContent = '⚠️';
                 
-                // 显示通知
                 showCopyNotification('⚠️ 天气数据获取失败，请检查网络或配置');
             }
         }
@@ -3162,7 +3962,6 @@
 
         // 显示复制通知
         function showCopyNotification(message) {
-            // 移除旧的通知
             const oldNotification = document.querySelector('.copy-notification');
             if (oldNotification) {
                 oldNotification.remove();
@@ -3173,7 +3972,6 @@
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            // 3秒后自动移除
             setTimeout(() => {
                 if (notification.parentNode) {
                     document.body.removeChild(notification);
@@ -3230,7 +4028,6 @@
         // 加载公告
         async function loadAnnouncements() {
             try {
-                // 优先尝试从根目录读取公告文件
                 const announcementFiles = [
                     './announcements.txt',
                     './announcement.txt', 
@@ -3243,14 +4040,12 @@
                 let announcements = [];
                 let fileFound = false;
                 
-                // 依次尝试各个可能的公告文件
                 for (const file of announcementFiles) {
                     try {
                         const response = await fetch(file + '?t=' + Date.now());
                         if (response.ok) {
                             const content = await response.text();
                             if (content.trim()) {
-                                // 解析公告内容
                                 announcements = parseAnnouncementContent(content);
                                 fileFound = true;
                                 console.log(`✅ 成功加载公告文件: ${file}`);
@@ -3263,7 +4058,6 @@
                     }
                 }
                 
-                // 如果没有找到公告文件，使用默认公告
                 if (!fileFound || announcements.length === 0) {
                     announcements = [
                         { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
@@ -3279,7 +4073,6 @@
                 
             } catch (error) {
                 console.log('公告加载失败:', error.message);
-                // 使用默认公告作为后备
                 const defaultAnnouncements = [
                     { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
                     { message: "📢 公告加载失败，请检查公告文件", type: "warning" }
@@ -3295,9 +4088,8 @@
             
             for (const line of lines) {
                 const trimmedLine = line.trim();
-                if (!trimmedLine) continue; // 跳过空行
+                if (!trimmedLine) continue;
                 
-                // 解析格式：[类型] 公告内容
                 let type = "info";
                 let message = trimmedLine;
                 
@@ -3321,7 +4113,6 @@
                     message = trimmedLine.substring(4).trim();
                 }
                 
-                // 移除可能的前缀符号
                 message = message.replace(/^[•\-*>]\s*/, '');
                 
                 if (message) {
@@ -3335,7 +4126,7 @@
             return announcements;
         }
 
-        // 显示公告 - 移除根据公告类型改变颜色的逻辑
+        // 显示公告
         function displayAnnouncements(announcements) {
             if (!announcements || announcements.length === 0) {
                 document.getElementById('announcementBar').classList.add('hidden');
@@ -3345,30 +4136,20 @@
             const announcementScroll = document.getElementById('announcementScroll');
             const announcementBar = document.getElementById('announcementBar');
             
-            // 将所有公告连接起来，用分隔符隔开
             const allMessages = announcements.map(ann => ann.message).join('  |  ');
             announcementScroll.innerHTML = allMessages;
             
-            // 保持为蓝色背景，不再根据类型改变颜色
             announcementBar.style.background = 'linear-gradient(90deg, #1a237e, #283593)';
             
             announcementBar.classList.remove('hidden');
             
-            // 动态调整滚动速度（根据内容长度）
             const contentLength = allMessages.length;
-            const duration = Math.max(30, contentLength / 3); // 每3个字符1秒，最少30秒
+            const duration = Math.max(30, contentLength / 3);
             announcementScroll.style.animationDuration = `${duration}s`;
         }
 
         function closeAnnouncement() {
             document.getElementById('announcementBar').classList.add('hidden');
-        }
-
-        // 初始化视频播放器
-        function initializeVideoPlayer() {
-            initializePlaylist();
-            setupUserInteraction();
-            playVideoFromPlaylist(currentPlaylistIndex);
         }
 
         // 初始化播放列表
@@ -3384,8 +4165,83 @@
             `).join('');
         }
 
-        // 从播放列表播放视频
+        // 检测是否应该显示视频播放器
+        function shouldShowVideoPlayer() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // 桌面端始终显示
+            if (width > 1024) return true;
+            
+            // 平板端和移动端：横屏显示，竖屏隐藏
+            if (width > height) {
+                // 横屏模式
+                return true;
+            } else {
+                // 竖屏模式
+                return false;
+            }
+        }
+
+        // 处理窗口大小变化和横竖屏切换
+        function handleResize() {
+            const videoContainer = document.querySelector('.video-container');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            if (!videoContainer) return;
+            
+            // 检查是否应该显示视频
+            if (shouldShowVideoPlayer()) {
+                // 显示视频容器
+                videoContainer.style.display = 'flex';
+                
+                // 调整布局
+                if (width <= 768) {
+                    // 移动端横屏：类似桌面端的双列布局
+                    videoContainer.style.width = '45%';
+                    videoContainer.style.minWidth = '45%';
+                    document.querySelector('.main-content').style.flexDirection = 'row';
+                } else if (width <= 1024 && width > 768) {
+                    // 平板端横屏：类似桌面端的双列布局
+                    videoContainer.style.width = '45%';
+                    videoContainer.style.minWidth = '45%';
+                    document.querySelector('.main-content').style.flexDirection = 'row';
+                } else {
+                    // 桌面端：保持原有布局
+                    videoContainer.style.width = '35%';
+                    videoContainer.style.minWidth = '320px';
+                    document.querySelector('.main-content').style.flexDirection = 'row';
+                }
+            } else {
+                // 竖屏模式：隐藏视频容器
+                videoContainer.style.display = 'none';
+                document.querySelector('.main-content').style.flexDirection = 'column';
+                
+                // 如果视频已解锁，停止视频
+                if (videoUnlocked && videoProgressInterval) {
+                    const iframe = document.getElementById('bilibiliPlayer');
+                    iframe.src = '';
+                    clearInterval(videoProgressInterval);
+                    videoProgressInterval = null;
+                }
+            }
+            
+            // 如果视频已解锁且正在显示，重新调整视频播放器
+            if (videoUnlocked && videoContainer.style.display !== 'none') {
+                const iframe = document.getElementById('bilibiliPlayer');
+                if (iframe) {
+                    // 重新设置iframe尺寸
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                }
+            }
+        }
+
+        // 播放视频函数（添加静音参数）
         function playVideoFromPlaylist(index) {
+            if (!videoUnlocked) return;
+            
             currentPlaylistIndex = index;
             const video = VIDEO_PLAYLIST[index];
             
@@ -3400,18 +4256,31 @@
             resetVideoProgress();
             
             if (video.type === 'bilibili') {
-                let bilibiliUrl = `https://player.bilibili.com/player.html?bvid=${video.id}&page=1&high_quality=1&danmaku=0`;
+                let bilibiliUrl = `https://player.bilibili.com/player.html?bvid=${video.id}&page=1&high_quality=1&danmaku=0&mute=1`;
                 
-                if (autoplayEnabled) {
+                const canAutoPlay = autoplayEnabled && 
+                                  (userInteracted || 
+                                   window.innerWidth > 768 || 
+                                   (window.innerWidth > window.innerHeight));
+                
+                if (canAutoPlay) {
                     bilibiliUrl += '&autoplay=1';
                 }
                 
                 iframe.src = bilibiliUrl;
             } else if (video.type === 'direct') {
-                iframe.src = video.id;
+                let directUrl = video.id;
+                if (!directUrl.includes('mute=')) {
+                    if (directUrl.includes('?')) {
+                        directUrl += '&mute=1';
+                    } else {
+                        directUrl += '?mute=1';
+                    }
+                }
+                iframe.src = directUrl;
             }
             
-            updateStatus(`正在播放: ${video.title}`, 'default');
+            updateStatus(`正在加载: ${video.title}`, 'default');
             checkBilibiliPlayerLoad();
             setupVideoProgressDetection(video.duration || 300);
         }
@@ -3453,18 +4322,27 @@
 
         // 播放下一个视频
         function playNextVideo() {
+            if (!videoUnlocked) return;
+            
             currentPlaylistIndex = (currentPlaylistIndex + 1) % VIDEO_PLAYLIST.length;
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
         // 播放上一个视频
         function playPreviousVideo() {
+            if (!videoUnlocked) return;
+            
             currentPlaylistIndex = (currentPlaylistIndex - 1 + VIDEO_PLAYLIST.length) % VIDEO_PLAYLIST.length;
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
         // 切换自动播放下一个视频
         function toggleAutoNext() {
+            if (!videoUnlocked) {
+                showCopyNotification('🔒 请先解锁视频区域');
+                return;
+            }
+            
             const btn = document.getElementById('autoNextBtn');
             autoNextEnabled = !autoNextEnabled;
             
@@ -3529,30 +4407,53 @@
 
         // 重试视频
         function retryVideo() {
+            if (!videoUnlocked) return;
+            
             hideVideoError();
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
         // 重新加载视频
         function reloadBilibiliVideo() {
+            if (!videoUnlocked) {
+                showCopyNotification('🔒 请先解锁视频区域');
+                return;
+            }
+            
             const iframe = document.getElementById('bilibiliPlayer');
-            const currentSrc = iframe.src;
+            let currentSrc = iframe.src;
+            
+            if (!currentSrc.includes('mute=')) {
+                if (currentSrc.includes('?')) {
+                    currentSrc += '&mute=1';
+                } else {
+                    currentSrc += '?mute=1';
+                }
+            }
+            
             iframe.src = '';
             setTimeout(() => {
                 iframe.src = currentSrc;
-                updateStatus('重新加载视频...', 'default');
+                updateStatus('重新加载视频...（已静音）', 'default');
                 checkBilibiliPlayerLoad();
             }, 100);
         }
 
         // 在新窗口打开视频
         function openInNewTab() {
+            if (!videoUnlocked) {
+                showCopyNotification('🔒 请先解锁视频区域');
+                return;
+            }
+            
             const iframe = document.getElementById('bilibiliPlayer');
             window.open(iframe.src, '_blank');
         }
 
         // 强制播放视频
         function forcePlay() {
+            if (!videoUnlocked) return;
+            
             const iframe = document.getElementById('bilibiliPlayer');
             try {
                 iframe.contentWindow.postMessage({
@@ -3568,6 +4469,11 @@
 
         // 切换自动播放
         function toggleAutoplay() {
+            if (!videoUnlocked) {
+                showCopyNotification('🔒 请先解锁视频区域');
+                return;
+            }
+            
             const btn = document.getElementById('autoplayBtn');
             autoplayEnabled = !autoplayEnabled;
             
@@ -3589,9 +4495,9 @@
             document.addEventListener('click', function() {
                 if (!userInteracted) {
                     userInteracted = true;
-                    console.log("用户已与页面交互，尝试自动播放");
+                    console.log("用户已与页面交互");
                     
-                    if (autoplayEnabled) {
+                    if (autoplayEnabled && videoUnlocked) {
                         setTimeout(forcePlay, 500);
                     }
                 }
@@ -3600,9 +4506,9 @@
             document.addEventListener('keydown', function() {
                 if (!userInteracted) {
                     userInteracted = true;
-                    console.log("用户已与页面交互（键盘），尝试自动播放");
+                    console.log("用户已与页面交互（键盘）");
                     
-                    if (autoplayEnabled) {
+                    if (autoplayEnabled && videoUnlocked) {
                         setTimeout(forcePlay, 500);
                     }
                 }
@@ -3611,11 +4517,26 @@
 
         // 加载自定义视频
         function loadCustomVideo() {
-            const videoUrl = document.getElementById('customVideoUrl').value.trim();
+            if (!videoUnlocked) {
+                showCopyNotification('🔒 请先解锁视频区域');
+                return;
+            }
+            
+            const videoUrlInput = document.getElementById('customVideoUrl');
+            let videoUrl = videoUrlInput.value.trim();
             
             if (!videoUrl) {
                 alert('请输入视频URL');
                 return;
+            }
+            
+            if (!videoUrl.includes('mute=')) {
+                if (videoUrl.includes('?')) {
+                    videoUrl += '&mute=1';
+                } else {
+                    videoUrl += '?mute=1';
+                }
+                videoUrlInput.value = videoUrl;
             }
             
             VIDEO_PLAYLIST.push({
@@ -3628,7 +4549,7 @@
             initializePlaylist();
             playVideoFromPlaylist(VIDEO_PLAYLIST.length - 1);
             
-            updateStatus('✅ 已添加自定义视频', 'success');
+            updateStatus('✅ 已添加自定义视频（已静音）', 'success');
         }
 
         // 设置搜索类型
@@ -3851,8 +4772,6 @@
             }, 300);
         }
 
-        // ==================== 修改的关键函数 ====================
-        
         // 搜索图片
         function searchImages(query) {
             if (!imageData || imageData.length === 0) {
@@ -3872,7 +4791,7 @@
             displayImages(results, query);
         }
 
-        // 显示图片结果 - 移除操作指南，只显示图片
+        // 显示图片结果
         function displayImages(images, query) {
             const resultsContainer = document.getElementById('results');
             
@@ -3914,23 +4833,23 @@
             imgElement.alt = '图片加载失败';
         }
 
-        // 修改模态框，移除操作指南
+        // 修改模态框
         function openImageModal(imageUrl, code, description = '') {
-    const modal = document.getElementById('imageModal');
-    
-    modal.innerHTML = `
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <div class="modal-content">
-            <div class="modal-image-container" style="padding: 0;">
-                <img id="modalImage" src="${imageUrl}" alt="${code}" 
-                     style="width: 100%; height: 100%; object-fit: contain; cursor: default;">
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('active');
-    document.addEventListener('keydown', handleModalKeydown);
-}
+            const modal = document.getElementById('imageModal');
+            
+            modal.innerHTML = `
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <div class="modal-content">
+                    <div class="modal-image-container" style="padding: 0;">
+                        <img id="modalImage" src="${imageUrl}" alt="${code}" 
+                             style="width: 100%; height: 100%; object-fit: contain; cursor: default;">
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            document.addEventListener('keydown', handleModalKeydown);
+        }
 
         // 模态框键盘事件处理
         function handleModalKeydown(e) {
@@ -4039,12 +4958,11 @@
             });
         }
 
-        // 通用复制函数（用于复制文本）
+        // 通用复制函数
         function copyToClipboard(text, type = '内容') {
             navigator.clipboard.writeText(text).then(() => {
                 showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
             }).catch(err => {
-                // 降级方案
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 document.body.appendChild(textArea);
