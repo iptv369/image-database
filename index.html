@@ -1674,7 +1674,7 @@
     }
 }
 
-/* ==================== 平板端适配 (768px-1024px) ==================== */
+平板端适配 (768px-1024px) ==================== */
 @media (max-width: 1024px) and (min-width: 769px) {
     body {
         padding: 20px;
@@ -1724,79 +1724,99 @@
         margin: 0;
     }
     
-    /* ========== 平板端视频播放器优化（不隐藏）========== */
-    .video-container {
-        display: flex !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        margin-bottom: 20px;
-        padding: 15px;
+    /* ========== 平板端竖屏 - 隐藏视频播放器 ========== */
+    @media (orientation: portrait) {
+        .video-container {
+            display: none !important;
+        }
+        
+        .main-content {
+            flex-direction: column;
+        }
+        
+        .results-container {
+            min-height: auto;
+            width: 100%;
+            scroll-margin-top: 80px;
+            padding: 18px;
+        }
     }
     
-    .main-content {
-        flex-direction: column;
-    }
-    
-    .results-container {
-        min-height: auto;
-        width: 100%;
-        scroll-margin-top: 80px;
-        padding: 18px;
-    }
-    
-    /* 平板端调整视频布局 */
-    .video-wrapper {
-        min-height: 250px;
-        height: 300px;
-    }
-    
-    .video-controls {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .video-controls button {
-        padding: 8px 12px;
-        font-size: 12px;
-        flex: 1;
-        min-width: 120px;
-    }
-    
-    .playback-controls {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .playback-controls button {
-        padding: 6px 10px;
-        font-size: 11px;
-        flex: 1;
-        min-width: 140px;
-    }
-    
-    .video-nav-controls {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .video-nav-controls button {
-        padding: 6px 10px;
-        font-size: 11px;
-        flex: 1;
-        min-width: 120px;
-    }
-    
-    .playlist-items {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    
-    .playlist-item {
-        padding: 4px 8px;
-        font-size: 10px;
-        flex: 1;
-        min-width: 60px;
-        text-align: center;
+    /* ========== 平板端横屏 - 显示视频播放器 ========== */
+    @media (orientation: landscape) {
+        .video-container {
+            display: flex !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        
+        .main-content {
+            flex-direction: column;
+        }
+        
+        .results-container {
+            min-height: auto;
+            width: 100%;
+            scroll-margin-top: 80px;
+            padding: 18px;
+        }
+        
+        /* 横屏调整视频布局 */
+        .video-wrapper {
+            min-height: 250px;
+            height: 300px;
+        }
+        
+        .video-controls {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .video-controls button {
+            padding: 8px 12px;
+            font-size: 12px;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .playback-controls {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .playback-controls button {
+            padding: 6px 10px;
+            font-size: 11px;
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .video-nav-controls {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .video-nav-controls button {
+            padding: 6px 10px;
+            font-size: 11px;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .playlist-items {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .playlist-item {
+            padding: 4px 8px;
+            font-size: 10px;
+            flex: 1;
+            min-width: 60px;
+            text-align: center;
+        }
     }
     
     /* ========== 平板端图片显示优化 ========== */
@@ -1925,9 +1945,9 @@
     }
 }
 
-/* ==================== 大平板端适配 (900px-1024px) - 两列布局 ==================== */
-@media (max-width: 1024px) and (min-width: 900px) {
-    /* 在大平板上显示两列布局 */
+/* ==================== 平板横屏时的大屏优化 ==================== */
+@media (max-width: 1024px) and (min-width: 900px) and (orientation: landscape) {
+    /* 在横屏大平板上显示两列布局 */
     .main-content {
         flex-direction: row !important;
         gap: 20px;
@@ -1949,9 +1969,9 @@
     }
 }
 
-/* ==================== 小平板端适配 (768px-899px) ==================== */
-@media (max-width: 899px) and (min-width: 769px) {
-    /* 在小平板上保持单列布局，但调整视频大小 */
+/* ==================== 平板横屏时的小屏优化 ==================== */
+@media (max-width: 899px) and (min-width: 769px) and (orientation: landscape) {
+    /* 在横屏小平板上保持单列布局，但调整视频大小 */
     .video-wrapper {
         height: 280px;
     }
