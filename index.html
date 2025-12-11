@@ -15,92 +15,149 @@
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
         /* 优化播放列表项 - 缩小按钮 */
-.playlist-item {
-    padding: 3px 6px !important;
-    font-size: 10px !important;
-    min-width: 50px !important;
-    text-align: center !important;
-}
-
-/* ==================== 全屏时间显示优化 ==================== */
-.fullscreen-time-display {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(10, 14, 42, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.fullscreen-time-display:hover {
-    background: rgba(10, 14, 42, 0.98);
-}
-
-.time-main {
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: rgba(123, 239, 255, 0.9);
-    text-shadow: 0 0 20px rgba(123, 239, 255, 0.5);
-    margin-bottom: 5px;
-    animation: timePulse 2s infinite;
-    letter-spacing: 2px;
-    text-align: center;
-}
-
-/* 移动端时间显示调整 */
-@media (max-width: 768px) {
-    .time-main {
-        font-size: 2.5rem;
-    }
-    
-    /* 横屏时时间显示更大 */
-    @media (orientation: landscape) {
-        .time-main {
-            font-size: 3rem;
+        .playlist-item {
+            padding: 3px 6px !important;
+            font-size: 10px !important;
+            min-width: 50px !important;
+            text-align: center !important;
         }
-    }
-}
 
-.time-hint {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(28, 37, 65, 0.6);
-    padding: 8px 15px;
-    border-radius: 20px;
-    border: 1px solid rgba(123, 239, 255, 0.3);
-    margin-top: 20px;
-    animation: hintFade 3s infinite;
-    text-align: center;
-    max-width: 90%;
-}
+        /* ==================== Fliqlo风格时间显示 ==================== */
+        .fliqlo-time-display {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #0a0e2a;
+            z-index: 100;
+            cursor: pointer;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
 
-@keyframes timePulse {
-    0%, 100% { 
-        opacity: 0.8;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.02);
-    }
-}
+        .fliqlo-clock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            width: 100%;
+            height: 100%;
+        }
 
-@keyframes hintFade {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
-* {
+        .time-digits {
+            display: flex;
+            gap: 8px;
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(123, 239, 255, 0.5);
+        }
+
+        .time-colon {
+            opacity: 0.7;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.2; }
+        }
+
+        .time-separator {
+            width: 80%;
+            height: 1px;
+            background: rgba(123, 239, 255, 0.3);
+            margin: 5px 0;
+        }
+
+        .date-display {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .unlock-hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.8rem;
+            color: rgba(123, 239, 255, 0.8);
+            text-align: center;
+            background: rgba(10, 14, 42, 0.7);
+            padding: 6px 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            animation: subtlePulse 2s infinite;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* ==================== 移除的按钮样式（已删除） ==================== */
+        /* 删除了以下按钮的相关样式：
+           .playback-controls
+           .autoplay-btn
+           .auto-next-btn
+           .video-nav-controls
+           .video-nav-controls button
+        */
+
+        /* 修改视频控制区域，只保留锁定按钮 */
+        .video-controls {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* 只有锁定按钮 */
+        .video-controls button {
+            padding: 8px 14px;
+            font-size: 13px;
+            background: linear-gradient(45deg, #283593, #1a237e);
+            width: 100%;
+        }
+
+        /* 修改播放列表样式以适应新布局 */
+        .video-playlist {
+            margin-top: 15px;
+            background: rgba(28, 37, 65, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .playlist-items {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .playlist-item {
+            padding: 4px 8px;
+            background: rgba(40, 53, 147, 0.8);
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid rgba(123, 239, 255, 0.2);
+            color: white;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* ==================== 其他样式保持不变 ==================== */
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -127,7 +184,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -2;
             pointer-events: none;
         }
         
@@ -164,7 +221,7 @@
             left: -50px;
             animation: flyAcross 12s linear infinite;
             filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.7));
-            z-index: 1;
+            z-index: -1;
         }
         
         .spaceship::before {
@@ -423,25 +480,25 @@
         
         /* ==================== 日历容器修复 - 添加溢出控制 ==================== */
         .calendar-container {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 320px;
-            background: linear-gradient(145deg, rgba(26, 35, 126, 0.95), rgba(40, 53, 147, 0.95));
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(123, 239, 255, 0.3);
-            z-index: 0;
-            display: none;
-            /* 修复溢出问题 - 添加以下属性 */
-            min-width: 280px;
-            max-width: 90vw;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: linear-gradient(145deg, rgba(26, 35, 126, 0.95), rgba(40, 53, 147, 0.95));
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(123, 239, 255, 0.3);
+    z-index: 10; /* 这里需要改为10或更高 */
+    display: none;
+    /* 修复溢出问题 - 添加以下属性 */
+    min-width: 280px;
+    max-width: 90vw;
+    overflow: hidden;
+    box-sizing: border-box;
+}
         
         @media (min-width: 1200px) {
             .calendar-container {
@@ -982,27 +1039,27 @@
             display: block;
         }
         
-        /* 视频密码锁覆盖层 */
-        .video-lock-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 42, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 30px;
-            box-sizing: border-box;
-            position: relative; /* 添加相对定位，用于倒计时绝对定位 */
-        }
+ /* 视频密码锁覆盖层 - 整体上移 */
+.video-lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 42, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 关键修改：从center改为flex-start */
+    align-items: center;
+    z-index: 100;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 40px 30px 20px 30px; /* 上40px 右30px 下20px 左30px */
+    box-sizing: border-box;
+    position: relative;
+}
         
         /* 倒计时显示样式 */
         .password-countdown {
@@ -1042,7 +1099,7 @@
         
         .lock-icon {
             font-size: 48px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #7befff;
             animation: pulse 2s infinite;
         }
@@ -1055,7 +1112,7 @@
         .lock-title {
             color: #7befff;
             font-size: 1.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-align: center;
         }
         
@@ -1068,14 +1125,14 @@
         }
         
         .password-input-container {
-            width: 100%;
-            max-width: 300px;
+            width: 80%;
+            max-width: 250px;
             margin-bottom: 20px;
         }
         
         .password-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             background: rgba(28, 37, 65, 0.9);
             border: 2px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
@@ -1147,97 +1204,6 @@
             transform: translateY(0);
         }
         
-        .video-controls {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .video-controls button {
-            padding: 8px 14px;
-            font-size: 13px;
-        }
-        
-        .playback-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .playback-controls button {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-        
-        .autoplay-btn {
-            background: linear-gradient(45deg, #4caf50, #2e7d32);
-        }
-        
-        .autoplay-btn.active {
-            background: linear-gradient(45deg, #4caf50, #2e7d32);
-        }
-        
-        .auto-next-btn {
-            background: linear-gradient(45deg, #9d4edd, #560bad);
-        }
-        
-        .auto-next-btn.active {
-            background: linear-gradient(45deg, #9d4edd, #560bad);
-        }
-        
-        .video-nav-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .video-nav-controls button {
-            padding: 8px 12px;
-            font-size: 12px;
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
-        }
-        
-        .video-playlist {
-            margin-top: 10px;
-            background: rgba(28, 37, 65, 0.8);
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .playlist-items {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        
-        .playlist-item {
-            padding: 4px 8px;
-            background: rgba(40, 53, 147, 0.8);
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-            border: 1px solid rgba(123, 239, 255, 0.2);
-            color: white;
-        }
-        
-        .playlist-item.active {
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
-            color: white;
-            border-color: #5bc0be;
-        }
-        
-        .playlist-item:hover {
-            background: rgba(91, 192, 190, 0.3);
-        }
-        
-        .playlist-item.active:hover {
-            background: linear-gradient(45deg, #7befff, #5bc0be);
-        }
-        
         .video-loading {
             position: absolute;
             top: 0;
@@ -1307,98 +1273,99 @@
             width: 100%;
         }
         
- /* 优化搜索小图 - 电脑端调整为700x300 */
-.image-results {
-    display: flex;               /* 改为flex布局 */
-    flex-direction: column;      /* 垂直排列 */
-    gap: 15px;                   /* 卡片间距 */
-    margin-top: 20px;
-    flex: 1;
-    align-items: center;         /* 居中对齐 */
-    justify-items: center;
-    width: 100%;
-}
+        /* 优化搜索小图 - 电脑端调整为700x300 */
+        .image-results {
+            display: flex;               /* 改为flex布局 */
+            flex-direction: column;      /* 垂直排列 */
+            gap: 15px;                   /* 卡片间距 */
+            margin-top: 20px;
+            flex: 1;
+            align-items: center;         /* 居中对齐 */
+            justify-items: center;
+            width: 100%;
+        }
 
-.image-card {
-    border: 1px solid rgba(123, 239, 255, 0.3);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    background: rgba(28, 37, 65, 0.8);
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    height: 300px;               /* ← 修改为300px高度 */
-    position: relative;
-    width: 700px;               /* ← 修改为700px宽度 */
-    max-width: 700px;           /* ← 修改为700px最大宽度 */
-    margin: 0 auto;              /* ← 添加水平居中 */
-}
+        .image-card {
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(28, 37, 65, 0.8);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 300px;               /* ← 修改为300px高度 */
+            position: relative;
+            width: 700px;               /* ← 修改为700px宽度 */
+            max-width: 700px;           /* ← 修改为700px最大宽度 */
+            margin: 0 auto;              /* ← 添加水平居中 */
+        }
 
-.image-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
-    border-color: #5bc0be;
-}
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
+            border-color: #5bc0be;
+        }
 
-/* 修复图片显示问题 - 电脑端大图 */
-.image-card .image-wrapper {
-    width: 100%;
-    height: 250px;               /* ← 修改为250px (300-50) */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: rgba(28, 37, 65, 0.8);
-    border-bottom: 1px solid rgba(123, 239, 255, 0.2);
-}
+        /* 修复图片显示问题 - 电脑端大图 */
+        .image-card .image-wrapper {
+            width: 100%;
+            height: 250px;               /* ← 修改为250px (300-50) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: rgba(28, 37, 65, 0.8);
+            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
+        }
 
-.image-card img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;         /* ← 保持图片比例 */
-    display: block;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    pointer-events: auto;
-    touch-action: manipulation;
-    outline: none;
-    border: none;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
+        .image-card img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;         /* ← 保持图片比例 */
+            display: block;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+            touch-action: manipulation;
+            outline: none;
+            border: none;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
 
-.image-card img:hover {
-    transform: scale(1.02);
-}
+        .image-card img:hover {
+            transform: scale(1.02);
+        }
 
-.image-info {
-    padding: 10px;
-    text-align: center;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 50px;            /* ← 固定文字区域高度 */
-}
+        .image-info {
+            padding: 10px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 50px;            /* ← 固定文字区域高度 */
+        }
 
-.image-code {
-    font-weight: bold;
-    font-size: 1rem;
-    color: #7befff;
-    margin-bottom: 4px;
-    word-break: break-word;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-}  
+        .image-code {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #7befff;
+            margin-bottom: 4px;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }  
+        
         .status-info {
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
@@ -1492,83 +1459,83 @@
         
         /* ==================== 重量结果区域 - 调整为电脑端700x300 ==================== */
 
-.weight-results {
-    display: flex;               /* 改为flex布局 */
-    flex-direction: column;      /* 垂直排列 */
-    gap: 15px;                   /* 卡片间距 */
-    margin-top: 15px;
-    align-items: center;         /* 居中对齐 */
-}
+        .weight-results {
+            display: flex;               /* 改为flex布局 */
+            flex-direction: column;      /* 垂直排列 */
+            gap: 15px;                   /* 卡片间距 */
+            margin-top: 15px;
+            align-items: center;         /* 居中对齐 */
+        }
 
-.weight-card {
-    border: 1px solid rgba(123, 239, 255, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    background: rgba(28, 37, 65, 0.8);
-    width: 700px;               /* ← 宽度700px */
-    height: 300px;              /* ← 高度300px */
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;             /* ← 水平居中 */
-}
+        .weight-card {
+            border: 1px solid rgba(123, 239, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(28, 37, 65, 0.8);
+            width: 700px;               /* ← 宽度700px */
+            height: 300px;              /* ← 高度300px */
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;             /* ← 水平居中 */
+        }
 
-.weight-header {
-    background: linear-gradient(45deg, #4caf50, #2e7d32);
-    color: white;
-    padding: 12px 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;               /* ← 固定头部高度 */
-}
+        .weight-header {
+            background: linear-gradient(45deg, #4caf50, #2e7d32);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;               /* ← 固定头部高度 */
+        }
 
-.weight-content {
-    padding: 15px;
-    flex: 1;                    /* ← 填满剩余空间 */
-    display: flex;
-    flex-direction: column;
-}
+        .weight-content {
+            padding: 15px;
+            flex: 1;                    /* ← 填满剩余空间 */
+            display: flex;
+            flex-direction: column;
+        }
 
-.weight-specs {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 8px;
-    margin-top: 10px;
-    flex: 1;                    /* ← 规格区域可伸缩 */
-}
+        .weight-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            flex: 1;                    /* ← 规格区域可伸缩 */
+        }
 
-.weight-spec-item {
-    text-align: center;
-    padding: 8px;
-    background: rgba(40, 53, 147, 0.8);
-    border-radius: 6px;
-}
+        .weight-spec-item {
+            text-align: center;
+            padding: 8px;
+            background: rgba(40, 53, 147, 0.8);
+            border-radius: 6px;
+        }
 
-.weight-spec-name {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 4px;
-}
+        .weight-spec-name {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+        }
 
-.weight-spec-value {
-    font-weight: bold;
-    color: #7befff;
-    font-size: 0.9rem;
-}
+        .weight-spec-value {
+            font-weight: bold;
+            color: #7befff;
+            font-size: 0.9rem;
+        }
 
-.copy-all-btn {
-    background: linear-gradient(45deg, #5bc0be, #3a506b);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-}
+        .copy-all-btn {
+            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
         
         /* 图片模态框 */
         .image-modal {
@@ -1726,832 +1693,784 @@
             }
         }
         
-/* ==================== 移动端适配 (768px以下) ==================== */
-@media (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
-    
-    .main-content-area {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    /* 移动端公告栏 */
-    .announcement-bar {
-        padding: 6px 25px 6px 12px;
-        min-height: 36px;
-        font-size: 12px;
-        margin-bottom: 12px;
-    }
-    
-    .announcement-content {
-        height: 18px;
-    }
-    
-    .announcement-scroll {
-        font-size: 11px;
-    }
-    
-    .announcement-close {
-        width: 20px;
-        height: 20px;
-        font-size: 14px;
-    }
-    
-    .search-container {
-        padding: 15px;
-        margin-top: 10px;
-    }
-    
-    h1 {
-        font-size: 1.5rem;
-    }
-    
-    .search-controls {
-        flex-direction: column;
-    }
-    
-    .search-input-container {
-        min-width: 100%;
-    }
-    
-    button {
-        width: 100%;
-        margin: 5px 0;
-    }
-    
-    /* 移动端竖屏隐藏视频容器 */
-    @media (orientation: portrait) {
-        .video-container {
-            display: none !important;
+        /* ==================== 移动端适配 (768px以下) ==================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .main-content-area {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            /* 移动端公告栏 */
+            .announcement-bar {
+                padding: 6px 25px 6px 12px;
+                min-height: 36px;
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .announcement-content {
+                height: 18px;
+            }
+            
+            .announcement-scroll {
+                font-size: 11px;
+            }
+            
+            .announcement-close {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .search-container {
+                padding: 15px;
+                margin-top: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            /* 移动端竖屏隐藏视频容器 */
+            @media (orientation: portrait) {
+                .video-container {
+                    display: none !important;
+                }
+                
+                .main-content {
+                    flex-direction: column;
+                }
+                
+                .results-container {
+                    min-height: auto;
+                    width: 100%;
+                    scroll-margin-top: 80px;
+                    padding: 15px;
+                }
+            }
+            
+            /* 移动端横屏显示视频容器 */
+            @media (orientation: landscape) {
+                .video-container {
+                    display: flex !important;
+                    width: 45% !important;
+                    min-width: 45% !important;
+                    margin-bottom: 15px;
+                    padding: 12px;
+                }
+                
+                .main-content {
+                    flex-direction: row !important;
+                    gap: 15px;
+                }
+                
+                .results-container {
+                    width: 55% !important;
+                    flex: 1;
+                    min-height: auto;
+                    padding: 12px;
+                }
+                
+                .video-wrapper {
+                    min-height: 180px;
+                    height: 220px;
+                }
+                
+                /* 移动端横屏视频控制优化 */
+                .video-controls {
+                    flex-wrap: wrap;
+                    gap: 6px;
+                }
+                
+                .video-controls button {
+                    padding: 6px 10px;
+                    font-size: 11px;
+                    flex: 1;
+                    min-width: 100px;
+                }
+                
+                .playlist-items {
+                    flex-wrap: wrap;
+                    gap: 4px;
+                }
+                
+                .playlist-item {
+                    padding: 3px 6px;
+                    font-size: 9px;
+                    flex: 1;
+                    min-width: 50px;
+                    text-align: center;
+                }
+            }
+            
+            /* 移动端图片显示 */
+            .image-results {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px;
+                justify-items: center;
+                padding: 0 10px;
+            }
+            
+            /* 竖屏样式 */
+            @media (orientation: portrait) {
+                .image-card {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    height: 220px !important;
+                    margin: 0 auto 15px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 180px !important;
+                }
+            }
+            
+            /* 横屏样式 */
+            @media (orientation: landscape) {
+                .image-card {
+                    width: 95% !important;
+                    max-width: 95% !important;
+                    height: 250px !important;  /* 横屏时增加高度 */
+                    margin: 0 auto 15px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 210px !important;  /* 横屏时增加图片区域高度 */
+                }
+            }
+            
+            .image-info {
+                min-height: 40px !important;
+                padding: 8px !important;
+            }
+            
+            /* ========== 移动端重量搜索显示修改 ========== */
+            .weight-results {
+                display: flex !important;           /* 改为flex布局 */
+                flex-direction: column !important;   /* 垂直排列 */
+                gap: 12px !important;                /* 卡片间距 */
+                padding: 0 10px !important;         /* 左右内边距 */
+            }
+            
+            /* 竖屏样式 */
+            @media (orientation: portrait) {
+                .weight-card {
+                    width: 100% !important;             /* 满宽显示 */
+                    max-width: 100% !important;
+                    height: 220px !important;           /* 竖屏高度 */
+                    margin: 0 auto 12px !important;     /* 底部间距 */
+                    border-radius: 8px !important;      /* 圆角 */
+                }
+                
+                .weight-header {
+                    height: 45px !important;            /* 固定头部高度 */
+                    padding: 10px 12px !important;      /* 内边距 */
+                    font-size: 14px !important;
+                }
+                
+                .weight-specs {
+                    display: grid !important;
+                    grid-template-columns: repeat(3, 1fr) !important; /* 竖屏3列 */
+                    gap: 6px !important;
+                }
+            }
+            
+            /* 横屏样式 */
+            @media (orientation: landscape) {
+                .weight-card {
+                    width: 95% !important;
+                    max-width: 95% !important;
+                    height: 240px !important;           /* 横屏增加高度 */
+                    margin: 0 auto 15px !important;
+                    border-radius: 10px !important;
+                }
+                
+                .weight-header {
+                    height: 50px !important;            /* 横屏增加头部高度 */
+                    padding: 12px 15px !important;
+                    font-size: 15px !important;
+                }
+                
+                .weight-specs {
+                    display: grid !important;
+                    grid-template-columns: repeat(4, 1fr) !important; /* 横屏4列 */
+                    gap: 8px !important;
+                }
+            }
+            
+            .weight-header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+            }
+            
+            .weight-header span {
+                font-size: 16px !important;         /* 产品代码字体大小 */
+                font-weight: bold !important;
+            }
+            
+            .weight-header button {
+                padding: 6px 10px !important;       /* 按钮内边距 */
+                font-size: 12px !important;         /* 按钮字体大小 */
+                white-space: nowrap !important;     /* 按钮文字不换行 */
+            }
+            
+            .weight-content {
+                padding: 12px !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            
+            .weight-spec-item {
+                padding: 6px !important;
+                text-align: center !important;
+                border-radius: 4px !important;
+            }
+            
+            .weight-spec-name {
+                font-size: 11px !important;         /* 规格名称字体 */
+                margin-bottom: 2px !important;
+            }
+            
+            .weight-spec-value {
+                font-size: 12px !important;         /* 重量值字体 */
+                font-weight: bold !important;
+            }
+            
+            .copy-all-btn {
+                padding: 8px !important;
+                font-size: 13px !important;
+                margin-top: 12px !important;
+                border-radius: 4px !important;
+            }
+            
+            /* 完整重量信息区域 */
+            .weight-content > div[style*="background: rgba"] {
+                margin-top: 8px !important;
+                padding: 6px !important;
+                font-size: 11px !important;
+                border-radius: 4px !important;
+            }
+            
+            /* 移动端目录 */
+            .directory-container {
+                padding: 10px;
+            }
+            
+            .directory-container h3 {
+                font-size: 14px;
+            }
+            
+            .directory-list {
+                flex-direction: column;
+            }
+            
+            .directory-item {
+                min-width: auto;
+                padding: 10px;
+                font-size: 13px;
+                text-align: center;
+            }
+            
+            /* ==================== 移动端日历适配 ==================== */
+            /* 隐藏桌面端日历（在移动端显示另一个版本） */
+            .calendar-container {
+                display: none !important;
+            }
         }
-        
-        .main-content {
-            flex-direction: column;
-        }
-        
-        .results-container {
-            min-height: auto;
-            width: 100%;
-            scroll-margin-top: 80px;
-            padding: 15px;
-        }
-    }
-    
-    /* 移动端横屏显示视频容器 */
-    @media (orientation: landscape) {
-        .video-container {
-            display: flex !important;
-            width: 45% !important;
-            min-width: 45% !important;
-            margin-bottom: 15px;
-            padding: 12px;
-        }
-        
-        .main-content {
-            flex-direction: row !important;
-            gap: 15px;
-        }
-        
-        .results-container {
-            width: 55% !important;
-            flex: 1;
-            min-height: auto;
-            padding: 12px;
-        }
-        
-        .video-wrapper {
-            min-height: 180px;
-            height: 220px;
-        }
-        
-        /* 移动端横屏视频控制优化 */
-        .video-controls {
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        .video-controls button {
-            padding: 6px 10px;
-            font-size: 11px;
-            flex: 1;
-            min-width: 100px;
-        }
-        
-        .playback-controls {
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        .playback-controls button {
-            padding: 5px 8px;
-            font-size: 10px;
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .video-nav-controls {
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        .video-nav-controls button {
-            padding: 5px 8px;
-            font-size: 10px;
-            flex: 1;
-            min-width: 100px;
-        }
-        
-        .playlist-items {
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        
-        .playlist-item {
-            padding: 3px 6px;
-            font-size: 9px;
-            flex: 1;
-            min-width: 50px;
-            text-align: center;
-        }
-    }
-    
-    /* 移动端图片显示 */
-    .image-results {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px;
-        justify-items: center;
-        padding: 0 10px;
-    }
-    
-    /* 竖屏样式 */
-    @media (orientation: portrait) {
-        .image-card {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 220px !important;
-            margin: 0 auto 15px !important;
-        }
-        
-        .image-card .image-wrapper {
-            height: 180px !important;
-        }
-    }
-    
-    /* 横屏样式 */
-    @media (orientation: landscape) {
-        .image-card {
-            width: 95% !important;
-            max-width: 95% !important;
-            height: 250px !important;  /* 横屏时增加高度 */
-            margin: 0 auto 15px !important;
-        }
-        
-        .image-card .image-wrapper {
-            height: 210px !important;  /* 横屏时增加图片区域高度 */
-        }
-    }
-    
-    .image-info {
-        min-height: 40px !important;
-        padding: 8px !important;
-    }
-    
-    /* ========== 移动端重量搜索显示修改 ========== */
-    .weight-results {
-        display: flex !important;           /* 改为flex布局 */
-        flex-direction: column !important;   /* 垂直排列 */
-        gap: 12px !important;                /* 卡片间距 */
-        padding: 0 10px !important;         /* 左右内边距 */
-    }
-    
-    /* 竖屏样式 */
-    @media (orientation: portrait) {
-        .weight-card {
-            width: 100% !important;             /* 满宽显示 */
-            max-width: 100% !important;
-            height: 220px !important;           /* 竖屏高度 */
-            margin: 0 auto 12px !important;     /* 底部间距 */
-            border-radius: 8px !important;      /* 圆角 */
-        }
-        
-        .weight-header {
-            height: 45px !important;            /* 固定头部高度 */
-            padding: 10px 12px !important;      /* 内边距 */
-            font-size: 14px !important;
-        }
-        
-        .weight-specs {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important; /* 竖屏3列 */
-            gap: 6px !important;
-        }
-    }
-    
-    /* 横屏样式 */
-    @media (orientation: landscape) {
-        .weight-card {
-            width: 95% !important;
-            max-width: 95% !important;
-            height: 240px !important;           /* 横屏增加高度 */
-            margin: 0 auto 15px !important;
-            border-radius: 10px !important;
-        }
-        
-        .weight-header {
-            height: 50px !important;            /* 横屏增加头部高度 */
-            padding: 12px 15px !important;
-            font-size: 15px !important;
-        }
-        
-        .weight-specs {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important; /* 横屏4列 */
-            gap: 8px !important;
-        }
-    }
-    
-    .weight-header {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-    }
-    
-    .weight-header span {
-        font-size: 16px !important;         /* 产品代码字体大小 */
-        font-weight: bold !important;
-    }
-    
-    .weight-header button {
-        padding: 6px 10px !important;       /* 按钮内边距 */
-        font-size: 12px !important;         /* 按钮字体大小 */
-        white-space: nowrap !important;     /* 按钮文字不换行 */
-    }
-    
-    .weight-content {
-        padding: 12px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-    
-    .weight-spec-item {
-        padding: 6px !important;
-        text-align: center !important;
-        border-radius: 4px !important;
-    }
-    
-    .weight-spec-name {
-        font-size: 11px !important;         /* 规格名称字体 */
-        margin-bottom: 2px !important;
-    }
-    
-    .weight-spec-value {
-        font-size: 12px !important;         /* 重量值字体 */
-        font-weight: bold !important;
-    }
-    
-    .copy-all-btn {
-        padding: 8px !important;
-        font-size: 13px !important;
-        margin-top: 12px !important;
-        border-radius: 4px !important;
-    }
-    
-    /* 完整重量信息区域 */
-    .weight-content > div[style*="background: rgba"] {
-        margin-top: 8px !important;
-        padding: 6px !important;
-        font-size: 11px !important;
-        border-radius: 4px !important;
-    }
-    
-    /* 移动端目录 */
-    .directory-container {
-        padding: 10px;
-    }
-    
-    .directory-container h3 {
-        font-size: 14px;
-    }
-    
-    .directory-list {
-        flex-direction: column;
-    }
-    
-    .directory-item {
-        min-width: auto;
-        padding: 10px;
-        font-size: 13px;
-        text-align: center;
-    }
-    
-    /* ==================== 移动端日历适配 ==================== */
-    /* 隐藏桌面端日历（在移动端显示另一个版本） */
-    .calendar-container {
-        display: none !important;
-    }
-}
 
-/* ==================== 平板端适配 (768px-1024px) ==================== */
-@media (max-width: 1024px) and (min-width: 769px) {
-    body {
-        padding: 20px;
-    }
-    
-    .main-content-area {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    /* 平板端公告栏 */
-    .announcement-bar {
-        padding: 8px 28px 8px 15px;
-        min-height: 38px;
-        font-size: 13px;
-        margin-bottom: 15px;
-    }
-    
-    .announcement-content {
-        height: 20px;
-    }
-    
-    .announcement-scroll {
-        font-size: 12px;
-    }
-    
-    .search-container {
-        padding: 18px;
-        margin-top: 15px;
-    }
-    
-    h1 {
-        font-size: 1.6rem;
-    }
-    
-    .search-controls {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    .search-input-container {
-        min-width: 60%;
-    }
-    
-    button {
-        width: auto;
-        margin: 0;
-    }
-    
-    /* ========== 平板端横屏 - 显示视频播放器 ========== */
-    @media (orientation: landscape) {
-        .video-container {
-            display: flex !important;
-            width: 45% !important;
-            min-width: 45% !important;
-            margin-bottom: 20px;
-            padding: 15px;
+        /* ==================== 平板端适配 (768px-1024px) ==================== */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            body {
+                padding: 20px;
+            }
+            
+            .main-content-area {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            /* 平板端公告栏 */
+            .announcement-bar {
+                padding: 8px 28px 8px 15px;
+                min-height: 38px;
+                font-size: 13px;
+                margin-bottom: 15px;
+            }
+            
+            .announcement-content {
+                height: 20px;
+            }
+            
+            .announcement-scroll {
+                font-size: 12px;
+            }
+            
+            .search-container {
+                padding: 18px;
+                margin-top: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .search-controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .search-input-container {
+                min-width: 60%;
+            }
+            
+            button {
+                width: auto;
+                margin: 0;
+            }
+            
+            /* ========== 平板端横屏 - 显示视频播放器 ========== */
+            @media (orientation: landscape) {
+                .video-container {
+                    display: flex !important;
+                    width: 45% !important;
+                    min-width: 45% !important;
+                    margin-bottom: 20px;
+                    padding: 15px;
+                }
+                
+                .main-content {
+                    flex-direction: row !important;
+                    gap: 20px;
+                }
+                
+                .results-container {
+                    width: 55% !important;
+                    flex: 1;
+                    min-height: auto;
+                    padding: 18px;
+                }
+                
+                /* 横屏调整视频布局 */
+                .video-wrapper {
+                    min-height: 250px;
+                    height: 300px;
+                }
+                
+                .video-controls {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .video-controls button {
+                    padding: 8px 12px;
+                    font-size: 12px;
+                    flex: 1;
+                    min-width: 120px;
+                }
+                
+                .playlist-items {
+                    flex-wrap: wrap;
+                    gap: 6px;
+                }
+                
+                .playlist-item {
+                    padding: 4px 8px;
+                    font-size: 10px;
+                    flex: 1;
+                    min-width: 60px;
+                    text-align: center;
+                }
+            }
+            
+            /* ========== 平板端竖屏 - 隐藏视频播放器 ========== */
+            @media (orientation: portrait) {
+                .video-container {
+                    display: none !important;
+                }
+                
+                .main-content {
+                    flex-direction: column;
+                }
+                
+                .results-container {
+                    min-height: auto;
+                    width: 100%;
+                    scroll-margin-top: 80px;
+                    padding: 18px;
+                }
+            }
+            
+            /* ========== 平板端图片显示优化 ========== */
+            .image-results {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px;
+                justify-items: center;
+                padding: 0;
+                width: 100%;
+            }
+            
+            /* 平板竖屏 */
+            @media (orientation: portrait) {
+                .image-card {
+                    width: 100% !important;
+                    max-width: 600px !important;
+                    height: 280px !important;
+                    margin: 0 auto 15px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 230px !important;
+                }
+            }
+            
+            /* 平板横屏 */
+            @media (orientation: landscape) {
+                .image-card {
+                    width: 90% !important;
+                    max-width: 700px !important;
+                    height: 320px !important;  /* 横屏增加高度 */
+                    margin: 0 auto 15px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 270px !important;  /* 横屏增加图片区域高度 */
+                }
+            }
+            
+            .image-info {
+                min-height: 50px !important;
+                padding: 10px !important;
+            }
+            
+            .image-code {
+                font-size: 1.1rem;
+            }
+            
+            /* ========== 平板端重量搜索显示优化 ========== */
+            .weight-results {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+                padding: 0 !important;
+                width: 100%;
+            }
+            
+            /* 平板竖屏 */
+            @media (orientation: portrait) {
+                .weight-card {
+                    width: 100% !important;
+                    max-width: 600px !important;
+                    height: 280px !important;
+                    margin: 0 auto 15px !important;
+                    border-radius: 10px !important;
+                }
+                
+                .weight-header {
+                    height: 50px !important;
+                }
+                
+                .weight-specs {
+                    display: grid !important;
+                    grid-template-columns: repeat(4, 1fr) !important;
+                }
+            }
+            
+            /* 平板横屏 */
+            @media (orientation: landscape) {
+                .weight-card {
+                    width: 90% !important;
+                    max-width: 700px !important;
+                    height: 300px !important;  /* 横屏增加高度 */
+                    margin: 0 auto 15px !important;
+                    border-radius: 10px !important;
+                }
+                
+                .weight-header {
+                    height: 55px !important;  /* 横屏增加头部高度 */
+                    padding: 12px 20px !important;
+                }
+                
+                .weight-specs {
+                    display: grid !important;
+                    grid-template-columns: repeat(5, 1fr) !important;  /* 横屏5列 */
+                    gap: 10px !important;
+                }
+            }
+            
+            .weight-header {
+                padding: 12px 15px !important;
+                font-size: 15px !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+            }
+            
+            .weight-header span {
+                font-size: 17px !important;
+                font-weight: bold !important;
+            }
+            
+            .weight-header button {
+                padding: 7px 12px !important;
+                font-size: 13px !important;
+            }
+            
+            .weight-content {
+                padding: 15px !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            
+            .weight-spec-item {
+                padding: 8px !important;
+                text-align: center !important;
+                border-radius: 6px !important;
+            }
+            
+            .weight-spec-name {
+                font-size: 12px !important;
+                margin-bottom: 3px !important;
+            }
+            
+            .weight-spec-value {
+                font-size: 13px !important;
+                font-weight: bold !important;
+            }
+            
+            .copy-all-btn {
+                padding: 9px !important;
+                font-size: 14px !important;
+                margin-top: 12px !important;
+                border-radius: 6px !important;
+            }
+            
+            /* 平板端目录 */
+            .directory-container {
+                padding: 12px;
+            }
+            
+            .directory-container h3 {
+                font-size: 15px;
+            }
+            
+            .directory-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .directory-item {
+                min-width: 120px;
+                padding: 12px;
+                font-size: 14px;
+                text-align: center;
+            }
+            
+            /* ========== 平板端日历优化 ========== */
+            .calendar-container {
+                display: none !important;
+            }
         }
-        
-        .main-content {
-            flex-direction: row !important;
-            gap: 20px;
-        }
-        
-        .results-container {
-            width: 55% !important;
-            flex: 1;
-            min-height: auto;
-            padding: 18px;
-        }
-        
-        /* 横屏调整视频布局 */
-        .video-wrapper {
-            min-height: 250px;
-            height: 300px;
-        }
-        
-        .video-controls {
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .video-controls button {
-            padding: 8px 12px;
-            font-size: 12px;
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .playback-controls {
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .playback-controls button {
-            padding: 6px 10px;
-            font-size: 11px;
-            flex: 1;
-            min-width: 140px;
-        }
-        
-        .video-nav-controls {
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .video-nav-controls button {
-            padding: 6px 10px;
-            font-size: 11px;
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .playlist-items {
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        .playlist-item {
-            padding: 4px 8px;
-            font-size: 10px;
-            flex: 1;
-            min-width: 60px;
-            text-align: center;
-        }
-    }
-    
-    /* ========== 平板端竖屏 - 隐藏视频播放器 ========== */
-    @media (orientation: portrait) {
-        .video-container {
-            display: none !important;
-        }
-        
-        .main-content {
-            flex-direction: column;
-        }
-        
-        .results-container {
-            min-height: auto;
-            width: 100%;
-            scroll-margin-top: 80px;
-            padding: 18px;
-        }
-    }
-    
-    /* ========== 平板端图片显示优化 ========== */
-    .image-results {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px;
-        justify-items: center;
-        padding: 0;
-        width: 100%;
-    }
-    
-    /* 平板竖屏 */
-    @media (orientation: portrait) {
-        .image-card {
-            width: 100% !important;
-            max-width: 600px !important;
-            height: 280px !important;
-            margin: 0 auto 15px !important;
-        }
-        
-        .image-card .image-wrapper {
-            height: 230px !important;
-        }
-    }
-    
-    /* 平板横屏 */
-    @media (orientation: landscape) {
-        .image-card {
-            width: 90% !important;
-            max-width: 700px !important;
-            height: 320px !important;  /* 横屏增加高度 */
-            margin: 0 auto 15px !important;
-        }
-        
-        .image-card .image-wrapper {
-            height: 270px !important;  /* 横屏增加图片区域高度 */
-        }
-    }
-    
-    .image-info {
-        min-height: 50px !important;
-        padding: 10px !important;
-    }
-    
-    .image-code {
-        font-size: 1.1rem;
-    }
-    
-    /* ========== 平板端重量搜索显示优化 ========== */
-    .weight-results {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
-        padding: 0 !important;
-        width: 100%;
-    }
-    
-    /* 平板竖屏 */
-    @media (orientation: portrait) {
-        .weight-card {
-            width: 100% !important;
-            max-width: 600px !important;
-            height: 280px !important;
-            margin: 0 auto 15px !important;
-            border-radius: 10px !important;
-        }
-        
-        .weight-header {
-            height: 50px !important;
-        }
-        
-        .weight-specs {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-        }
-    }
-    
-    /* 平板横屏 */
-    @media (orientation: landscape) {
-        .weight-card {
-            width: 90% !important;
-            max-width: 700px !important;
-            height: 300px !important;  /* 横屏增加高度 */
-            margin: 0 auto 15px !important;
-            border-radius: 10px !important;
-        }
-        
-        .weight-header {
-            height: 55px !important;  /* 横屏增加头部高度 */
-            padding: 12px 20px !important;
-        }
-        
-        .weight-specs {
-            display: grid !important;
-            grid-template-columns: repeat(5, 1fr) !important;  /* 横屏5列 */
-            gap: 10px !important;
-        }
-    }
-    
-    .weight-header {
-        padding: 12px 15px !important;
-        font-size: 15px !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-    }
-    
-    .weight-header span {
-        font-size: 17px !important;
-        font-weight: bold !important;
-    }
-    
-    .weight-header button {
-        padding: 7px 12px !important;
-        font-size: 13px !important;
-    }
-    
-    .weight-content {
-        padding: 15px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-    
-    .weight-spec-item {
-        padding: 8px !important;
-        text-align: center !important;
-        border-radius: 6px !important;
-    }
-    
-    .weight-spec-name {
-        font-size: 12px !important;
-        margin-bottom: 3px !important;
-    }
-    
-    .weight-spec-value {
-        font-size: 13px !important;
-        font-weight: bold !important;
-    }
-    
-    .copy-all-btn {
-        padding: 9px !important;
-        font-size: 14px !important;
-        margin-top: 12px !important;
-        border-radius: 6px !important;
-    }
-    
-    /* 平板端目录 */
-    .directory-container {
-        padding: 12px;
-    }
-    
-    .directory-container h3 {
-        font-size: 15px;
-    }
-    
-    .directory-list {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    .directory-item {
-        min-width: 120px;
-        padding: 12px;
-        font-size: 14px;
-        text-align: center;
-    }
-    
-    /* ========== 平板端日历优化 ========== */
-    .calendar-container {
-        display: none !important;
-    }
-}
 
-/* ==================== 桌面端适配 (1024px以上) ==================== */
-@media (min-width: 1025px) {
-    .video-container {
-        display: flex !important;
-        width: 35% !important;
-        min-width: 320px !important;
-    }
-    
-    .main-content {
-        flex-direction: row !important;
-        gap: 25px !important;
-    }
-    
-    .results-container {
-        flex: 1 !important;
-        min-height: 450px !important;
-    }
-}
+        /* ==================== 桌面端适配 (1024px以上) ==================== */
+        @media (min-width: 1025px) {
+            .video-container {
+                display: flex !important;
+                width: 35% !important;
+                min-width: 320px !important;
+            }
+            
+            .main-content {
+                flex-direction: row !important;
+                gap: 25px !important;
+            }
+            
+            .results-container {
+                flex: 1 !important;
+                min-height: 450px !important;
+            }
+        }
 
-/* ==================== 超小屏幕手机适配 (480px以下) ==================== */
-@media (max-width: 480px) {
-    body {
-        padding: 12px;
-    }
-    
-    .image-results {
-        gap: 10px;
-        padding: 0 5px;
-    }
-    
-    /* 超小屏幕竖屏 */
-    @media (orientation: portrait) {
-        .image-card {
-            height: 200px !important;
-            margin: 0 auto 12px !important;
+        /* ==================== 超小屏幕手机适配 (480px以下) ==================== */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            
+            .image-results {
+                gap: 10px;
+                padding: 0 5px;
+            }
+            
+            /* 超小屏幕竖屏 */
+            @media (orientation: portrait) {
+                .image-card {
+                    height: 200px !important;
+                    margin: 0 auto 12px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 160px !important;
+                }
+            }
+            
+            /* 超小屏幕横屏 */
+            @media (orientation: landscape) {
+                .image-card {
+                    height: 180px !important;  /* 超小屏横屏高度较小 */
+                    margin: 0 auto 10px !important;
+                }
+                
+                .image-card .image-wrapper {
+                    height: 140px !important;
+                }
+            }
+            
+            .image-info {
+                min-height: 35px !important;
+                padding: 6px !important;
+            }
+            
+            .image-code {
+                font-size: 0.9rem;
+            }
+            
+            /* ========== 超小屏幕重量搜索优化 ========== */
+            .weight-results {
+                gap: 8px !important;
+                padding: 0 5px !important;
+            }
+            
+            /* 超小屏幕竖屏 */
+            @media (orientation: portrait) {
+                .weight-card {
+                    height: 200px !important;
+                    margin: 0 auto 10px !important;
+                    border-radius: 6px !important;
+                }
+                
+                .weight-header {
+                    height: 40px !important;
+                }
+                
+                .weight-specs {
+                    grid-template-columns: repeat(2, 1fr) !important; /* 超小屏竖屏2列 */
+                    gap: 5px !important;
+                }
+            }
+            
+            /* 超小屏幕横屏 */
+            @media (orientation: landscape) {
+                .weight-card {
+                    height: 190px !important;
+                    margin: 0 auto 8px !important;
+                    border-radius: 6px !important;
+                }
+                
+                .weight-header {
+                    height: 42px !important;
+                    padding: 8px 10px !important;
+                }
+                
+                .weight-specs {
+                    grid-template-columns: repeat(3, 1fr) !important; /* 超小屏横屏3列 */
+                    gap: 4px !important;
+                }
+            }
+            
+            .weight-header span {
+                font-size: 15px !important;
+            }
+            
+            .weight-header button {
+                padding: 5px 8px !important;
+                font-size: 11px !important;
+            }
+            
+            .weight-content {
+                padding: 10px !important;
+            }
+            
+            .weight-spec-item {
+                padding: 5px !important;
+                border-radius: 4px !important;
+            }
+            
+            .weight-spec-name {
+                font-size: 10px !important;
+                margin-bottom: 2px !important;
+            }
+            
+            .weight-spec-value {
+                font-size: 11px !important;
+            }
+            
+            .copy-all-btn {
+                padding: 7px !important;
+                font-size: 12px !important;
+                margin-top: 10px !important;
+                border-radius: 4px !important;
+            }
+            
+            /* 搜索区域超小屏幕优化 */
+            .search-container {
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .search-type-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .search-controls {
+                gap: 8px;
+            }
+            
+            #searchInput {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            /* 目录超小屏幕优化 */
+            .directory-list {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .directory-item {
+                padding: 8px;
+                font-size: 12px;
+                min-width: auto;
+            }
         }
-        
-        .image-card .image-wrapper {
-            height: 160px !important;
-        }
-    }
-    
-    /* 超小屏幕横屏 */
-    @media (orientation: landscape) {
-        .image-card {
-            height: 180px !important;  /* 超小屏横屏高度较小 */
-            margin: 0 auto 10px !important;
-        }
-        
-        .image-card .image-wrapper {
-            height: 140px !important;
-        }
-    }
-    
-    .image-info {
-        min-height: 35px !important;
-        padding: 6px !important;
-    }
-    
-    .image-code {
-        font-size: 0.9rem;
-    }
-    
-    /* ========== 超小屏幕重量搜索优化 ========== */
-    .weight-results {
-        gap: 8px !important;
-        padding: 0 5px !important;
-    }
-    
-    /* 超小屏幕竖屏 */
-    @media (orientation: portrait) {
-        .weight-card {
-            height: 200px !important;
-            margin: 0 auto 10px !important;
-            border-radius: 6px !important;
-        }
-        
-        .weight-header {
-            height: 40px !important;
-        }
-        
-        .weight-specs {
-            grid-template-columns: repeat(2, 1fr) !important; /* 超小屏竖屏2列 */
-            gap: 5px !important;
-        }
-    }
-    
-    /* 超小屏幕横屏 */
-    @media (orientation: landscape) {
-        .weight-card {
-            height: 190px !important;
-            margin: 0 auto 8px !important;
-            border-radius: 6px !important;
-        }
-        
-        .weight-header {
-            height: 42px !important;
-            padding: 8px 10px !important;
-        }
-        
-        .weight-specs {
-            grid-template-columns: repeat(3, 1fr) !important; /* 超小屏横屏3列 */
-            gap: 4px !important;
-        }
-    }
-    
-    .weight-header span {
-        font-size: 15px !important;
-    }
-    
-    .weight-header button {
-        padding: 5px 8px !important;
-        font-size: 11px !important;
-    }
-    
-    .weight-content {
-        padding: 10px !important;
-    }
-    
-    .weight-spec-item {
-        padding: 5px !important;
-        border-radius: 4px !important;
-    }
-    
-    .weight-spec-name {
-        font-size: 10px !important;
-        margin-bottom: 2px !important;
-    }
-    
-    .weight-spec-value {
-        font-size: 11px !important;
-    }
-    
-    .copy-all-btn {
-        padding: 7px !important;
-        font-size: 12px !important;
-        margin-top: 10px !important;
-        border-radius: 4px !important;
-    }
-    
-    /* 搜索区域超小屏幕优化 */
-    .search-container {
-        padding: 12px;
-    }
-    
-    h1 {
-        font-size: 1.3rem;
-    }
-    
-    .search-type-btn {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
-    
-    .search-controls {
-        gap: 8px;
-    }
-    
-    #searchInput {
-        padding: 12px;
-        font-size: 14px;
-    }
-    
-    button {
-        padding: 12px;
-        font-size: 14px;
-    }
-    
-    /* 目录超小屏幕优化 */
-    .directory-list {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .directory-item {
-        padding: 8px;
-        font-size: 12px;
-        min-width: auto;
-    }
-}
         
         /* 天气通知动画 */
         @keyframes weatherNotificationSlideIn {
@@ -2628,10 +2547,298 @@
         .image-actions {
             display: none;
         }
-    </style>
+    /* ==================== 圣诞老人骑鹿动画 ==================== */
+.santa-ride-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.santa-with-reindeer {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    top: 20%;
+    left: -200px; /* 从左侧开始 */
+    animation: santaRideAcross 20s linear infinite;
+    animation-delay: 3s; /* 延迟3秒开始 */
+    filter: drop-shadow(0 0 10px rgba(255, 50, 50, 0.7));
+}
+
+.santa-sleigh {
+    position: absolute;
+    width: 160px;
+    height: 30px;
+    background: linear-gradient(45deg, #8B4513, #A0522D);
+    border-radius: 15px 5px 5px 15px;
+    bottom: 0;
+    left: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.santa-sleigh::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #FFD700;
+    border-radius: 50%;
+    top: -10px;
+    left: 10px;
+    box-shadow: 0 0 15px #FFD700;
+}
+
+.santa-body {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background: linear-gradient(145deg, #C41E3A, #8B0000);
+    border-radius: 30px 30px 20px 20px;
+    bottom: 25px;
+    left: 70px;
+    z-index: 2;
+}
+
+.santa-hat {
+    position: absolute;
+    width: 50px;
+    height: 60px;
+    background: #C41E3A;
+    border-radius: 25px 25px 0 0;
+    top: -40px;
+    left: 5px;
+    z-index: 3;
+}
+
+.santa-hat::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    bottom: -10px;
+    right: 5px;
+}
+
+.santa-beard {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    bottom: 15px;
+    left: 5px;
+    z-index: 3;
+}
+
+.santa-bag {
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    background: linear-gradient(145deg, #8B4513, #654321);
+    border-radius: 20px;
+    bottom: 30px;
+    right: 10px;
+    z-index: 1;
+}
+
+.santa-bag::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 10px;
+    background: #FFD700;
+    border-radius: 5px;
+    top: 10px;
+    left: 5px;
+}
+
+.reindeer {
+    position: absolute;
+    width: 80px;
+    height: 60px;
+    bottom: 5px;
+    left: -30px;
+    z-index: 1;
+}
+
+.reindeer-body {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    background: linear-gradient(145deg, #8B4513, #A0522D);
+    border-radius: 35px 15px 15px 35px;
+    bottom: 0;
+    left: 0;
+}
+
+.reindeer-head {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #8B4513;
+    border-radius: 50%;
+    bottom: 25px;
+    left: 50px;
+}
+
+.reindeer-antlers {
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background: #8B4513;
+    border-radius: 10px;
+    top: -15px;
+    left: 45px;
+    transform: rotate(-20deg);
+}
+
+.reindeer-antlers::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: #8B4513;
+    border-radius: 8px;
+    top: -10px;
+    left: 5px;
+    transform: rotate(30deg);
+}
+
+.reindeer-nose {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #FF0000;
+    border-radius: 50%;
+    bottom: 30px;
+    left: 75px;
+    animation: noseBlink 2s infinite;
+    box-shadow: 0 0 10px #FF0000;
+}
+
+@keyframes santaRideAcross {
+    0% {
+        left: -200px;
+        top: 20%;
+        transform: translateY(0) rotate(0deg);
+    }
+    10% {
+        top: 15%;
+        transform: translateY(-10px) rotate(5deg);
+    }
+    20% {
+        top: 25%;
+        transform: translateY(10px) rotate(-5deg);
+    }
+    30% {
+        top: 18%;
+        transform: translateY(-5px) rotate(3deg);
+    }
+    40% {
+        top: 22%;
+        transform: translateY(8px) rotate(-3deg);
+    }
+    50% {
+        top: 20%;
+        transform: translateY(0) rotate(0deg);
+    }
+    60% {
+        top: 16%;
+        transform: translateY(-8px) rotate(4deg);
+    }
+    70% {
+        top: 24%;
+        transform: translateY(12px) rotate(-4deg);
+    }
+    80% {
+        top: 19%;
+        transform: translateY(-3px) rotate(2deg);
+    }
+    90% {
+        top: 21%;
+        transform: translateY(6px) rotate(-2deg);
+    }
+    100% {
+        left: calc(100% + 200px);
+        top: 20%;
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+@keyframes noseBlink {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+/* 雪花效果 */
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.snowflake {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
 </head>
 <body>
-    <!-- 星空背景 -->
+    <!-- 圣诞老人骑鹿动画 -->
+<div class="santa-ride-container">
+    <div class="santa-with-reindeer">
+        <div class="reindeer">
+            <div class="reindeer-body"></div>
+            <div class="reindeer-head"></div>
+            <div class="reindeer-antlers"></div>
+            <div class="reindeer-nose"></div>
+        </div>
+        <div class="santa-sleigh"></div>
+        <div class="santa-body"></div>
+        <div class="santa-hat"></div>
+        <div class="santa-beard"></div>
+        <div class="santa-bag"></div>
+    </div>
+    <div class="snowflakes" id="snowflakes"></div>
+</div>
+<!-- 星空背景 -->
     <div id="stars"></div>
     
     <!-- 飞船 -->
@@ -2801,15 +3008,28 @@
             <div class="video-container">
                 <h2>🎬 视频教程</h2>
                 <div class="video-wrapper">
-                    <!-- 全屏时间显示 -->
-                    <div id="fullscreenTimeDisplay" onclick="showPasswordInput()">
-                        <div class="time-main" id="timeMain">00:00:00</div>
-                        <div class="time-hint">点击输入密码解锁视频区域</div>
+                    <!-- Fliqlo风格时间显示 -->
+                    <div class="fliqlo-time-display" id="fliqloTimeDisplay" onclick="showPasswordInput()">
+                        <div class="fliqlo-clock">
+                            <div class="time-digits">
+                                <span id="hour1">0</span>
+                                <span id="hour2">0</span>
+                                <span class="time-colon">:</span>
+                                <span id="minute1">0</span>
+                                <span id="minute2">0</span>
+                                <span class="time-colon">:</span>
+                                <span id="second1">0</span>
+                                <span id="second2">0</span>
+                            </div>
+                            <div class="time-separator"></div>
+                            <div class="date-display" id="dateDisplay">YYYY-MM-DD</div>
+                        </div>
+                        <div class="unlock-hint">点击输入密码解锁视频</div>
                     </div>
                     
                     <!-- 视频密码锁覆盖层 -->
                     <div class="video-lock-overlay" id="videoLockOverlay" style="display: none;">
-                        <!-- 添加倒计时显示器 -->
+                        <!-- 倒计时显示器 -->
                         <div class="password-countdown" id="passwordCountdown" style="display: none;">
                             <span>⏰</span>
                             <span id="countdownTimer">30</span>秒后返回
@@ -2833,6 +3053,7 @@
                         </div>
                     </div>
                     
+                    <!-- 视频加载和错误状态 -->
                     <div class="video-loading" id="videoLoading" style="display: none;">
                         <div>视频加载中...</div>
                     </div>
@@ -2840,9 +3061,13 @@
                         <div>视频加载失败</div>
                         <button onclick="retryVideo()">重试</button>
                     </div>
+                    
+                    <!-- 视频进度条 -->
                     <div class="video-progress">
                         <div class="video-progress-bar" id="videoProgressBar"></div>
                     </div>
+                    
+                    <!-- 视频播放器 -->
                     <iframe class="bilibili-player" 
                             id="bilibiliPlayer"
                             src=""
@@ -2855,18 +3080,6 @@
                     </iframe>
                 </div>
                 
-                <!-- 播放控制区域 -->
-                <div class="playback-controls">
-                    <button class="autoplay-btn active" id="autoplayBtn" onclick="toggleAutoplay()">⏯️ 自动播放: 开启</button>
-                    <button class="auto-next-btn active" id="autoNextBtn" onclick="toggleAutoNext()">⏭️ 自动下一个: 开启</button>
-                </div>
-                
-                <!-- 上一个/下一个控制 -->
-                <div class="video-nav-controls">
-                    <button onclick="playPreviousVideo()">⏪ 上一个</button>
-                    <button onclick="playNextVideo()">⏩ 下一个</button>
-                </div>
-                
                 <!-- 播放列表 -->
                 <div class="video-playlist">
                     <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">播放列表:</div>
@@ -2876,9 +3089,9 @@
                 </div>
                 
                 <!-- 视频控制按钮 - 仅保留重新锁定 -->
-<div class="video-controls">
-    <button onclick="lockVideoArea()" style="background: linear-gradient(45deg, #283593, #1a237e); width: 100%;">🔒 重新锁定</button>
-</div>
+                <div class="video-controls">
+                    <button onclick="lockVideoArea()">🔒 重新锁定</button>
+                </div>
                 
                 <!-- 自定义视频源区域 -->
                 <div style="margin-top: 15px; padding: 10px; background: rgba(28, 37, 65, 0.8); border-radius: 8px;">
@@ -3005,7 +3218,7 @@
         };
 
         // 视频密码配置
-        const VIDEO_PASSWORD = "988968"; // 默认密码
+        const VIDEO_PASSWORD = "888888"; // 默认密码
         const PASSWORD_HINT = "默认密码是6个数字";
         let videoUnlocked = false;
         let unlockAttempts = 0;
@@ -3018,8 +3231,8 @@
         let countdownActive = false; // 倒计时是否激活
 
         // 视频播放控制状态
-        let autoplayEnabled = true;
-        let autoNextEnabled = true;
+        let autoplayEnabled = false; // 修改为false，关闭自动播放
+        let autoNextEnabled = false; // 修改为false，关闭自动下一个
         let userInteracted = false;
         let currentPlaylistIndex = 0;
         let videoProgressInterval = null;
@@ -3031,6 +3244,38 @@
         let currentWeatherCity = "东莞";
         let weatherApiKey = "";
         let weatherUpdateTimer = null;
+
+        // ==================== Fliqlo时间显示功能 ====================
+
+        // 更新Fliqlo时间显示
+        function updateFliqloTimeDisplay() {
+            const now = new Date();
+            
+            // 格式化时间数字
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            // 更新数字显示
+            document.getElementById('hour1').textContent = hours[0];
+            document.getElementById('hour2').textContent = hours[1];
+            document.getElementById('minute1').textContent = minutes[0];
+            document.getElementById('minute2').textContent = minutes[1];
+            document.getElementById('second1').textContent = seconds[0];
+            document.getElementById('second2').textContent = seconds[1];
+            
+            // 更新日期显示
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            document.getElementById('dateDisplay').textContent = `${year}-${month}-${day}`;
+        }
+
+        // 初始化Fliqlo时间显示
+        function initFliqloTimeDisplay() {
+            updateFliqloTimeDisplay(); // 立即更新一次
+            setInterval(updateFliqloTimeDisplay, 1000); // 每秒更新一次
+        }
 
         // ==================== 倒计时相关函数 ====================
 
@@ -3065,7 +3310,7 @@
             
             // 设置30秒后自动返回
             autoReturnTimer = setTimeout(() => {
-                showFullscreenTimeDisplay();
+                showFliqloTimeDisplay();
                 showCopyNotification('⏰ 30秒未操作，已自动返回时间显示');
                 countdownActive = false;
             }, 30000); // 30秒
@@ -3108,25 +3353,25 @@
             }
         }
 
-        // ==================== 时间显示功能优化 ====================
-        function updateFullscreenTimeDisplay() {
-            const now = new Date();
+        // 显示Fliqlo时间显示
+        function showFliqloTimeDisplay() {
+            // 重置和清除倒计时
+            resetAutoReturnCountdown();
             
-            // 更新主时间 - 只显示时分秒
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('timeMain').textContent = `${hours}:${minutes}:${seconds}`;
-        }
-
-        function initFullscreenTimeDisplay() {
-            updateFullscreenTimeDisplay(); // 立即更新一次
-            setInterval(updateFullscreenTimeDisplay, 1000); // 每秒更新一次
+            // 隐藏倒计时显示器
+            const countdownEl = document.getElementById('passwordCountdown');
+            if (countdownEl) {
+                countdownEl.style.display = 'none';
+            }
+            
+            // 显示时间显示
+            document.getElementById('videoLockOverlay').style.display = 'none';
+            document.getElementById('fliqloTimeDisplay').style.display = 'flex';
         }
 
         // 显示密码输入框
         function showPasswordInput() {
-            document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+            document.getElementById('fliqloTimeDisplay').style.display = 'none';
             document.getElementById('videoLockOverlay').style.display = 'flex';
             document.getElementById('videoPassword').focus();
             
@@ -3142,22 +3387,6 @@
             
             // 开始倒计时
             startAutoReturnCountdown();
-        }
-
-        // 显示全屏时间显示
-        function showFullscreenTimeDisplay() {
-            // 重置和清除倒计时
-            resetAutoReturnCountdown();
-            
-            // 隐藏倒计时显示器
-            const countdownEl = document.getElementById('passwordCountdown');
-            if (countdownEl) {
-                countdownEl.style.display = 'none';
-            }
-            
-            // 显示时间显示
-            document.getElementById('videoLockOverlay').style.display = 'none';
-            document.getElementById('fullscreenTimeDisplay').style.display = 'flex';
         }
 
         // ==================== 简单准确的农历计算 ====================
@@ -3407,7 +3636,7 @@
             }
             
             videoUnlocked = false;
-            showFullscreenTimeDisplay();
+            showFliqloTimeDisplay();
             
             // 停止视频
             const iframe = document.getElementById('bilibiliPlayer');
@@ -3443,7 +3672,7 @@
                     // 如果解锁时间在1分钟内，自动解锁
                     if (minutesSinceUnlock < 1) {
                         videoUnlocked = true;
-                        document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+                        document.getElementById('fliqloTimeDisplay').style.display = 'none';
                         initializeVideoPlayback();
                         console.log('视频区域自动解锁（1分钟内）');
                         return true;
@@ -3459,8 +3688,39 @@
             return false;
         }
 
+              // ==================== 圣诞老人动画 ====================
+        function createSantaAnimation() {
+            // 创建雪花
+            const snowflakes = document.getElementById('snowflakes');
+            if (snowflakes) {
+                for (let i = 0; i < 50; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.className = 'snowflake';
+                    
+                    const size = Math.random() * 5 + 2;
+                    snowflake.style.width = size + 'px';
+                    snowflake.style.height = size + 'px';
+                    
+                    snowflake.style.left = Math.random() * 100 + '%';
+                    
+                    const duration = Math.random() * 10 + 5;
+                    const delay = Math.random() * 5;
+                    
+                    snowflake.style.animationDuration = duration + 's';
+                    snowflake.style.animationDelay = delay + 's';
+                    
+                    snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+                    
+                    snowflakes.appendChild(snowflake);
+                }
+            }
+        }
+
         // ==================== 初始化函数 ====================
         async function initialize() {
+            // 添加圣诞老人动画
+            createSantaAnimation();
+            
             // 创建星空背景
             createStars();
             createMeteors();
@@ -3468,8 +3728,8 @@
             // 初始化日历
             initializeCalendar();
             
-            // 初始化全屏时间显示
-            initFullscreenTimeDisplay();
+            // 初始化Fliqlo时间显示
+            initFliqloTimeDisplay();
             
             // 加载天气配置并初始化天气
             loadWeatherConfig();
@@ -3522,8 +3782,8 @@
         function initializeVideoPlayback() {
             if (!videoUnlocked) return;
             
-            // 隐藏全屏时间显示
-            document.getElementById('fullscreenTimeDisplay').style.display = 'none';
+            // 隐藏Fliqlo时间显示
+            document.getElementById('fliqloTimeDisplay').style.display = 'none';
             
             initializePlaylist();
             setupUserInteraction();
@@ -4336,32 +4596,6 @@
             playVideoFromPlaylist(currentPlaylistIndex);
         }
 
-        // 切换自动播放下一个视频
-        function toggleAutoNext() {
-            if (!videoUnlocked) {
-                showCopyNotification('🔒 请先解锁视频区域');
-                return;
-            }
-            
-            const btn = document.getElementById('autoNextBtn');
-            autoNextEnabled = !autoNextEnabled;
-            
-            if (autoNextEnabled) {
-                btn.textContent = '⏭️ 自动下一个: 开启';
-                btn.classList.add('active');
-                updateStatus('✅ 已开启自动播放下一个视频', 'success');
-            } else {
-                btn.textContent = '⏭️ 自动下一个: 关闭';
-                btn.classList.remove('active');
-                updateStatus('已关闭自动播放下一个视频', 'warning');
-                
-                if (videoProgressInterval) {
-                    clearInterval(videoProgressInterval);
-                    videoProgressInterval = null;
-                }
-            }
-        }
-
         // 检测视频是否成功加载
         function checkBilibiliPlayerLoad() {
             const iframe = document.getElementById('bilibiliPlayer');
@@ -4467,39 +4701,12 @@
             }
         }
 
-        // 切换自动播放
-        function toggleAutoplay() {
-            if (!videoUnlocked) {
-                showCopyNotification('🔒 请先解锁视频区域');
-                return;
-            }
-            
-            const btn = document.getElementById('autoplayBtn');
-            autoplayEnabled = !autoplayEnabled;
-            
-            if (autoplayEnabled) {
-                btn.textContent = '⏯️ 自动播放: 开启';
-                btn.classList.add('active');
-                updateStatus('✅ 已开启自动播放', 'success');
-            } else {
-                btn.textContent = '⏯️ 自动播放: 关闭';
-                btn.classList.remove('active');
-                updateStatus('已关闭自动播放', 'warning');
-            }
-            
-            playVideoFromPlaylist(currentPlaylistIndex);
-        }
-
         // 设置用户交互检测
         function setupUserInteraction() {
             document.addEventListener('click', function() {
                 if (!userInteracted) {
                     userInteracted = true;
                     console.log("用户已与页面交互");
-                    
-                    if (autoplayEnabled && videoUnlocked) {
-                        setTimeout(forcePlay, 500);
-                    }
                 }
             });
             
@@ -4507,10 +4714,6 @@
                 if (!userInteracted) {
                     userInteracted = true;
                     console.log("用户已与页面交互（键盘）");
-                    
-                    if (autoplayEnabled && videoUnlocked) {
-                        setTimeout(forcePlay, 500);
-                    }
                 }
             });
         }
