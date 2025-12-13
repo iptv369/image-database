@@ -477,7 +477,90 @@
                 transform: translate(100px, 100px);
             }
         }
-        
+        /* 圣诞老人GIF */
+.santa-gif-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.santa-gif {
+    position: absolute;
+    width: 200px;
+    top: 20%;
+    left: -200px;
+    animation: santaFly 30s linear infinite;
+}
+
+@keyframes santaFly {
+    0% {
+        left: -200px;
+        top: 20%;
+    }
+    100% {
+        left: 100%;
+        top: 20%;
+    }
+}
+/* 宇航员GIF样式 */
+.astronaut-gif {
+    position: absolute;
+    width: 150px; /* 调整大小 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: float 6s ease-in-out infinite; /* 原有的漂浮动画 */
+    filter: drop-shadow(0 0 10px rgba(123, 239, 255, 0.5));
+    z-index: 2; /* 确保在行星图层之上 */
+}
+/* 漂浮的宇航员容器 */
+.floating-astronaut {
+    position: absolute;
+    width: 180px; /* 控制GIF显示大小 */
+    top: 25%;
+    left: -80px; /* 从左侧外开始 */
+    z-index: -1;
+    pointer-events: none;
+    animation: astronautFloatAcross 15s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(123, 239, 255, 0.7));
+}
+
+/* 宇航员GIF图片 */
+.astronaut-gif {
+    width: 150%;
+    height: auto;
+    display: block;
+}
+
+/* 宇航员漂浮动画 */
+@keyframes astronautFloatAcross {
+    0% {
+        left: -80px;
+        top: 25%;
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        top: 22%;
+        transform: translateY(-10px) rotate(5deg);
+    }
+    50% {
+        top: 28%;
+        transform: translateY(5px) rotate(-5deg);
+    }
+    75% {
+        top: 23%;
+        transform: translateY(-5px) rotate(2deg);
+    }
+    100% {
+        left: calc(100% + 80px);
+        top: 25%;
+        transform: translateY(0) rotate(0deg);
+    }
+}
         /* ==================== 日历容器修复 - 添加溢出控制 ==================== */
         .calendar-container {
     position: fixed;
@@ -2821,48 +2904,37 @@
 </style>
 </head>
 <body>
-    <!-- 圣诞老人骑鹿动画 -->
-<div class="santa-ride-container">
-    <div class="santa-with-reindeer">
-        <div class="reindeer">
-            <div class="reindeer-body"></div>
-            <div class="reindeer-head"></div>
-            <div class="reindeer-antlers"></div>
-            <div class="reindeer-nose"></div>
-        </div>
-        <div class="santa-sleigh"></div>
-        <div class="santa-body"></div>
-        <div class="santa-hat"></div>
-        <div class="santa-beard"></div>
-        <div class="santa-bag"></div>
-    </div>
+    <!-- 圣诞老人GIF动画 -->
+<div class="santa-gif-container">
+    <!-- 你的圣诞老人GIF -->
+    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1765590261550.gif" 
+         alt="圣诞老人骑雪橇" 
+         class="santa-gif"
+         id="santaGif">
+    <!-- 雪花背景 -->
     <div class="snowflakes" id="snowflakes"></div>
 </div>
 <!-- 星空背景 -->
     <div id="stars"></div>
     
-    <!-- 飞船 -->
-    <div class="spaceship">
-        <div class="spaceship-wings"></div>
-    </div>
+    <!-- 漂浮的宇航员GIF -->
+<div class="floating-astronaut">
+    <img src="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251213/3e0e4df477d9be2659f3297fbd20b998/fac6eea229c64af29e1e5602f1da6f1d.gif"
+         alt="漂浮的宇航员"
+         class="astronaut-gif">
+</div>
     
     <!-- 左侧宇航员插画 -->
-    <div class="illustration-container">
-        <div class="astronaut">
-            <div class="astronaut-antenna">
-                <div class="astronaut-antenna-tip"></div>
-            </div>
-            <div class="astronaut-helmet">
-                <div class="astronaut-visor"></div>
-                <div class="astronaut-light"></div>
-            </div>
-            <div class="astronaut-body"></div>
-            <div class="astronaut-backpack"></div>
-        </div>
-        <div class="planet planet1"></div>
-        <div class="planet planet2"></div>
-        <div class="planet planet3"></div>
-    </div>
+   <div class="illustration-container">
+    <!-- 透明背景的宇航员GIF -->
+    <img src="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251213/3e0e4df477d9be2659f3297fbd20b998/eee4176e129441758cd3598e3a36348f.gif" 
+         alt="宇航员" 
+         class="astronaut-gif">
+    <!-- 保留原有的行星背景 -->
+    <div class="planet planet1"></div>
+    <div class="planet planet2"></div>
+    <div class="planet planet3"></div>
+</div>
     
     <!-- 右侧日历区域 -->
     <div class="calendar-container">
@@ -3245,239 +3317,6 @@
         let weatherApiKey = "";
         let weatherUpdateTimer = null;
 
-        // ==================== 农历计算方法 ====================
-        // 农历数据：从1900年到2100年的农历信息
-        const LUNAR_INFO = [
-            0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
-            0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
-            0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
-            0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
-            0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
-            0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
-            0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
-            0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
-            0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
-            0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x055c0,0x0ab60,0x096d5,0x092e0,
-            0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
-            0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
-            0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
-            0x05aa0,0x076a3,0x096d0,0x04bd7,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
-            0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0
-        ];
-
-        // 农历月份名称
-        const LUNAR_MONTH_NAMES = [
-            "正月", "二月", "三月", "四月", "五月", "六月",
-            "七月", "八月", "九月", "十月", "冬月", "腊月"
-        ];
-
-        // 农历日期名称
-        const LUNAR_DAY_NAMES = [
-            "初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
-            "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
-            "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"
-        ];
-
-        // 天干地支
-        const HEAVENLY_STEMS = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
-        const EARTHLY_BRANCHES = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
-
-        // 生肖
-        const ZODIAC_ANIMALS = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
-
-        // 获取农历年份的天干地支
-        function getLunarYearStemBranch(lunarYear) {
-            const stemIndex = (lunarYear - 4) % 10;
-            const branchIndex = (lunarYear - 4) % 12;
-            const zodiacIndex = (lunarYear - 4) % 12;
-            
-            return {
-                stemBranch: HEAVENLY_STEMS[stemIndex] + EARTHLY_BRANCHES[branchIndex],
-                zodiac: ZODIAC_ANIMALS[zodiacIndex]
-            };
-        }
-
-        // 判断农历年是否有闰月
-        function getLeapMonth(lunarYear) {
-            return LUNAR_INFO[lunarYear - 1900] & 0xf;
-        }
-
-        // 获取农历某月的天数
-        function getLunarMonthDays(lunarYear, lunarMonth) {
-            if ((LUNAR_INFO[lunarYear - 1900] & (0x10000 >> lunarMonth)) === 0) {
-                return 29;
-            } else {
-                return 30;
-            }
-        }
-
-        // 计算农历日期
-        function getLunarDate(year, month, day) {
-            // 阳历1900年1月31日是农历1900年正月初一
-            const baseDate = new Date(1900, 0, 31);
-            const targetDate = new Date(year, month - 1, day);
-            
-            let offset = Math.floor((targetDate - baseDate) / (1000 * 60 * 60 * 24));
-            
-            let lunarYear = 1900;
-            let daysInYear = 0;
-            
-            // 计算农历年份
-            while (offset > 0) {
-                daysInYear = getLunarYearDays(lunarYear);
-                if (offset < daysInYear) {
-                    break;
-                }
-                offset -= daysInYear;
-                lunarYear++;
-            }
-            
-            // 获取闰月
-            let leapMonth = getLeapMonth(lunarYear);
-            let isLeap = false;
-            let lunarMonth = 1;
-            
-            // 计算农历月份
-            for (let m = 1; m <= 12; m++) {
-                let days = getLunarMonthDays(lunarYear, m);
-                
-                // 如果有闰月，先处理闰月
-                if (leapMonth > 0 && m === leapMonth + 1 && !isLeap) {
-                    let leapDays = getLeapMonthDays(lunarYear);
-                    if (offset < leapDays) {
-                        isLeap = true;
-                        lunarMonth = m - 1;
-                        break;
-                    }
-                    offset -= leapDays;
-                }
-                
-                if (offset < days) {
-                    lunarMonth = m;
-                    if (leapMonth > 0 && m === leapMonth + 1) {
-                        isLeap = true;
-                    }
-                    break;
-                }
-                offset -= days;
-            }
-            
-            // 农历日期
-            let lunarDay = offset + 1;
-            
-            // 获取天干地支
-            const { stemBranch, zodiac } = getLunarYearStemBranch(lunarYear);
-            
-            // 构建农历显示字符串
-            let monthDisplay = isLeap ? "闰" + LUNAR_MONTH_NAMES[lunarMonth - 1] : LUNAR_MONTH_NAMES[lunarMonth - 1];
-            return `${stemBranch}(${zodiac})年${monthDisplay}${LUNAR_DAY_NAMES[lunarDay - 1]}`;
-        }
-
-        // 获取农历年的总天数
-        function getLunarYearDays(lunarYear) {
-            let sum = 348; // 29天 * 12个月 = 348天
-            
-            for (let i = 0x8000; i > 0x8; i >>= 1) {
-                if ((LUNAR_INFO[lunarYear - 1900] & i) !== 0) {
-                    sum += 1; // 大月30天
-                }
-            }
-            
-            // 加上闰月的天数
-            if (getLeapMonth(lunarYear) > 0) {
-                sum += getLeapMonthDays(lunarYear);
-            }
-            
-            return sum;
-        }
-
-        // 获取闰月的天数
-        function getLeapMonthDays(lunarYear) {
-            if (getLeapMonth(lunarYear) > 0) {
-                if ((LUNAR_INFO[lunarYear - 1900] & 0x10000) !== 0) {
-                    return 30; // 大月
-                } else {
-                    return 29; // 小月
-                }
-            }
-            return 0;
-        }
-
-        // 简单准确的农历计算（兼容2025年数据）
-        function getAccurateLunarDate(year, month, day) {
-            try {
-                // 尝试使用完整计算方法
-                return getLunarDate(year, month, day);
-            } catch (e) {
-                console.log("农历计算失败，使用简略方法:", e);
-                
-                // 如果完整计算失败，使用简化方法（保持原有功能）
-                const lunarData2025 = {
-                    '2025-01-01': '甲辰(龙)年腊月初二',
-                    '2025-01-29': '甲辰(龙)年腊月三十',
-                    '2025-01-30': '乙巳(蛇)年正月初一',
-                    
-                    '2025-12-31': '乙巳(蛇)年冬月十二',
-                    '2026-01-01': '乙巳(蛇)年冬月十三'
-                };
-                
-                const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                
-                if (lunarData2025[dateStr]) {
-                    return lunarData2025[dateStr];
-                }
-                
-                // 对于其他日期，返回简化的农历
-                const dateObj = new Date(year, month - 1, day);
-                const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
-                                       "七月", "八月", "九月", "十月", "冬月", "腊月"];
-                
-                // 简单计算：基于春节日期
-                const getSpringFestivalDate = (year) => {
-                    // 2020-2030年春节日期
-                    const springFestivals = {
-                        2024: new Date(2024, 1, 10),  // 2024年2月10日
-                        2025: new Date(2025, 0, 29),  // 2025年1月29日
-                        2026: new Date(2026, 1, 17),  // 2026年2月17日
-                        2027: new Date(2027, 1, 6),   // 2027年2月6日
-                        2028: new Date(2028, 0, 26),  // 2028年1月26日
-                        2029: new Date(2029, 1, 13),  // 2029年2月13日
-                        2030: new Date(2030, 1, 3)    // 2030年2月3日
-                    };
-                    return springFestivals[year] || new Date(year, 1, 1);
-                };
-                
-                let lunarYear = year;
-                let springFestival = getSpringFestivalDate(year);
-                
-                // 如果当前日期在春节前，则农历年份为前一年
-                if (dateObj < springFestival) {
-                    lunarYear = year - 1;
-                    springFestival = getSpringFestivalDate(lunarYear);
-                }
-                
-                // 计算天干地支
-                const stemIndex = (lunarYear - 4) % 10;
-                const branchIndex = (lunarYear - 4) % 12;
-                const zodiacIndex = (lunarYear - 4) % 12;
-                
-                const stemBranch = HEAVENLY_STEMS[stemIndex] + EARTHLY_BRANCHES[branchIndex];
-                const zodiac = ZODIAC_ANIMALS[zodiacIndex];
-                
-                // 计算天数差（简化）
-                const diffDays = Math.floor((dateObj - springFestival) / (1000 * 60 * 60 * 24));
-                const lunarMonth = Math.floor(diffDays / 30) + 1;
-                const lunarDay = (diffDays % 30) + 1;
-                
-                if (lunarMonth <= 12 && lunarMonth >= 1 && lunarDay <= 30 && lunarDay >= 1) {
-                    return `${stemBranch}(${zodiac})年${lunarMonthNames[lunarMonth - 1]}${LUNAR_DAY_NAMES[lunarDay - 1]}`;
-                }
-                
-                // 如果计算失败，返回默认值
-                return "农历计算中...";
-            }
-        }
-
         // ==================== Fliqlo时间显示功能 ====================
 
         // 更新Fliqlo时间显示
@@ -3620,6 +3459,120 @@
             
             // 开始倒计时
             startAutoReturnCountdown();
+        }
+
+        // ==================== 简单准确的农历计算 ====================
+        function getAccurateLunarDate(year, month, day) {
+            // 2025年准确的农历数据表
+            const lunarData2025 = {
+                '2025-01-01': '甲辰年腊月初二',
+                '2025-01-29': '甲辰年腊月三十', // 除夕
+                '2025-01-30': '乙巳年正月初一', // 春节
+                
+                '2025-02-10': '乙巳年正月十二',
+                '2025-02-20': '乙巳年正月廿二',
+                '2025-02-28': '乙巳年正月三十',
+                
+                '2025-03-01': '乙巳年二月初二',
+                '2025-03-10': '乙巳年二月十一',
+                '2025-03-20': '乙巳年二月廿一',
+                '2025-03-30': '乙巳年三月初一',
+                
+                '2025-04-01': '乙巳年三月初三',
+                '2025-04-10': '乙巳年三月十二',
+                '2025-04-20': '乙巳年三月廿二',
+                '2025-04-30': '乙巳年四月初三',
+                
+                '2025-05-01': '乙巳年四月初四',
+                '2025-05-10': '乙巳年四月十三',
+                '2025-05-20': '乙巳年四月廿三',
+                '2025-05-30': '乙巳年五月初三',
+                
+                '2025-06-01': '乙巳年五月初五',
+                '2025-06-10': '乙巳年五月十四',
+                '2025-06-20': '乙巳年五月廿四',
+                '2025-06-30': '乙巳年闰五月初四', // 2025年有闰六月
+                
+                '2025-07-01': '乙巳年闰五月初五',
+                '2025-07-10': '乙巳年闰五月十四',
+                '2025-07-20': '乙巳年闰五月廿四',
+                '2025-07-30': '乙巳年六月初五',
+                
+                '2025-08-01': '乙巳年六月初七',
+                '2025-08-10': '乙巳年六月十六',
+                '2025-08-20': '乙巳年六月廿六',
+                '2025-08-30': '乙巳年七月初七',
+                
+                '2025-09-01': '乙巳年七月初九',
+                '2025-09-10': '乙巳年七月十八',
+                '2025-09-20': '乙巳年七月廿八',
+                '2025-09-30': '乙巳年八月初八',
+                
+                '2025-10-01': '乙巳年八月初九',
+                '2025-10-10': '乙巳年八月十八',
+                '2025-10-20': '乙巳年八月廿八',
+                '2025-10-30': '乙巳年九月初九',
+                
+                '2025-11-01': '乙巳年九月十一',
+                '2025-11-10': '乙巳年九月二十',
+                '2025-11-20': '乙巳年九月三十',
+                '2025-11-30': '乙巳年十月初十',
+                
+                '2025-12-01': '乙巳年十月十一',
+                '2025-12-10': '乙巳年十月二十',
+                '2025-12-20': '乙巳年十月三十',
+                '2025-12-25': '乙巳年冬月初五', // 圣诞节
+                '2025-12-30': '乙巳年冬月初十',
+                '2025-12-31': '乙巳年冬月十一'
+            };
+
+            const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            
+            if (lunarData2025[dateStr]) {
+                return lunarData2025[dateStr];
+            }
+            
+            const dateObj = new Date(year, month - 1, day);
+            
+            const springFestival2025 = new Date(2025, 0, 29);
+            const diffDays = Math.floor((dateObj - springFestival2025) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays >= 0) {
+                const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
+                                       "七月", "八月", "九月", "十月", "冬月", "腊月"];
+                const lunarDayNames = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
+                                     "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                                     "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+                
+                const lunarMonthDays = [
+                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29,  // 正月至五月
+                    30,  // 闰六月
+                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29  // 六月至腊月
+                ];
+                
+                let remainingDays = diffDays;
+                let lunarMonth = 0;
+                
+                while (remainingDays >= lunarMonthDays[lunarMonth]) {
+                    remainingDays -= lunarMonthDays[lunarMonth];
+                    lunarMonth++;
+                }
+                
+                const lunarDay = remainingDays + 1;
+                
+                let monthDisplay = "";
+                if (lunarMonth === 5) { // 第六个月是闰六月
+                    monthDisplay = "闰六月";
+                } else if (lunarMonth > 5) {
+                    monthDisplay = lunarMonthNames[lunarMonth - 1];
+                } else {
+                    monthDisplay = lunarMonthNames[lunarMonth];
+                }
+                
+                return `乙巳年${monthDisplay}${lunarDayNames[lunarDay - 1]}`;
+            } else {
+                return "甲辰年腊月";
+            }
         }
 
         // 获取节气
@@ -3897,33 +3850,6 @@
             handleResize();
         }
 
-        // 初始化日历
-        function initializeCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const date = now.getDate();
-            const day = now.getDay();
-            
-            const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
-            
-            document.getElementById('currentDate').textContent = `${month + 1}月${date}日`;
-            document.getElementById('weekDay').textContent = `星期${weekDays[day]}`;
-            
-            // 使用新的农历计算方法
-            const lunarDate = getAccurateLunarDate(year, month + 1, date);
-            document.getElementById('lunarDate').textContent = `农历${lunarDate}`;
-            
-            const solarTerm = getSolarTerm(year, month + 1, date);
-            document.getElementById('solarTerm').textContent = solarTerm;
-            
-            const { yi, ji } = getYiJi(year, month + 1, date);
-            document.getElementById('yiContent').textContent = yi;
-            document.getElementById('jiContent').textContent = ji;
-            
-            generateCalendar(year, month);
-        }
-
         // 视频播放器初始化
         function initializeVideoPlayback() {
             if (!videoUnlocked) return;
@@ -4012,6 +3938,32 @@
                 
                 starsContainer.appendChild(meteor);
             }
+        }
+
+        // 初始化日历
+        function initializeCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const date = now.getDate();
+            const day = now.getDay();
+            
+            const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
+            
+            document.getElementById('currentDate').textContent = `${month + 1}月${date}日`;
+            document.getElementById('weekDay').textContent = `星期${weekDays[day]}`;
+            
+            const lunarDate = getAccurateLunarDate(year, month + 1, date);
+            document.getElementById('lunarDate').textContent = `农历${lunarDate}`;
+            
+            const solarTerm = getSolarTerm(year, month + 1, date);
+            document.getElementById('solarTerm').textContent = solarTerm;
+            
+            const { yi, ji } = getYiJi(year, month + 1, date);
+            document.getElementById('yiContent').textContent = yi;
+            document.getElementById('jiContent').textContent = ji;
+            
+            generateCalendar(year, month);
         }
 
         // 生成日历
