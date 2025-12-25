@@ -14,13 +14,85 @@
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
-        /* 优化播放列表项 - 缩小按钮 */
-        .playlist-item {
-            padding: 3px 6px !important;
-            font-size: 10px !important;
-            min-width: 50px !important;
-            text-align: center !important;
-        }
+/* ==================== 灯笼样式 - 修复版 ==================== */
+.lantern-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999; /* 改为高z-index确保在最上层 */
+    overflow: visible; /* 改为visible */
+}
+
+.lantern {
+    position: absolute;
+    top: 1px;  /* 改这里：调整到公告栏下方 */
+    width: 400px; /* 增大尺寸 */
+    height: 350px;
+    z-index: 9999;
+    animation: lanternFloat 8s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(255, 100, 100, 0.9));
+    display: block !important; /* 强制显示 */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.lantern.left {
+    left: 13%;  /* 距离左边5% */
+}
+
+.lantern.right {
+    right: 10%; /* 距离右边5% */
+}
+
+.lantern-gif {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* 移动端灯笼适配 */
+@media (max-width: 768px) {
+    .lantern {
+        width: 100px;
+        height: 150px;
+        top: 0;  /* 贴顶 */
+    }
+    
+    .lantern.left {
+        left: 15px;
+    }
+    
+    .lantern.right {
+        right: 15px;
+    }
+}
+
+@keyframes lanternFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-20px) rotate(-8deg);
+    }
+    50% {
+        transform: translateY(10px) rotate(8deg);
+    }
+    75% {
+        transform: translateY(-10px) rotate(-4deg);
+    }
+}
+
+/* 优化播放列表项 - 缩小按钮 */
+.playlist-item {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+    min-width: 50px !important;
+    text-align: center !important;
+}
 
         /* ==================== Fliqlo风格时间显示 ==================== */
         .fliqlo-time-display {
@@ -2913,6 +2985,19 @@
          id="santaGif">
     <!-- 雪花背景 -->
     <div class="snowflakes" id="snowflakes"></div>
+</div>
+   <!-- 过年灯笼装饰 -->
+<div class="lantern-container">
+    <div class="lantern left">
+        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1766625417480.gif" 
+             alt="灯笼" 
+             class="lantern-gif">
+    </div>
+    <div class="lantern right">
+        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1766625417480.gif" 
+             alt="灯笼" 
+             class="lantern-gif">
+    </div>
 </div>
 <!-- 星空背景 -->
     <div id="stars"></div>
