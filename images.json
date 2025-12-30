@@ -9424,5 +9424,14 @@
       "批量导入"
     ],
     "description": "从HTML批量导入的图片"
+  },
+  {
+    "code": "A175",
+    "url": "https://fastly.jsdelivr.net/gh/iptv369/my-image-bed@main/img/A175.png",
+    "date": "2025-12-29",
+    "tags": [
+      "批量导入"
+    ],
+    "description": "从HTML批量导入的图片"
   }
 ]
