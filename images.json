@@ -9406,8 +9406,8 @@
   },
   {
     "code": "H0915",
-    "url": "https://v1.ax1x.com/2026/01/03/Qs44iH.png",
-    "date": "2026-01-03",
+    "url": "https://v1.ax1x.com/2026/01/18/NTEcUw.png",
+    "date": "2026-01-18",
     "tags": [
       "批量导入"
     ],
@@ -9759,6 +9759,24 @@
     "code": "G697",
     "url": "https://v1.ax1x.com/2026/01/15/N9x59Y.png",
     "date": "2026-01-15",
+    "tags": [
+      "批量导入"
+    ],
+    "description": "从HTML批量导入的图片"
+  },
+  {
+    "code": "H113",
+    "url": "https://v1.ax1x.com/2026/01/18/NTEDEO.png",
+    "date": "2026-01-18",
+    "tags": [
+      "批量导入"
+    ],
+    "description": "从HTML批量导入的图片"
+  },
+  {
+    "code": "H191",
+    "url": "https://v1.ax1x.com/2026/01/18/NTEvs6.png",
+    "date": "2026-01-18",
     "tags": [
       "批量导入"
     ],
