@@ -94,15 +94,6 @@
             50% { opacity: 1; }
         }
 
-        /* ==================== 移除的按钮样式（已删除） ==================== */
-        /* 删除了以下按钮的相关样式：
-           .playback-controls
-           .autoplay-btn
-           .auto-next-btn
-           .video-nav-controls
-           .video-nav-controls button
-        */
-
         /* 修改视频控制区域，只保留锁定按钮 */
         .video-controls {
             margin-top: 15px;
@@ -539,20 +530,20 @@
         top: 22%;
         transform: translateY(-10px) rotate(5deg);
     }
-    50% {
-        top: 28%;
-        transform: translateY(5px) rotate(-5deg);
-    }
-    75% {
-        top: 23%;
-        transform: translateY(-5px) rotate(2deg);
-    }
-    100% {
-        left: calc(100% + 80px);
-        top: 25%;
-        transform: translateY(0) rotate(0deg);
-    }
-}
+            50% {
+                top: 28%;
+                transform: translateY(5px) rotate(-5deg);
+            }
+            75% {
+                top: 23%;
+                transform: translateY(-5px) rotate(2deg);
+            }
+            100% {
+                left: calc(100% + 80px);
+                top: 25%;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
         /* ==================== 日历容器修复 - 添加溢出控制 ==================== */
         .calendar-container {
     position: fixed;
@@ -2893,6 +2884,37 @@
         opacity: 0;
     }
 }
+        /* ==================== 马GIF图标样式 ==================== */
+        .horse-gif-icon {
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+            margin-right: 6px;
+            display: inline-block;
+            object-fit: contain;
+        }
+        
+        .horse-gif-icon-large {
+            width: 37px;
+            height: 37px;
+        }
+        
+        .horse-gif-icon-small {
+            width: 27px;
+            height: 27px;
+        }
+        
+        .horse-gif-icon-title {
+            width: 39px;
+            height: 39px;
+        }
+        
+        /* 调整按钮包含GIF时的样式 */
+        button, .search-type-btn, .directory-item, .playlist-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 </style>
 </head>
 <body>
@@ -2933,7 +2955,12 @@
         <!-- 天气区域 -->
         <div class="weather-container" id="weatherContainer">
             <div class="weather-header">
-                <div class="weather-title">🌤️ 当地天气</div>
+                <div class="weather-title">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
+                   🌤️ 当地天气
+                </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div class="weather-location" id="weatherLocation">加载中...</div>
                     <div class="weather-refresh" id="weatherRefreshBtn" title="刷新天气">↻</div>
@@ -2969,13 +2996,23 @@
                            placeholder="输入天气API密钥 (可选)">
                     <input type="text" class="weather-config-input" id="weatherCity" 
                            placeholder="城市名 (如: 东莞)" value="东莞">
-                    <button class="weather-config-btn" onclick="saveWeatherConfig()">保存配置</button>
+                    <button class="weather-config-btn" onclick="saveWeatherConfig()">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                             alt="马" 
+                             class="horse-gif-icon horse-gif-icon-small">
+                        保存配置
+                    </button>
                 </div>
             </div>
         </div>
         
         <div class="calendar-header">
-            <h3>📅 智能日历</h3>
+            <h3>
+                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                     alt="马" 
+                     class="horse-gif-icon horse-gif-icon-title">
+               📅 智能日历
+            </h3>
             <div class="current-date" id="currentDate">--月--日</div>
             <div class="date-details">
                 <div class="lunar-date" id="lunarDate">农历--月--</div>
@@ -3037,7 +3074,12 @@
     <!-- 主要内容区域 -->
     <div class="main-content-area">
         <div class="search-container">
-            <h1>👕📊 尺寸表搜索工具</h1>
+            <h1>
+                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                     alt="马" 
+                     class="horse-gif-icon horse-gif-icon-title">
+                👕📊 尺寸表搜索工具
+            </h1>
             
             <div class="update-status" id="updateStatus">
                 <span class="loading-spinner"></span>
@@ -3045,23 +3087,48 @@
             </div>
             
             <div class="search-type">
-                <button class="search-type-btn active" id="imageSearchBtn" onclick="setSearchType('image')">👚 尺寸表搜索</button>
-                <button class="search-type-btn" id="weightSearchBtn" onclick="setSearchType('weight')">⚖️ 重量搜索</button>
+                <button class="search-type-btn active" id="imageSearchBtn" onclick="setSearchType('image')">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon horse-gif-icon-small">
+                   👚 尺寸表搜索
+                </button>
+                <button class="search-type-btn" id="weightSearchBtn" onclick="setSearchType('weight')">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon horse-gif-icon-small">
+                    ⚖️ 重量搜索
+                </button>
             </div>
             
             <div class="search-controls">
                 <div class="search-input-container">
                     <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
                 </div>
-                <button onclick="search()">🔍 搜索</button>
-                <button class="refresh-btn" onclick="checkUpdate()">🔄 检查更新</button>
+                <button onclick="search()">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
+                    🔍 搜索
+                </button>
+                <button class="refresh-btn" onclick="checkUpdate()">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
+                    🔄 检查更新
+                </button>
             </div>
             
             <div class="results-info" id="resultsInfo"></div>
         </div>
 
         <div class="directory-container" id="directoryContainer" style="display: none;">
-            <h3>📁 选择数据目录</h3>
+            <h3>
+                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                     alt="马" 
+                     class="horse-gif-icon">
+                📁 选择数据目录
+            </h3>
             <div class="directory-list" id="directoryList">
                 <!-- 目录项将通过JavaScript动态生成 -->
             </div>
@@ -3070,7 +3137,12 @@
         <div class="main-content">
             <!-- 视频播放区域 -->
             <div class="video-container">
-                <h2>🎬 视频教程</h2>
+                <h2>
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
+                    🎬 视频教程
+                </h2>
                 <div class="video-wrapper">
                     <!-- Fliqlo风格时间显示 -->
                     <div class="fliqlo-time-display" id="fliqloTimeDisplay" onclick="showPasswordInput()">
@@ -3110,6 +3182,9 @@
                             <div class="password-error" id="passwordError"></div>
                         </div>
                         <button class="unlock-button" onclick="unlockVideo()">
+                            <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                                 alt="马" 
+                                 class="horse-gif-icon horse-gif-icon-small">
                             🔓 解锁视频
                         </button>
                         <div class="password-hint" onclick="showPasswordHint()">
@@ -3123,7 +3198,12 @@
                     </div>
                     <div class="video-error" id="videoError" style="display: none;">
                         <div>视频加载失败</div>
-                        <button onclick="retryVideo()">重试</button>
+                        <button onclick="retryVideo()">
+                            <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                                 alt="马" 
+                                 class="horse-gif-icon horse-gif-icon-small">
+                            重试
+                        </button>
                     </div>
                     
                     <!-- 视频进度条 -->
@@ -3146,7 +3226,12 @@
                 
                 <!-- 播放列表 -->
                 <div class="video-playlist">
-                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">播放列表:</div>
+                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                             alt="马" 
+                             style="width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;">
+                        播放列表:
+                    </div>
                     <div class="playlist-items" id="playlistItems">
                         <!-- 播放列表项将通过JavaScript动态生成 -->
                     </div>
@@ -3154,16 +3239,31 @@
                 
                 <!-- 视频控制按钮 - 仅保留重新锁定 -->
                 <div class="video-controls">
-                    <button onclick="lockVideoArea()">🔒 重新锁定</button>
+                    <button onclick="lockVideoArea()">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                             alt="马" 
+                             class="horse-gif-icon horse-gif-icon-small">
+                        🔒 重新锁定
+                    </button>
                 </div>
                 
                 <!-- 自定义视频源区域 -->
                 <div style="margin-top: 15px; padding: 10px; background: rgba(28, 37, 65, 0.8); border-radius: 8px;">
-                    <h4 style="margin-bottom: 10px; color: #7befff;">🎥 自定义视频源</h4>
+                    <h4 style="margin-bottom: 10px; color: #7befff; display: flex; align-items: center; gap: 6px;">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                             alt="马" 
+                             style="width: 18px; height: 18px;">
+                        🎥 自定义视频源
+                    </h4>
                     <input type="text" id="customVideoUrl" style="width: 100%; padding: 8px; background: rgba(40, 53, 147, 0.8); border: 1px solid rgba(123, 239, 255, 0.3); border-radius: 4px; margin-bottom: 8px; color: white;" 
                            placeholder="输入视频URL (例如: http://api.qemao.com/api/douyin)" 
                            value="http://api.qemao.com/api/douyin">
-                    <button onclick="loadCustomVideo()" style="width: 100%; padding: 8px; background: linear-gradient(45deg, #9d4edd, #560bad);">加载自定义视频</button>
+                    <button onclick="loadCustomVideo()" style="width: 100%; padding: 8px; background: linear-gradient(45deg, #9d4edd, #560bad); display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                             alt="马" 
+                             style="width: 16px; height: 16px;">
+                        加载自定义视频
+                    </button>
                 </div>
                 
                 <div style="margin-top: 15px; font-size: 12px; color: rgba(255, 255, 255, 0.7);">
@@ -3752,7 +3852,7 @@
             return false;
         }
 
-              // ==================== 圣诞老人动画 ====================
+        // ==================== 圣诞老人动画 ====================
         function createSantaAnimation() {
             // 创建雪花
             const snowflakes = document.getElementById('snowflakes');
@@ -4484,6 +4584,9 @@
             playlistItems.innerHTML = VIDEO_PLAYLIST.map((video, index) => `
                 <div class="playlist-item ${index === 0 ? 'active' : ''}" 
                      onclick="playVideoFromPlaylist(${index})">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         style="width: 12px; height: 12px; vertical-align: middle; margin-right: 4px;">
                     ${index + 1}. ${video.title}
                 </div>
             `).join('');
@@ -4849,6 +4952,9 @@
             
             directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
                 <div class="directory-item" onclick="loadFromDirectory(${index})">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         style="width: 14px; height: 14px; vertical-align: middle; margin-right: 6px;">
                     ${dir.name}
                 </div>
             `).join('');
@@ -5174,8 +5280,11 @@
                         <div class="weight-card">
                             <div class="weight-header">
                                 <span>${code}</span>
-                                <button onclick="copyWeightData('${code}')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px;">
-                                    📋 复制整款
+                                <button onclick="copyWeightData('${code}')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+                                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                                         alt="马" 
+                                         style="width: 12px; height: 12px;">
+                                    📋复制整款
                                 </button>
                             </div>
                             <div class="weight-content">
@@ -5190,7 +5299,10 @@
                                 <div style="margin-top: 10px; padding: 8px; background: rgba(91, 192, 190, 0.2); border-radius: 4px; font-size: 0.8rem; color: #7befff;">
                                     <strong>完整重量信息:</strong> ${weightList}
                                 </div>
-                                <button class="copy-all-btn" onclick="copyWeightData('${code}')">
+                                <button class="copy-all-btn" onclick="copyWeightData('${code}')" style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                                         alt="马" 
+                                         style="width: 14px; height: 14px;">
                                     复制整款重量数据
                                 </button>
                             </div>
