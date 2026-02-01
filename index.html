@@ -980,23 +980,50 @@
         .search-input-container {
             flex: 1;
             min-width: 250px;
+            position: relative;
+            display: flex;
+            align-items: center;
         }
         
-        #searchInput {
+        /* 舞狮GIF装饰样式 - 在搜索框内部 */
+        .search-input-with-lion {
             width: 100%;
-            padding: 14px 16px;
+            display: flex;
+            align-items: center;
             background: rgba(28, 37, 65, 0.8);
             border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
-            font-size: 16px;
+            overflow: hidden;
             transition: all 0.3s;
-            color: white;
         }
         
-        #searchInput:focus {
-            outline: none;
+        .search-input-with-lion:focus-within {
             border-color: #5bc0be;
             box-shadow: 0 0 0 3px rgba(91, 192, 190, 0.2);
+        }
+        
+        .lion-dance-gif {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+            border-right: 1px solid rgba(123, 239, 255, 0.2);
+            background: rgba(28, 37, 65, 0.9);
+            padding: 5px;
+        }
+        
+        #searchInput {
+            flex: 1;
+            width: 100%;
+            padding: 14px 16px;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            color: white;
+            outline: none;
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         button {
@@ -1010,6 +1037,10 @@
             white-space: nowrap;
             transition: all 0.3s;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
@@ -1032,6 +1063,9 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .search-type-btn.active {
@@ -1258,6 +1292,10 @@
             transition: all 0.3s;
             width: 100%;
             max-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .unlock-button:hover {
@@ -1483,6 +1521,10 @@
             font-size: 14px;
             font-weight: 500;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .directory-item:hover {
@@ -1601,6 +1643,10 @@
             cursor: pointer;
             margin-top: 10px;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         /* 图片模态框 */
@@ -1807,6 +1853,22 @@
             
             .search-input-container {
                 min-width: 100%;
+            }
+            
+            .search-input-with-lion {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .lion-dance-gif {
+                width: 40px !important;
+                height: 40px !important;
+                padding: 4px;
+            }
+            
+            #searchInput {
+                padding: 12px 10px;
+                font-size: 14px;
             }
             
             button {
@@ -2106,6 +2168,12 @@
             
             .search-input-container {
                 min-width: 60%;
+            }
+            
+            .lion-dance-gif {
+                width: 45px !important;
+                height: 45px !important;
+                padding: 5px;
             }
             
             button {
@@ -2515,8 +2583,14 @@
                 gap: 8px;
             }
             
+            .lion-dance-gif {
+                width: 35px !important;
+                height: 35px !important;
+                padding: 3px;
+            }
+            
             #searchInput {
-                padding: 12px;
+                padding: 10px;
                 font-size: 14px;
             }
             
@@ -3103,14 +3177,26 @@
             
             <div class="search-controls">
                 <div class="search-input-container">
-                    <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
+                    <!-- 舞狮GIF装饰与搜索框合并 -->
+                    <div class="search-input-with-lion">
+                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
+                             alt="舞狮" 
+                             class="lion-dance-gif">
+                        
+                        <!-- 搜索输入框 -->
+                        <input type="text" id="searchInput" placeholder="输入图片代码、描述或标签进行搜索...">
+                    </div>
                 </div>
+                
+                <!-- 搜索按钮 -->
                 <button onclick="search()">
                     <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
                          alt="马" 
                          class="horse-gif-icon">
                     🔍 搜索
                 </button>
+                
+                <!-- 刷新按钮 -->
                 <button class="refresh-btn" onclick="checkUpdate()">
                     <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
                          alt="马" 
@@ -5048,7 +5134,7 @@
                         updateStatus(`✅ ${currentDataSource.name} 已更新！新增 ${newImagesCount} 张图片`, 'success');
                         updateDisplay(`✅ 使用 ${currentDataSource.name} 数据 (共 ${cloudCount} 张图片，新增 ${newImagesCount} 张)`);
                     } else if (cloudCount === currentCount) {
-                        updateStatus(`✅ ${currentDataSource.name} 已是最新数据`, 'success');
+                        updateStatus(`✅ ${currentDataSource.name} 已是最新数据', 'success`);
                     } else {
                         updateStatus(`⚠️ ${currentDataSource.name} 数据异常，数据量减少`, 'warning');
                     }
