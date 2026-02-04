@@ -113,6 +113,8 @@
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         
         /* 星空效果 */
@@ -1077,6 +1079,9 @@
             color: white;
             outline: none;
             height: 100%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
         
         .desktop-search-input::placeholder {
@@ -1184,6 +1189,14 @@
             color: white;
             outline: none;
             height: 100%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .mobile-search-input::placeholder {
@@ -1209,6 +1222,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(91, 192, 190, 0.3);
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
         
         .mobile-search-btn:hover {
@@ -1773,6 +1787,7 @@
             body {
                 padding: 15px;
                 font-size: 16px;
+                touch-action: manipulation;
             }
             
             input, select, textarea {
@@ -1888,6 +1903,15 @@
                 background: transparent !important;
                 color: white !important;
                 outline: none !important;
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                appearance: none !important;
+                -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+                -webkit-user-select: text !important;
+                -moz-user-select: text !important;
+                -ms-user-select: text !important;
+                user-select: text !important;
+                touch-action: manipulation !important;
             }
             
             .mobile-search-input::placeholder {
@@ -1914,6 +1938,7 @@
                 gap: 8px !important;
                 position: relative !important;
                 overflow: hidden !important;
+                -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
             }
             
             .mobile-search-btn:hover {
@@ -1935,6 +1960,17 @@
             button {
                 width: 100%;
                 margin: 5px 0;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+            
+            /* 优化触摸体验 */
+            .search-type-btn, .directory-item, button {
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                touch-action: manipulation;
+            }
+            
+            input:focus, textarea:focus, select:focus {
+                font-size: 16px !important;
             }
             
             @media (orientation: portrait) {
@@ -2997,7 +3033,7 @@
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="desktop-lion-dance-gif">
-                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入图片代码、描述或标签进行搜索...">
+                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入图片代码、描述或标签进行搜索..." autocomplete="off">
                             <button class="desktop-search-btn" onclick="searchDesktop()">
                                 <svg class="desktop-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3014,7 +3050,7 @@
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="mobile-lion-dance-gif">
-                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入图片代码、描述或标签进行搜索...">
+                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入图片代码、描述或标签进行搜索..." autocomplete="off">
                         </div>
                         <button class="mobile-search-btn" onclick="searchMobile()">
                             <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3452,6 +3488,49 @@
             
             // 添加搜索框同步功能
             setupSearchInputSync();
+            
+            // 修复移动端触摸问题
+            fixMobileInputIssues();
+        }
+
+        // 修复移动端输入问题
+        function fixMobileInputIssues() {
+            const mobileInput = document.getElementById('searchInputMobile');
+            const desktopInput = document.getElementById('searchInputDesktop');
+            
+            if (mobileInput) {
+                // 移除所有可能阻止输入的事件监听器
+                mobileInput.addEventListener('touchstart', function(e) {
+                    // 允许触摸事件
+                    e.stopPropagation();
+                }, { passive: true });
+                
+                mobileInput.addEventListener('touchmove', function(e) {
+                    // 允许触摸移动
+                    e.stopPropagation();
+                }, { passive: true });
+                
+                mobileInput.addEventListener('touchend', function(e) {
+                    // 允许触摸结束
+                    e.stopPropagation();
+                    // 确保输入框获得焦点
+                    setTimeout(() => {
+                        mobileInput.focus();
+                    }, 10);
+                }, { passive: true });
+                
+                // 确保点击时能获得焦点
+                mobileInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileInput.focus();
+                });
+            }
+            
+            if (desktopInput) {
+                desktopInput.addEventListener('touchstart', function(e) {
+                    e.stopPropagation();
+                }, { passive: true });
+            }
         }
 
         // 设置搜索框同步
@@ -4416,13 +4495,6 @@
                 });
             }
         });
-
-        // 防止iOS缩放输入
-        document.addEventListener('touchstart', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                e.preventDefault();
-            }
-        }, { passive: false });
 
         // 页面加载时初始化
         initialize();
