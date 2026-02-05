@@ -162,9 +162,17 @@
             animation: floatInPlace 6s ease-in-out infinite;
         }
 
+        /* 只在桌面端（1200px以上）显示 */
         @media (min-width: 1200px) {
             .spaceship-weather-calendar {
                 display: block;
+            }
+        }
+
+        /* 在所有平板和手机设备上隐藏 */
+        @media (max-width: 1199px) {
+            .spaceship-weather-calendar {
+                display: none !important;
             }
         }
 
@@ -2185,8 +2193,8 @@
             }
         }
 
-        /* ==================== 平板端适配 (768px-1024px) ==================== */
-        @media (max-width: 1024px) and (min-width: 769px) {
+        /* ==================== 平板端适配 (768px-1199px) ==================== */
+        @media (max-width: 1199px) and (min-width: 769px) {
             body {
                 padding: 20px;
             }
@@ -2194,6 +2202,7 @@
             .main-content-area {
                 width: 100%;
                 max-width: 100%;
+                margin: 0 auto;
             }
             
             .announcement-bar {
@@ -2214,6 +2223,8 @@
             .search-container {
                 padding: 18px;
                 margin-top: 15px;
+                width: 100%;
+                max-width: 100%;
             }
             
             h1 {
@@ -2223,17 +2234,20 @@
             .search-controls {
                 flex-direction: row;
                 flex-wrap: wrap;
+                width: 100%;
             }
             
             .search-input-container {
                 min-width: 60%;
+                width: 100%;
             }
             
-            /* 重要修改：平板端无论横竖屏都隐藏天气飞船模板 */
+            /* 确保平板端隐藏天气飞船模板 */
             .spaceship-weather-calendar {
                 display: none !important;
             }
             
+            /* 平板端竖屏 */
             @media (orientation: portrait) {
                 /* 竖屏显示移动端布局 */
                 .desktop-search-layout {
@@ -2286,6 +2300,7 @@
                 }
             }
             
+            /* 平板端横屏 */
             @media (orientation: landscape) {
                 /* 横屏显示电脑端布局 */
                 .desktop-search-layout {
@@ -2301,6 +2316,7 @@
                     overflow: hidden !important;
                     transition: all 0.3s !important;
                     height: 52px !important;
+                    width: 100% !important;
                 }
                 
                 .desktop-lion-dance-gif {
@@ -2347,6 +2363,7 @@
                 .main-content {
                     flex-direction: row !important;
                     gap: 20px;
+                    width: 100%;
                 }
                 
                 .results-container {
@@ -2369,6 +2386,7 @@
                 
                 .main-content {
                     flex-direction: column;
+                    width: 100%;
                 }
                 
                 .results-container {
@@ -2538,14 +2556,17 @@
                 text-align: center;
             }
             
-            /* 重要修改：平板端隐藏天气飞船模板 */
+            /* 重要修改：平板端必须隐藏天气飞船模板 */
             .spaceship-weather-calendar {
                 display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
             }
         }
 
-        /* ==================== 电脑端适配 (1025px以上) ==================== */
-        @media (min-width: 1025px) {
+        /* ==================== 电脑端适配 (1200px以上) ==================== */
+        @media (min-width: 1200px) {
             .desktop-search-layout {
                 display: block !important;
             }
@@ -2597,6 +2618,9 @@
             .spaceship-weather-calendar {
                 display: block !important;
                 right: 15px;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
             }
         }
 
