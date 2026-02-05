@@ -2069,7 +2069,7 @@
                     width: 100% !important;
                     max-width: 100% !important;
                     height: 220px !important;
-                    margin: 0 auto 12px !important;
+                    margin: 0 auto 10px !important;
                     border-radius: 8px !important;
                 }
                 
@@ -2227,6 +2227,11 @@
             
             .search-input-container {
                 min-width: 60%;
+            }
+            
+            /* 重要修改：平板端无论横竖屏都隐藏天气飞船模板 */
+            .spaceship-weather-calendar {
+                display: none !important;
             }
             
             @media (orientation: portrait) {
@@ -2533,6 +2538,7 @@
                 text-align: center;
             }
             
+            /* 重要修改：平板端隐藏天气飞船模板 */
             .spaceship-weather-calendar {
                 display: none !important;
             }
