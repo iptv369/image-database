@@ -32,48 +32,90 @@
             overflow: hidden;
         }
 
+        /* GIF背景容器 - 居中显示不拉伸 */
+        .fliqlo-gif-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .fliqlo-gif-background img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            opacity: 0.5;
+        }
+
+        /* 添加半透明遮罩，让时间文字更清晰 */
+        .fliqlo-time-display::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 42, 0.6);
+            z-index: 2;
+        }
+
         .fliqlo-clock {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
             width: 100%;
             height: 100%;
+            position: relative;
+            z-index: 3;
         }
 
         .time-digits {
             display: flex;
-            gap: 8px;
-            font-size: 2.8rem;
+            gap: 12px;
+            font-size: 3.5rem;
             font-weight: 300;
             color: #ffffff;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(123, 239, 255, 0.5);
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(123, 239, 255, 0.7);
         }
 
         .time-colon {
-            opacity: 0.7;
+            opacity: 0.8;
             animation: blink 1s infinite;
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 0.2; }
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
         }
 
         .time-separator {
             width: 80%;
-            height: 1px;
-            background: rgba(123, 239, 255, 0.3);
-            margin: 5px 0;
+            height: 2px;
+            background: rgba(123, 239, 255, 0.4);
+            margin: 8px 0;
         }
 
         .date-display {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 5px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-top: 8px;
             text-align: center;
+            background: rgba(10, 14, 42, 0.5);
+            padding: 8px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(123, 239, 255, 0.2);
         }
 
         .unlock-hint {
@@ -87,6 +129,7 @@
             border-radius: 15px;
             border: 1px solid rgba(123, 239, 255, 0.2);
             animation: subtlePulse 2s infinite;
+            z-index: 3;
         }
 
         @keyframes subtlePulse {
@@ -338,14 +381,6 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
             margin-bottom: 10px;
-        }
-
-        .calendar-module-day-fixed {
-            text-align: center;
-            padding: 8px;
-            font-size: 12px;
-            color: #ffd166;
-            font-weight: 600;
         }
 
         .calendar-module-date-cell-fixed {
@@ -1045,21 +1080,159 @@
             width: 100%;
         }
         
+        /* ==================== 搜索栏内部背景 - 龙年GIF优化 ==================== */
+        .search-row-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.35;
+            background: linear-gradient(45deg, rgba(28, 37, 65, 0.1), rgba(40, 53, 147, 0.1));
+        }
+        
+        /* 龙年GIF - 游动动画 */
+        .dragon-gif-bg {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
+            animation: dragonFloat 15s ease-in-out infinite;
+        }
+        
+        /* 龙在搜索框内游动的动画 */
+        @keyframes dragonFloat {
+            0% {
+                left: -20px;
+                top: 50%;
+                transform: translateY(-50%) scale(0.9);
+                opacity: 0.8;
+            }
+            25% {
+                left: 25%;
+                top: 30%;
+                transform: translateY(-50%) scale(1.1);
+                opacity: 1;
+            }
+            50% {
+                left: 50%;
+                top: 70%;
+                transform: translateY(-50%) scale(0.9);
+                opacity: 0.9;
+            }
+            75% {
+                left: 75%;
+                top: 30%;
+                transform: translateY(-50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                left: calc(100% + 20px);
+                top: 50%;
+                transform: translateY(-50%) scale(0.9);
+                opacity: 0.8;
+            }
+        }
+        
+        /* 第二只龙的动画 - 不同时间延迟 */
+        .dragon-gif-bg.second {
+            animation: dragonFloatReverse 18s ease-in-out infinite;
+            animation-delay: 2s;
+            width: 80px;
+            height: 80px;
+            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 4px rgba(255, 100, 100, 0.6));
+        }
+        
+        @keyframes dragonFloatReverse {
+            0% {
+                left: calc(100% + 20px);
+                top: 70%;
+                transform: translateY(-50%) scale(0.8);
+                opacity: 0.7;
+            }
+            25% {
+                left: 75%;
+                top: 30%;
+                transform: translateY(-50%) scale(1.0);
+                opacity: 0.9;
+            }
+            50% {
+                left: 50%;
+                top: 50%;
+                transform: translateY(-50%) scale(1.1);
+                opacity: 1;
+            }
+            75% {
+                left: 25%;
+                top: 70%;
+                transform: translateY(-50%) scale(0.9);
+                opacity: 0.9;
+            }
+            100% {
+                left: -20px;
+                top: 30%;
+                transform: translateY(-50%) scale(0.8);
+                opacity: 0.7;
+            }
+        }
+        
+        /* 第三只龙的动画 - 垂直移动 */
+        .dragon-gif-bg.third {
+            animation: dragonFloatVertical 12s ease-in-out infinite;
+            animation-delay: 4s;
+            width: 75px;
+            height: 75px;
+            filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 3px rgba(100, 200, 255, 0.6));
+        }
+        
+        @keyframes dragonFloatVertical {
+            0%, 100% {
+                left: 80%;
+                top: -20px;
+                transform: scale(0.8);
+                opacity: 0.6;
+            }
+            25% {
+                left: 60%;
+                top: 50%;
+                transform: scale(1.0);
+                opacity: 0.8;
+            }
+            50% {
+                left: 40%;
+                top: 100%;
+                transform: scale(0.9);
+                opacity: 0.9;
+            }
+            75% {
+                left: 20%;
+                top: 50%;
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
         /* ==================== 电脑端搜索栏样式 ==================== */
         .desktop-search-layout {
             width: 100%;
+            position: relative;
         }
         
         .desktop-search-row {
             display: flex;
             align-items: center;
-            background: rgba(28, 37, 65, 0.8);
             border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s;
             height: 52px;
             width: 100%;
+            position: relative;
+            background: rgba(28, 37, 65, 0.8);
         }
         
         .desktop-search-row:focus-within {
@@ -1075,13 +1248,15 @@
             background: rgba(28, 37, 65, 0.9);
             padding: 5px;
             display: block;
+            position: relative;
+            z-index: 2;
         }
         
         .desktop-search-input {
             flex: 1;
             width: 100%;
             padding: 14px 16px;
-            background: transparent;
+            background: rgba(28, 37, 65, 0.7);
             border: none;
             font-size: 16px;
             color: white;
@@ -1090,10 +1265,12 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
+            position: relative;
+            z-index: 2;
         }
         
         .desktop-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.7);
         }
         
         /* 电脑端搜索按钮 */
@@ -1118,6 +1295,7 @@
             flex-shrink: 0;
             margin: 0;
             border-radius: 0 8px 8px 0;
+            z-index: 2;
         }
         
         .desktop-search-btn:hover {
@@ -1158,18 +1336,20 @@
             display: none;
             flex-direction: column;
             gap: 12px;
+            position: relative;
         }
         
         .mobile-search-row {
             display: flex;
             align-items: center;
-            background: rgba(28, 37, 65, 0.8);
             border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 10px;
             overflow: hidden;
             transition: all 0.3s;
             width: 100%;
             height: 50px;
+            position: relative;
+            background: rgba(28, 37, 65, 0.8);
         }
         
         .mobile-search-row:focus-within {
@@ -1185,13 +1365,15 @@
             background: rgba(28, 37, 65, 0.9);
             padding: 4px;
             display: block;
+            position: relative;
+            z-index: 2;
         }
         
         .mobile-search-input {
             flex: 1;
             width: 100%;
             padding: 12px 10px;
-            background: transparent;
+            background: rgba(28, 37, 65, 0.7);
             border: none;
             font-size: 16px;
             color: white;
@@ -1205,6 +1387,8 @@
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
+            position: relative;
+            z-index: 2;
         }
         
         .mobile-search-input::placeholder {
@@ -1231,6 +1415,7 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(91, 192, 190, 0.3);
             -webkit-tap-highlight-color: rgba(0,0,0,0);
+            z-index: 1;
         }
         
         .mobile-search-btn:hover {
@@ -1876,13 +2061,13 @@
             .mobile-search-row {
                 display: flex !important;
                 align-items: center !important;
-                background: rgba(28, 37, 65, 0.8) !important;
                 border: 1px solid rgba(123, 239, 255, 0.3) !important;
                 border-radius: 10px !important;
                 overflow: hidden !important;
                 transition: all 0.3s !important;
                 width: 100% !important;
                 height: 50px !important;
+                background: rgba(28, 37, 65, 0.8) !important;
             }
             
             .mobile-search-row:focus-within {
@@ -1898,6 +2083,8 @@
                 border-right: 1px solid rgba(123, 239, 255, 0.2) !important;
                 background: rgba(28, 37, 65, 0.9) !important;
                 display: block !important;
+                position: relative !important;
+                z-index: 2 !important;
             }
             
             .mobile-search-input {
@@ -1908,7 +2095,7 @@
                 width: 100% !important;
                 height: 100% !important;
                 border: none !important;
-                background: transparent !important;
+                background: rgba(28, 37, 65, 0.7) !important;
                 color: white !important;
                 outline: none !important;
                 -webkit-appearance: none !important;
@@ -1920,6 +2107,8 @@
                 -ms-user-select: text !important;
                 user-select: text !important;
                 touch-action: manipulation !important;
+                position: relative !important;
+                z-index: 2 !important;
             }
             
             .mobile-search-input::placeholder {
@@ -1979,6 +2168,22 @@
             
             input:focus, textarea:focus, select:focus {
                 font-size: 16px !important;
+            }
+            
+            /* 移动端调整龙年GIF - 更小一点 */
+            .dragon-gif-bg {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            
+            .dragon-gif-bg.second {
+                width: 65px !important;
+                height: 65px !important;
+            }
+            
+            .dragon-gif-bg.third {
+                width: 60px !important;
+                height: 60px !important;
             }
             
             @media (orientation: portrait) {
@@ -2247,6 +2452,22 @@
                 display: none !important;
             }
             
+            /* 平板端调整龙年GIF */
+            .dragon-gif-bg {
+                width: 100px !important;
+                height: 100px !important;
+            }
+            
+            .dragon-gif-bg.second {
+                width: 95px !important;
+                height: 95px !important;
+            }
+            
+            .dragon-gif-bg.third {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            
             /* 平板端竖屏 */
             @media (orientation: portrait) {
                 /* 竖屏显示移动端布局 */
@@ -2264,13 +2485,13 @@
                 .mobile-search-row {
                     display: flex !important;
                     align-items: center !important;
-                    background: rgba(28, 37, 65, 0.8) !important;
                     border: 1px solid rgba(123, 239, 255, 0.3) !important;
                     border-radius: 10px !important;
                     overflow: hidden !important;
                     transition: all 0.3s !important;
                     width: 100% !important;
                     height: 50px !important;
+                    background: rgba(28, 37, 65, 0.8) !important;
                 }
                 
                 .mobile-lion-dance-gif {
@@ -2278,6 +2499,8 @@
                     height: 45px !important;
                     padding: 5px !important;
                     display: block !important;
+                    position: relative !important;
+                    z-index: 2 !important;
                 }
                 
                 .mobile-search-btn {
@@ -2310,13 +2533,13 @@
                 .desktop-search-row {
                     display: flex !important;
                     align-items: center !important;
-                    background: rgba(28, 37, 65, 0.8) !important;
                     border: 1px solid rgba(123, 239, 255, 0.3) !important;
                     border-radius: 8px !important;
                     overflow: hidden !important;
                     transition: all 0.3s !important;
                     height: 52px !important;
                     width: 100% !important;
+                    background: rgba(28, 37, 65, 0.8) !important;
                 }
                 
                 .desktop-lion-dance-gif {
@@ -2324,6 +2547,8 @@
                     height: 50px !important;
                     padding: 5px !important;
                     display: block !important;
+                    position: relative !important;
+                    z-index: 2 !important;
                 }
                 
                 .desktop-search-btn {
@@ -2660,6 +2885,22 @@
             .mobile-search-icon {
                 width: 18px !important;
                 height: 18px !important;
+            }
+            
+            /* 超小屏幕调整龙年GIF */
+            .dragon-gif-bg {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .dragon-gif-bg.second {
+                width: 55px !important;
+                height: 55px !important;
+            }
+            
+            .dragon-gif-bg.third {
+                width: 50px !important;
+                height: 50px !important;
             }
             
             .image-results {
@@ -3060,6 +3301,10 @@
                     <!-- 电脑端布局 -->
                     <div class="desktop-search-layout">
                         <div class="desktop-search-row">
+                            <!-- 搜索框内部的龙年背景 - 已优化为游动效果 -->
+                            <div class="search-row-background" id="desktopDragonBackground">
+                                <!-- 龙年GIF将通过JavaScript动态添加 -->
+                            </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="desktop-lion-dance-gif">
@@ -3077,6 +3322,10 @@
                     <!-- 移动端布局 -->
                     <div class="mobile-search-layout">
                         <div class="mobile-search-row">
+                            <!-- 搜索框内部的龙年背景 - 已优化为游动效果 -->
+                            <div class="search-row-background" id="mobileDragonBackground">
+                                <!-- 龙年GIF将通过JavaScript动态添加 -->
+                            </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="mobile-lion-dance-gif">
@@ -3121,6 +3370,11 @@
                     <!-- Fliqlo风格时间显示 -->
                     <div class="fliqlo-time-display" id="fliqloTimeDisplay">
                         <div class="fliqlo-clock">
+                            <!-- GIF背景容器 -->
+                            <div class="fliqlo-gif-background">
+                                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770359552636.gif" 
+                                     alt="时间背景GIF">
+                            </div>
                             <div class="time-digits">
                                 <span id="hour1">0</span>
                                 <span id="hour2">0</span>
@@ -3475,6 +3729,70 @@
             }
         }
 
+        // ==================== 龙年GIF游动效果 ====================
+        function createDragonAnimation() {
+            const desktopBackground = document.getElementById('desktopDragonBackground');
+            const mobileBackground = document.getElementById('mobileDragonBackground');
+            
+            const dragonGifUrl = "https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770359916479.gif";
+            
+            // 为电脑端搜索框添加龙年GIF
+            if (desktopBackground) {
+                // 第一只龙 - 主要游动
+                const dragon1 = document.createElement('img');
+                dragon1.src = dragonGifUrl;
+                dragon1.alt = "龙年吉祥";
+                dragon1.className = 'dragon-gif-bg';
+                desktopBackground.appendChild(dragon1);
+                
+                // 第二只龙 - 反向游动
+                const dragon2 = document.createElement('img');
+                dragon2.src = dragonGifUrl;
+                dragon2.alt = "龙年吉祥";
+                dragon2.className = 'dragon-gif-bg second';
+                desktopBackground.appendChild(dragon2);
+                
+                // 第三只龙 - 垂直游动
+                const dragon3 = document.createElement('img');
+                dragon3.src = dragonGifUrl;
+                dragon3.alt = "龙年吉祥";
+                dragon3.className = 'dragon-gif-bg third';
+                desktopBackground.appendChild(dragon3);
+            }
+            
+            // 为移动端搜索框添加龙年GIF
+            if (mobileBackground) {
+                // 第一只龙 - 主要游动
+                const dragon1 = document.createElement('img');
+                dragon1.src = dragonGifUrl;
+                dragon1.alt = "龙年吉祥";
+                dragon1.className = 'dragon-gif-bg';
+                mobileBackground.appendChild(dragon1);
+                
+                // 第二只龙 - 反向游动
+                const dragon2 = document.createElement('img');
+                dragon2.src = dragonGifUrl;
+                dragon2.alt = "龙年吉祥";
+                dragon2.className = 'dragon-gif-bg second';
+                mobileBackground.appendChild(dragon2);
+                
+                // 第三只龙 - 垂直游动
+                const dragon3 = document.createElement('img');
+                dragon3.src = dragonGifUrl;
+                dragon3.alt = "龙年吉祥";
+                dragon3.className = 'dragon-gif-bg third';
+                mobileBackground.appendChild(dragon3);
+            }
+            
+            // 添加龙年GIF加载完成后的效果
+            setTimeout(() => {
+                const dragons = document.querySelectorAll('.dragon-gif-bg');
+                dragons.forEach((dragon, index) => {
+                    dragon.style.opacity = '0.8';
+                });
+            }, 100);
+        }
+
         // ==================== 初始化函数 ====================
         async function initialize() {
             // 添加圣诞老人动画
@@ -3486,6 +3804,9 @@
             
             // 初始化Fliqlo时间显示
             initFliqloTimeDisplay();
+            
+            // 创建龙年GIF游动效果
+            createDragonAnimation();
             
             // 加载天气配置并初始化天气
             loadWeatherConfig();
