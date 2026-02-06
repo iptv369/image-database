@@ -1080,7 +1080,7 @@
             width: 100%;
         }
         
-        /* ==================== 搜索栏内部背景 - 龙年GIF优化 ==================== */
+        /* ==================== 搜索栏内部背景 - 马年GIF优化 ==================== */
         .search-row-background {
             position: absolute;
             top: 0;
@@ -1090,129 +1090,30 @@
             z-index: 1;
             overflow: hidden;
             pointer-events: none;
-            opacity: 0.35;
+            opacity: 0.9; /* 提高透明度，更亮 */
             background: linear-gradient(45deg, rgba(28, 37, 65, 0.1), rgba(40, 53, 147, 0.1));
         }
         
-        /* 龙年GIF - 游动动画 */
-        .dragon-gif-bg {
+        /* 马年GIF - 大而慢的移动 */
+        .horse-gif-bg {
             position: absolute;
-            width: 100px;
+            width: 100px; /* 更大的马 */
             height: 100px;
             object-fit: contain;
-            filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
-            animation: dragonFloat 15s ease-in-out infinite;
+            filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)); /* 更亮 */
+            animation: horseWalkRightToLeft 45s linear infinite; /* 更慢的移动 */
+            opacity: 0.9; /* 更高的不透明度 */
+            top: 50%;
+            transform: translateY(-50%);
         }
         
-        /* 龙在搜索框内游动的动画 */
-        @keyframes dragonFloat {
+        /* 马从右向左的慢速动画 - 像马在漫步 */
+        @keyframes horseWalkRightToLeft {
             0% {
-                left: -20px;
-                top: 50%;
-                transform: translateY(-50%) scale(0.9);
-                opacity: 0.8;
-            }
-            25% {
-                left: 25%;
-                top: 30%;
-                transform: translateY(-50%) scale(1.1);
-                opacity: 1;
-            }
-            50% {
-                left: 50%;
-                top: 70%;
-                transform: translateY(-50%) scale(0.9);
-                opacity: 0.9;
-            }
-            75% {
-                left: 75%;
-                top: 30%;
-                transform: translateY(-50%) scale(1.2);
-                opacity: 1;
+                left: 100%;
             }
             100% {
-                left: calc(100% + 20px);
-                top: 50%;
-                transform: translateY(-50%) scale(0.9);
-                opacity: 0.8;
-            }
-        }
-        
-        /* 第二只龙的动画 - 不同时间延迟 */
-        .dragon-gif-bg.second {
-            animation: dragonFloatReverse 18s ease-in-out infinite;
-            animation-delay: 2s;
-            width: 80px;
-            height: 80px;
-            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 4px rgba(255, 100, 100, 0.6));
-        }
-        
-        @keyframes dragonFloatReverse {
-            0% {
-                left: calc(100% + 20px);
-                top: 70%;
-                transform: translateY(-50%) scale(0.8);
-                opacity: 0.7;
-            }
-            25% {
-                left: 75%;
-                top: 30%;
-                transform: translateY(-50%) scale(1.0);
-                opacity: 0.9;
-            }
-            50% {
-                left: 50%;
-                top: 50%;
-                transform: translateY(-50%) scale(1.1);
-                opacity: 1;
-            }
-            75% {
-                left: 25%;
-                top: 70%;
-                transform: translateY(-50%) scale(0.9);
-                opacity: 0.9;
-            }
-            100% {
-                left: -20px;
-                top: 30%;
-                transform: translateY(-50%) scale(0.8);
-                opacity: 0.7;
-            }
-        }
-        
-        /* 第三只龙的动画 - 垂直移动 */
-        .dragon-gif-bg.third {
-            animation: dragonFloatVertical 12s ease-in-out infinite;
-            animation-delay: 4s;
-            width: 75px;
-            height: 75px;
-            filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 3px rgba(100, 200, 255, 0.6));
-        }
-        
-        @keyframes dragonFloatVertical {
-            0%, 100% {
-                left: 80%;
-                top: -20px;
-                transform: scale(0.8);
-                opacity: 0.6;
-            }
-            25% {
-                left: 60%;
-                top: 50%;
-                transform: scale(1.0);
-                opacity: 0.8;
-            }
-            50% {
-                left: 40%;
-                top: 100%;
-                transform: scale(0.9);
-                opacity: 0.9;
-            }
-            75% {
-                left: 20%;
-                top: 50%;
-                transform: scale(1.1);
-                opacity: 0.8;
+                left: -100px;
             }
         }
         
@@ -2170,20 +2071,12 @@
                 font-size: 16px !important;
             }
             
-            /* 移动端调整龙年GIF - 更小一点 */
-            .dragon-gif-bg {
+            /* 移动端调整马年GIF - 更大更亮 */
+            .horse-gif-bg {
                 width: 70px !important;
                 height: 70px !important;
-            }
-            
-            .dragon-gif-bg.second {
-                width: 65px !important;
-                height: 65px !important;
-            }
-            
-            .dragon-gif-bg.third {
-                width: 60px !important;
-                height: 60px !important;
+                opacity: 0.95 !important;
+                filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.9)) !important;
             }
             
             @media (orientation: portrait) {
@@ -2452,20 +2345,12 @@
                 display: none !important;
             }
             
-            /* 平板端调整龙年GIF */
-            .dragon-gif-bg {
-                width: 100px !important;
-                height: 100px !important;
-            }
-            
-            .dragon-gif-bg.second {
-                width: 95px !important;
-                height: 95px !important;
-            }
-            
-            .dragon-gif-bg.third {
-                width: 90px !important;
-                height: 90px !important;
+            /* 平板端调整马年GIF */
+            .horse-gif-bg {
+                width: 85px !important;
+                height: 85px !important;
+                opacity: 0.95 !important;
+                filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) !important;
             }
             
             /* 平板端竖屏 */
@@ -2887,20 +2772,12 @@
                 height: 18px !important;
             }
             
-            /* 超小屏幕调整龙年GIF */
-            .dragon-gif-bg {
-                width: 60px !important;
-                height: 60px !important;
-            }
-            
-            .dragon-gif-bg.second {
-                width: 55px !important;
-                height: 55px !important;
-            }
-            
-            .dragon-gif-bg.third {
-                width: 50px !important;
-                height: 50px !important;
+            /* 超小屏幕调整马年GIF */
+            .horse-gif-bg {
+                width: 65px !important;
+                height: 65px !important;
+                opacity: 0.95 !important;
+                filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.9)) !important;
             }
             
             .image-results {
@@ -3301,14 +3178,14 @@
                     <!-- 电脑端布局 -->
                     <div class="desktop-search-layout">
                         <div class="desktop-search-row">
-                            <!-- 搜索框内部的龙年背景 - 已优化为游动效果 -->
-                            <div class="search-row-background" id="desktopDragonBackground">
-                                <!-- 龙年GIF将通过JavaScript动态添加 -->
+                            <!-- 搜索框内部的马年背景 - 简单从右向左移动 -->
+                            <div class="search-row-background" id="desktopHorseBackground">
+                                <!-- 马年GIF将通过JavaScript动态添加 -->
                             </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="desktop-lion-dance-gif">
-                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入图片代码、描述或标签进行搜索..." autocomplete="off">
+                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入" autocomplete="off">
                             <button class="desktop-search-btn" onclick="searchDesktop()">
                                 <svg class="desktop-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3322,14 +3199,14 @@
                     <!-- 移动端布局 -->
                     <div class="mobile-search-layout">
                         <div class="mobile-search-row">
-                            <!-- 搜索框内部的龙年背景 - 已优化为游动效果 -->
-                            <div class="search-row-background" id="mobileDragonBackground">
-                                <!-- 龙年GIF将通过JavaScript动态添加 -->
+                            <!-- 搜索框内部的马年背景 - 简单从右向左移动 -->
+                            <div class="search-row-background" id="mobileHorseBackground">
+                                <!-- 马年GIF将通过JavaScript动态添加 -->
                             </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="mobile-lion-dance-gif">
-                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入图片代码、描述或标签进行搜索..." autocomplete="off">
+                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入" autocomplete="off">
                         </div>
                         <button class="mobile-search-btn" onclick="searchMobile()">
                             <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3729,68 +3606,30 @@
             }
         }
 
-        // ==================== 龙年GIF游动效果 ====================
-        function createDragonAnimation() {
-            const desktopBackground = document.getElementById('desktopDragonBackground');
-            const mobileBackground = document.getElementById('mobileDragonBackground');
+        // ==================== 马年GIF简单动画 ====================
+        function createHorseAnimation() {
+            const desktopBackground = document.getElementById('desktopHorseBackground');
+            const mobileBackground = document.getElementById('mobileHorseBackground');
             
-            const dragonGifUrl = "https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770359916479.gif";
+            const horseGifUrl = "https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770382691539.gif";
             
-            // 为电脑端搜索框添加龙年GIF
+            // 为电脑端搜索框添加马年GIF
             if (desktopBackground) {
-                // 第一只龙 - 主要游动
-                const dragon1 = document.createElement('img');
-                dragon1.src = dragonGifUrl;
-                dragon1.alt = "龙年吉祥";
-                dragon1.className = 'dragon-gif-bg';
-                desktopBackground.appendChild(dragon1);
-                
-                // 第二只龙 - 反向游动
-                const dragon2 = document.createElement('img');
-                dragon2.src = dragonGifUrl;
-                dragon2.alt = "龙年吉祥";
-                dragon2.className = 'dragon-gif-bg second';
-                desktopBackground.appendChild(dragon2);
-                
-                // 第三只龙 - 垂直游动
-                const dragon3 = document.createElement('img');
-                dragon3.src = dragonGifUrl;
-                dragon3.alt = "龙年吉祥";
-                dragon3.className = 'dragon-gif-bg third';
-                desktopBackground.appendChild(dragon3);
+                const horse = document.createElement('img');
+                horse.src = horseGifUrl;
+                horse.alt = "马年吉祥";
+                horse.className = 'horse-gif-bg';
+                desktopBackground.appendChild(horse);
             }
             
-            // 为移动端搜索框添加龙年GIF
+            // 为移动端搜索框添加马年GIF
             if (mobileBackground) {
-                // 第一只龙 - 主要游动
-                const dragon1 = document.createElement('img');
-                dragon1.src = dragonGifUrl;
-                dragon1.alt = "龙年吉祥";
-                dragon1.className = 'dragon-gif-bg';
-                mobileBackground.appendChild(dragon1);
-                
-                // 第二只龙 - 反向游动
-                const dragon2 = document.createElement('img');
-                dragon2.src = dragonGifUrl;
-                dragon2.alt = "龙年吉祥";
-                dragon2.className = 'dragon-gif-bg second';
-                mobileBackground.appendChild(dragon2);
-                
-                // 第三只龙 - 垂直游动
-                const dragon3 = document.createElement('img');
-                dragon3.src = dragonGifUrl;
-                dragon3.alt = "龙年吉祥";
-                dragon3.className = 'dragon-gif-bg third';
-                mobileBackground.appendChild(dragon3);
+                const horse = document.createElement('img');
+                horse.src = horseGifUrl;
+                horse.alt = "马年吉祥";
+                horse.className = 'horse-gif-bg';
+                mobileBackground.appendChild(horse);
             }
-            
-            // 添加龙年GIF加载完成后的效果
-            setTimeout(() => {
-                const dragons = document.querySelectorAll('.dragon-gif-bg');
-                dragons.forEach((dragon, index) => {
-                    dragon.style.opacity = '0.8';
-                });
-            }, 100);
         }
 
         // ==================== 初始化函数 ====================
@@ -3805,8 +3644,8 @@
             // 初始化Fliqlo时间显示
             initFliqloTimeDisplay();
             
-            // 创建龙年GIF游动效果
-            createDragonAnimation();
+            // 创建马年GIF动画
+            createHorseAnimation();
             
             // 加载天气配置并初始化天气
             loadWeatherConfig();
