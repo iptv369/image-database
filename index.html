@@ -3901,6 +3901,19 @@
             const calendarGrid = document.getElementById('calendarModuleGridFixed');
             calendarGrid.innerHTML = '';
             
+            // 添加星期标题
+            const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+            for (let i = 0; i < 7; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-module-date-cell-fixed';
+                dayElement.textContent = weekDays[i];
+                // 为星期天特别标记
+                if (i === 0) {
+                    dayElement.style.color = '#ff9a00'; // 红色表示星期天
+                }
+                calendarGrid.appendChild(dayElement);
+            }
+            
             const today = new Date();
             
             // 生成日历
@@ -4007,6 +4020,25 @@
             // 加载天气配置并初始化天气
             loadWeatherConfig();
             await initializeRealWeather();
+            
+            // 为天气位置添加点击事件以切换城市
+            const weatherLocationElement = document.getElementById('weatherModuleLocationFixed');
+            if (weatherLocationElement) {
+                weatherLocationElement.style.cursor = 'pointer';
+                weatherLocationElement.title = '点击切换城市';
+                weatherLocationElement.addEventListener('click', function() {
+                    const newCity = prompt('请输入新的城市名称:', currentWeatherCity);
+                    if (newCity && newCity.trim() !== '') {
+                        currentWeatherCity = newCity.trim();
+                        localStorage.setItem('weatherConfig', JSON.stringify({
+                            apiKey: weatherApiKey,
+                            city: currentWeatherCity
+                        }));
+                        initializeRealWeather(); // 重新初始化天气
+                        showCopyNotification('✅ 已切换到 ' + currentWeatherCity);
+                    }
+                });
+            }
             
             // 初始化固定飞船模块
             const now = new Date();
