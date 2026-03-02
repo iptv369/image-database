@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>尺寸表搜索 · 横竖屏适配版</title>
+    <title>尺寸表搜索 · 数据加载修复版</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         /* ===== 全局 & 樱花 ===== */
@@ -84,13 +84,60 @@
         .weather-module-icon-fixed { font-size:36px; }
         .weather-module-desc-fixed { font-size:14px; text-align:center; margin-bottom:10px; }
         .weather-module-details-fixed { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; font-size:12px; }
+        
+        /* 日历模块样式 - 修复版本 */
+        .calendar-module-fixed {
+            min-height: 320px !important;
+        }
         .calendar-module-header-fixed { text-align:center; }
         .calendar-module-title-fixed { color:#ff9eb0; font-size:18px; margin-bottom:10px; display:flex; justify-content:center; gap:8px; }
         .calendar-module-date-fixed { font-size:24px; font-weight:bold; color:#333; margin-bottom:5px; }
         .calendar-module-lunar-fixed { font-size:14px; color:#ffd166; background:rgba(255,209,102,0.1); padding:5px 12px; border-radius:20px; display:inline-block; margin-bottom:10px; }
-        .calendar-module-grid-fixed { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-        .calendar-module-date-cell-fixed { text-align:center; padding:8px; font-size:12px; border-radius:8px; background:rgba(255,240,245,0.5); border:1px solid rgba(255,190,176,0.1); }
-        .calendar-module-date-cell-fixed.today { background:linear-gradient(145deg, #ff9eb0, #ff7eb5); color:white; font-weight:bold; }
+        
+        /* 修复的日历网格样式 */
+        .calendar-module-grid-fixed {
+            display: grid !important;
+            grid-template-columns: repeat(7, 1fr) !important;
+            gap: 4px !important;
+            margin-top: 10px !important;
+            width: 100% !important;
+        }
+        
+        .calendar-module-date-cell-fixed {
+            text-align: center !important;
+            padding: 8px 2px !important;
+            font-size: 12px !important;
+            border-radius: 6px !important;
+            background: rgba(255, 240, 245, 0.5) !important;
+            border: 1px solid rgba(255, 190, 176, 0.1) !important;
+            aspect-ratio: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-module-date-cell-fixed:hover {
+            background: rgba(255, 158, 176, 0.2) !important;
+            transform: scale(1.05);
+        }
+        
+        .calendar-module-date-cell-fixed.today {
+            background: linear-gradient(145deg, #ff9eb0, #ff7eb5) !important;
+            color: white !important;
+            font-weight: bold !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(255, 126, 181, 0.4);
+        }
+        
+        .calendar-module-date-cell-fixed.weekday-header {
+            font-weight: bold !important;
+            background: rgba(255, 158, 176, 0.15) !important;
+            color: #ff7eb5 !important;
+            border: none !important;
+            aspect-ratio: auto !important;
+            padding: 6px 2px !important;
+        }
 
         /* 左侧花鸟装饰 (桌面≥1025px显示) */
         .illustration-container { position:fixed; left:20px; top:50%; transform:translateY(-50%); width:200px; height:350px; z-index:0; opacity:0.9; display:none; }
@@ -116,8 +163,8 @@
             margin-bottom:20px; border-left:5px solid #ff9eb0; backdrop-filter:blur(10px);
         }
         h1 { color:#ff9eb0; margin-bottom:15px; font-size:1.8rem; display:flex; align-items:center; gap:10px; }
-        .update-status { background:rgba(28,37,65,0.8); padding:12px; border-radius:8px; margin:15px 0; font-size:14px; border-left:4px solid #5bc0be; color:white; }
-        .search-type { display:flex; gap:10px; margin-bottom:15px; }
+        .update-status { background:rgba(28,37,65,0.8); padding:12px; border-radius:8px; margin:15px 0; font-size:14px; border-left:4px solid #5bc0be; color:white; transition:0.3s; }
+        .search-type { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
         .search-type-btn {
             padding:10px 15px; background:rgba(28,37,65,0.8); color:rgba(255,255,255,0.7);
             border:1px solid rgba(123,239,255,0.2); border-radius:6px; cursor:pointer; font-weight:500;
@@ -163,7 +210,7 @@
             width:100%; height:50px; gap:8px; transition:0.3s;
         }
 
-        /* ===== 时间 & 结果区域 (flex布局) ===== */
+        /* ===== 时间 & 结果区域 ===== */
         .main-content { display:flex; gap:25px; margin-bottom:25px; width:100%; }
         .time-display-container {
             background:rgba(255,240,245,0.9); padding:20px; border-radius:12px; box-shadow:0 5px 20px rgba(0,0,0,0.1);
@@ -180,8 +227,9 @@
         .directory-list { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
         .directory-item {
             padding:12px 16px; border:1px solid rgba(255,190,176,0.3); border-radius:8px; cursor:pointer;
-            background:white; min-width:140px; color:#333; text-align:center;
+            background:white; min-width:140px; color:#333; text-align:center; transition:0.2s;
         }
+        .directory-item:hover { background:#ffe4e1; }
         .directory-item.active { background:linear-gradient(45deg,#ff9eb0,#ff7eb5); color:white; }
 
         /* 图片 & 重量卡片 */
@@ -208,81 +256,28 @@
         .modal-content { max-width:90%; max-height:90%; background:rgba(255,240,245,0.95); border-radius:12px; overflow:hidden; }
         .modal-close { position:absolute; top:15px; right:15px; background:rgba(255,190,176,0.8); color:white; border:none; width:40px; height:40px; border-radius:50%; font-size:1.5rem; cursor:pointer; z-index:1001; }
 
-        /* ===== 核心：横竖屏显示控制 ===== */
-        /* 手机 & 平板：竖屏不显示时间容器 */
+        /* ===== 横竖屏显示控制 ===== */
         @media (max-width: 1024px) and (orientation: portrait) {
-            .time-display-container {
-                display: none !important;
-            }
-            .main-content {
-                flex-direction: column;
-            }
-            .results-container {
-                width: 100%;
-            }
+            .time-display-container { display: none !important; }
+            .main-content { flex-direction: column; }
+            .results-container { width: 100%; }
         }
-
-        /* 手机 & 平板：横屏显示时间，但隐藏右侧飞船日历（因右侧模块只在≥1025px显示，此处无需额外规则，但确保时间容器可见） */
         @media (max-width: 1024px) and (orientation: landscape) {
-            .time-display-container {
-                display: flex !important;
-                width: 45% !important;
-                min-width: 45% !important;
-                height: 400px;
-            }
-            .main-content {
-                flex-direction: row !important;
-            }
-            .results-container {
-                width: 55% !important;
-            }
-            /* 强制隐藏飞船日历（虽然在1024px以下默认不显示，但双重保证） */
-            .spaceship-weather-calendar {
-                display: none !important;
-            }
+            .time-display-container { display: flex !important; width: 45% !important; min-width: 45% !important; height: 400px; }
+            .main-content { flex-direction: row !important; }
+            .results-container { width: 55% !important; }
+            .spaceship-weather-calendar { display: none !important; }
         }
-
-        /* 手机小屏 (<768) 横屏时时间容器适配 */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .time-display-container {
-                width: 45% !important;
-                min-width: 45% !important;
-                height: 350px;
-            }
-        }
-
-        /* 桌面 (≥1025px) 始终显示时间，并显示右侧飞船日历 */
         @media (min-width: 1025px) {
-            .time-display-container {
-                display: flex !important;
-                width: 35% !important;
-                min-width: 320px;
-            }
+            .time-display-container { display: flex !important; width: 35% !important; min-width: 320px; }
         }
-
-        /* 移动端/平板搜索栏切换：小于1025px且竖屏时使用移动端布局（输入框可点） */
         @media (max-width: 1024px) {
-            /* 竖屏或横屏都采用移动端布局以保证输入框可点 (但横屏也可用移动端布局，输入框正常) */
-            .desktop-search-layout {
-                display: none !important;
-            }
-            .mobile-search-layout {
-                display: flex !important;
-            }
-            /* 确保输入框可点击（移除任何pointer-events限制） */
-            .mobile-search-input, .mobile-search-btn {
-                pointer-events: auto !important;
-                touch-action: manipulation;
-            }
+            .desktop-search-layout { display: none !important; }
+            .mobile-search-layout { display: flex !important; }
+            .mobile-search-input, .mobile-search-btn { pointer-events: auto !important; touch-action: manipulation; }
         }
 
-        /* 极窄屏微调 */
-        @media (max-width: 480px) {
-            .mobile-search-row { height: 45px; }
-            .mobile-search-input { font-size: 16px; }
-        }
-
-        /* 其他辅助 */
+        /* 通知 */
         .copy-notification { position:fixed; top:20px; right:20px; background:#2ecc71; color:white; padding:12px 20px; border-radius:8px; z-index:10000; animation:slideIn 0.3s; }
         @keyframes slideIn { from{transform:translateX(100%); opacity:0} to{transform:translateX(0); opacity:1} }
     </style>
@@ -372,13 +367,13 @@
             <div class="results-info" id="resultsInfo"></div>
         </div>
 
-        <div class="directory-container" id="directoryContainer" style="display: none;">
-            <h3>📁 选择数据目录</h3>
+        <div class="directory-container" id="directoryContainer">
+            <h3>📁 数据源 (点击加载)</h3>
             <div class="directory-list" id="directoryList"></div>
         </div>
 
         <div class="main-content">
-            <!-- 时间显示区域 (横屏手机/平板可见，竖屏隐藏) -->
+            <!-- 时间显示区域 -->
             <div class="time-display-container" id="timeDisplayContainer">
                 <h2>⏰ 时间显示</h2>
                 <div class="time-wrapper">
@@ -398,115 +393,383 @@
 
             <!-- 搜索结果区域 -->
             <div class="results-container" id="results">
-                <div class="status-info"><p>📥 正在加载数据，请稍候...</p></div>
+                <div class="status-info"><p>📥 请选择数据源并输入款号搜索</p></div>
             </div>
         </div>
     </div>
 
     <script>
         // ========== 配置 & 全局变量 ==========
-        const DATA_DIRECTORIES = [{ name:"本地数据文件", url:"./images.json" }, { name:"CDN备份", url:"https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json" }];
-        const SAMPLE_DATA = [{ code:"17A3", description:"示例图片1", date:"2023-10-01", url:"https://picsum.photos/id/1/300/200" }];
-        let weightData = { "17A3":{"S":"220g","M":"240g","L":"260g"} };
-        let imageData = [], currentSearchType = 'image', currentDataSource = null, weatherApiKey = "", currentWeatherCity = "东莞";
+        const DATA_DIRECTORIES = [
+            { name: "📁 本地数据 images.json", url: "./images.json" },
+            { name: "☁️ CDN备份", url: "https://cdn.jsdelivr.net/gh/iptv369/image-database@main/images.json" }
+        ];
+        
+        // 扩展的示例数据，让搜索更丰富
+        const SAMPLE_DATA = [
+            { code: "17A3", description: "连衣裙尺寸图", date: "2025-01-01", url: "https://picsum.photos/id/20/400/300" },
+            { code: "9002", description: "外套尺码表", date: "2025-01-02", url: "https://picsum.photos/id/21/400/300" },
+            { code: "A011", description: "裤子规格图", date: "2025-01-03", url: "https://picsum.photos/id/22/400/300" },
+            { code: "B235", description: "衬衫尺寸表", date: "2025-01-04", url: "https://picsum.photos/id/23/400/300" }
+        ];
+
+        // 重量数据
+        let weightData = {
+            "17A3": { "S": "220g", "M": "240g", "L": "260g", "XL": "280g" },
+            "9002": { "TU": "118g" },
+            "A011": { "M": "240g", "L": "260g", "XL": "280g" },
+            "B235": { "S": "180g", "M": "200g", "L": "220g" }
+        };
+
+        let imageData = [];              // 实际加载的数据
+        let currentSearchType = 'image';
+        let currentDataSource = null;
+        let currentWeatherCity = "东莞";
 
         // ========== Fliqlo时钟 ==========
         function updateFliqloTime() {
             const now = new Date();
-            const h = now.getHours().toString().padStart(2,'0'), m = now.getMinutes().toString().padStart(2,'0'), s = now.getSeconds().toString().padStart(2,'0');
-            const el = id => document.getElementById(id);
-            if(el('hour1')) { el('hour1').textContent = h[0]; el('hour2').textContent = h[1]; el('minute1').textContent = m[0]; el('minute2').textContent = m[1]; el('second1').textContent = s[0]; el('second2').textContent = s[1]; }
-            if(el('dateDisplay')) el('dateDisplay').textContent = now.toISOString().slice(0,10);
+            const h = now.getHours().toString().padStart(2,'0');
+            const m = now.getMinutes().toString().padStart(2,'0');
+            const s = now.getSeconds().toString().padStart(2,'0');
+            const get = id => document.getElementById(id);
+            if(get('hour1')) {
+                get('hour1').textContent = h[0];
+                get('hour2').textContent = h[1];
+                get('minute1').textContent = m[0];
+                get('minute2').textContent = m[1];
+                get('second1').textContent = s[0];
+                get('second2').textContent = s[1];
+            }
+            if(get('dateDisplay')) {
+                get('dateDisplay').textContent = now.toISOString().slice(0,10);
+            }
         }
         setInterval(updateFliqloTime, 1000);
         updateFliqloTime();
 
-        // ========== 天气/日历模块 (简版) ==========
-        async function fetchRealWeather() {
-            // 模拟天气
-            const mock = { temperature:25, condition:'晴', humidity:60, windSpeed:3, feelsLike:26, icon:'☀️' };
-            document.getElementById('weatherModuleTempFixed').textContent = '25°C';
-            document.getElementById('weatherModuleIconFixed').textContent = '☀️';
-            document.getElementById('weatherModuleDescFixed').textContent = '晴朗';
-            document.getElementById('weatherModuleHumidityFixed').textContent = '60%';
-            document.getElementById('weatherModuleWindFixed').textContent = '3 m/s';
-            document.getElementById('weatherModuleFeelsLikeFixed').textContent = '26°C';
+        // ========== 天气日历模拟 ==========
+        function updateWeatherMock() {
+            const mock = { temperature:26, condition:'多云', humidity:65, windSpeed:2.5, feelsLike:27, icon:'☁️' };
+            document.getElementById('weatherModuleLocationFixed').textContent = currentWeatherCity;
+            document.getElementById('weatherModuleTempFixed').textContent = '26°C';
+            document.getElementById('weatherModuleIconFixed').textContent = '☁️';
+            document.getElementById('weatherModuleDescFixed').textContent = '多云';
+            document.getElementById('weatherModuleHumidityFixed').textContent = '65%';
+            document.getElementById('weatherModuleWindFixed').textContent = '2.5 m/s';
+            document.getElementById('weatherModuleFeelsLikeFixed').textContent = '27°C';
         }
-        function generateFixedCalendar() {
-            const now = new Date(), y=now.getFullYear(), m=now.getMonth(), d=now.getDate();
-            document.getElementById('calendarModuleDateFixed').textContent = `${m+1}月${d}日`;
-            document.getElementById('calendarModuleLunarFixed').textContent = '农历乙巳年三月初五';
+        
+        // ========== 修复的日历生成函数 ==========
+        function generateCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const date = now.getDate();
+            
+            // 更新年月日显示
+            document.getElementById('calendarModuleDateFixed').textContent = `${month + 1}月${date}日`;
+            
+            // 农历简化显示
+            const lunarMonths = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
+            const lunarYear = '乙巳年'; // 2025年是乙巳年，简化处理
+            document.getElementById('calendarModuleLunarFixed').textContent = `农历${lunarYear}${lunarMonths[month]}`;
+            
+            // 获取当月第一天和最后一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            // 获取当月第一天是星期几（0是周日，1是周一，... 6是周六）
+            let firstDayOfWeek = firstDay.getDay();
+            // 调整为周一为一周的第一天（0是周一，6是周日）
+            firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+            
+            const daysInMonth = lastDay.getDate();
+            
+            // 生成日历网格
             const grid = document.getElementById('calendarModuleGridFixed');
-            if(!grid) return;
+            if (!grid) return;
+            
             grid.innerHTML = '';
-            for(let i=0; i<7; i++) grid.innerHTML += `<div class="calendar-module-date-cell-fixed ${i===2?'today':''}">${i+1}</div>`;
+            grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+            
+            // 添加星期标题
+            const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+            weekdays.forEach(day => {
+                const headerCell = document.createElement('div');
+                headerCell.className = 'calendar-module-date-cell-fixed weekday-header';
+                headerCell.textContent = day;
+                grid.appendChild(headerCell);
+            });
+            
+            // 填充月初空白
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-module-date-cell-fixed';
+                emptyCell.style.background = 'transparent';
+                emptyCell.style.border = 'none';
+                emptyCell.style.boxShadow = 'none';
+                emptyCell.textContent = '';
+                grid.appendChild(emptyCell);
+            }
+            
+            // 填充日期
+            for (let i = 1; i <= daysInMonth; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-module-date-cell-fixed';
+                if (i === date) {
+                    cell.classList.add('today');
+                }
+                cell.textContent = i;
+                grid.appendChild(cell);
+            }
+            
+            // 计算需要补充的空白单元格，确保最后一行完整
+            const totalCells = grid.children.length;
+            const remainder = totalCells % 7;
+            if (remainder !== 0) {
+                const blanksNeeded = 7 - remainder;
+                for (let i = 0; i < blanksNeeded; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-module-date-cell-fixed';
+                    emptyCell.style.background = 'transparent';
+                    emptyCell.style.border = 'none';
+                    emptyCell.style.boxShadow = 'none';
+                    emptyCell.textContent = '';
+                    grid.appendChild(emptyCell);
+                }
+            }
         }
-        fetchRealWeather(); generateFixedCalendar();
+        
+        updateWeatherMock();
+        generateCalendar();
 
-        // ========== 初始化 ==========
-        async function initialize() {
-            createSakuraPetals();
-            document.getElementById('updateStatus').innerHTML = '✅ 数据加载就绪 (示例模式)';
-            imageData = SAMPLE_DATA;
-            document.getElementById('results').innerHTML = '<div class="status-info"><p>请选择搜索类型并输入款号</p></div>';
+        // ========== 核心：数据加载 ==========
+        function updateStatus(message, type = 'info') {
+            const el = document.getElementById('updateStatus');
+            if(!el) return;
+            el.innerHTML = message;
+            const colors = { success: '#2ecc71', warning: '#f39c12', error: '#e74c3c', info: '#5bc0be' };
+            el.style.borderLeftColor = colors[type] || '#5bc0be';
+            el.style.background = type === 'error' ? 'rgba(231,76,60,0.2)' : 'rgba(28,37,65,0.8)';
         }
+
+        // 尝试加载数据 (带超时)
+        async function loadFromDirectory(index) {
+            const dir = DATA_DIRECTORIES[index];
+            currentDataSource = dir;
+            
+            // 高亮选中的目录项
+            document.querySelectorAll('.directory-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+
+            updateStatus(`⏳ 正在从 ${dir.name} 加载数据...`, 'info');
+
+            // 先尝试加载本地数据
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
+
+                const url = dir.url.includes('?') ? `${dir.url}&t=${Date.now()}` : `${dir.url}?t=${Date.now()}`;
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        imageData = data;
+                        updateStatus(`✅ 成功加载 ${imageData.length} 张图片`, 'success');
+                        document.getElementById('resultsInfo').innerHTML = `<p>当前数据源: ${dir.name} (${imageData.length}项)</p>`;
+                        // 清空结果区，等待搜索
+                        document.getElementById('results').innerHTML = `<div class="status-info"><p>数据就绪，请输入款号搜索</p></div>`;
+                        return;
+                    } else {
+                        throw new Error('数据格式异常或为空');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (err) {
+                console.warn(`${dir.name} 加载失败:`, err);
+                // 如果这是第一个源且失败，尝试第二个；如果第二个也失败，使用示例
+                if (index === 0 && DATA_DIRECTORIES.length > 1) {
+                    updateStatus(`⚠️ 本地数据加载失败，尝试CDN备份...`, 'warning');
+                    loadFromDirectory(1); // 递归尝试下一个
+                } else {
+                    // 所有远程源失败，使用示例数据
+                    updateStatus(`🔄 使用内置示例数据 (${SAMPLE_DATA.length}张图片)`, 'warning');
+                    imageData = SAMPLE_DATA.slice(); // 复制一份
+                    document.getElementById('resultsInfo').innerHTML = `<p>当前数据源: 内置示例 (${imageData.length}项)</p>`;
+                    document.getElementById('results').innerHTML = `<div class="status-info"><p>示例模式，输入款号可搜索</p></div>`;
+                }
+            }
+        }
+
+        // 初始化目录列表
+        function renderDirectories() {
+            const list = document.getElementById('directoryList');
+            list.innerHTML = DATA_DIRECTORIES.map((dir, idx) => 
+                `<div class="directory-item" onclick="loadFromDirectory(${idx})">${dir.name}</div>`
+            ).join('');
+            // 默认尝试加载第一个
+            setTimeout(() => loadFromDirectory(0), 100);
+        }
+
+        // ========== 搜索功能 ==========
+        function searchImages(query) {
+            if (!imageData || imageData.length === 0) {
+                alert('数据未加载，请先选择数据源');
+                return;
+            }
+            const lowerQ = query.toLowerCase();
+            const results = imageData.filter(img => 
+                img.code.toLowerCase().includes(lowerQ) || 
+                (img.description && img.description.toLowerCase().includes(lowerQ))
+            );
+
+            document.getElementById('resultsInfo').innerHTML = `<p>找到 ${results.length} 个图片结果 (共 ${imageData.length} 张)</p>`;
+            
+            const container = document.getElementById('results');
+            if (results.length === 0) {
+                container.innerHTML = `<div class="status-info"><p>没有找到与 "<strong>${query}</strong>" 匹配的图片</p></div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="image-results">
+                    ${results.map(img => `
+                        <div class="image-card" onclick="openImageModal('${img.url}', '${img.code}')">
+                            <div class="image-wrapper">
+                                <img src="${img.url}" alt="${img.code}" onerror="this.src='https://picsum.photos/400/300?random=1'">
+                            </div>
+                            <div class="image-info">
+                                <div class="image-code">${img.code}</div>
+                                <div style="font-size:12px;">${img.description || ''}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function searchWeights(query) {
+            const lowerQ = query.toLowerCase();
+            const results = [];
+            for (const [code, specs] of Object.entries(weightData)) {
+                if (code.toLowerCase().includes(lowerQ)) results.push({ code, specs });
+            }
+
+            document.getElementById('resultsInfo').innerHTML = `<p>找到 ${results.length} 个重量结果</p>`;
+            const container = document.getElementById('results');
+            if (results.length === 0) {
+                container.innerHTML = `<div class="status-info"><p>没有找到与 "<strong>${query}</strong>" 匹配的重量数据</p></div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="weight-results">
+                    ${results.map(item => `
+                        <div class="weight-card">
+                            <div class="weight-header">
+                                <span>${item.code}</span>
+                                <button onclick="copyWeight('${item.code}')" style="background:rgba(255,255,255,0.2); border:1px solid white; border-radius:4px; padding:4px 8px; color:white;">📋复制</button>
+                            </div>
+                            <div class="weight-content">
+                                <div class="weight-specs">
+                                    ${Object.entries(item.specs).map(([k,v]) => `
+                                        <div class="weight-spec-item"><span class="weight-spec-name">${k}</span><span class="weight-spec-value">${v}</span></div>
+                                    `).join('')}
+                                </div>
+                                <button class="copy-all-btn" onclick="copyWeight('${item.code}')">复制整款重量</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function performSearch(query) {
+            if (!query.trim()) return;
+            if (currentSearchType === 'image') searchImages(query);
+            else searchWeights(query);
+        }
+
+        // ========== 辅助函数 ==========
+        window.setSearchType = (type) => {
+            currentSearchType = type;
+            document.getElementById('imageSearchBtn').classList.toggle('active', type==='image');
+            document.getElementById('weightSearchBtn').classList.toggle('active', type==='weight');
+        };
+
+        window.searchDesktop = () => {
+            const q = document.getElementById('searchInputDesktop').value.trim();
+            if(q) performSearch(q);
+        };
+        window.searchMobile = () => {
+            const q = document.getElementById('searchInputMobile').value.trim();
+            if(q) performSearch(q);
+        };
+
+        // 同步输入框
+        document.getElementById('searchInputDesktop')?.addEventListener('input', (e) => {
+            document.getElementById('searchInputMobile').value = e.target.value;
+        });
+        document.getElementById('searchInputMobile')?.addEventListener('input', (e) => {
+            document.getElementById('searchInputDesktop').value = e.target.value;
+        });
+        document.getElementById('searchInputDesktop')?.addEventListener('keypress', (e) => e.key==='Enter' && searchDesktop());
+        document.getElementById('searchInputMobile')?.addEventListener('keypress', (e) => e.key==='Enter' && searchMobile());
+
+        window.openImageModal = (url, code) => {
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = url;
+            modal.classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('imageModal').classList.remove('active');
+
+        window.copyWeight = (code) => {
+            const specs = weightData[code];
+            if (!specs) return;
+            const text = `${code}克重: ` + Object.entries(specs).map(([k,v])=>`${k}:${v}`).join(' ');
+            navigator.clipboard.writeText(text).then(() => {
+                const notif = document.createElement('div');
+                notif.className = 'copy-notification';
+                notif.textContent = `✅ 已复制 ${code}`;
+                document.body.appendChild(notif);
+                setTimeout(() => notif.remove(), 2000);
+            });
+        };
+
+        window.closeAnnouncement = () => document.getElementById('announcementBar').classList.add('hidden');
 
         // 樱花
-        function createSakuraPetals() {
-            const container = document.getElementById('sakura');
-            for(let i=0;i<20;i++) {
-                const p = document.createElement('div'); p.className = 'sakura-petal';
-                p.style.width = (Math.random()*10+5)+'px'; p.style.height = p.style.width;
-                p.style.left = Math.random()*100+'%'; p.style.animationDuration = (Math.random()*5+8)+'s';
-                p.style.animationDelay = Math.random()*5+'s'; container.appendChild(p);
+        function createSakura() {
+            const sakura = document.getElementById('sakura');
+            for (let i=0;i<25;i++) {
+                const p = document.createElement('div');
+                p.className = 'sakura-petal';
+                const size = Math.random()*10+6;
+                p.style.width = size+'px';
+                p.style.height = size+'px';
+                p.style.left = Math.random()*100+'%';
+                p.style.animationDuration = (Math.random()*5+8)+'s';
+                p.style.animationDelay = Math.random()*5+'s';
+                sakura.appendChild(p);
             }
         }
 
         // 公告
-        function loadAnnouncements() {
-            const scroll = document.getElementById('announcementScroll');
-            if(scroll) scroll.innerText = '🎉 欢迎使用尺寸表搜索工具 | 手机竖屏隐藏时间，横屏显示时间，右侧日历仅桌面可见';
-        }
-        loadAnnouncements();
-        window.closeAnnouncement = () => document.getElementById('announcementBar').classList.add('hidden');
+        document.getElementById('announcementScroll').innerText = '🌸 点击目录加载数据 | 手机竖屏隐藏时间，横屏显示 | 数据加载失败将使用示例';
 
-        // 搜索类型
-        window.setSearchType = (type) => {
-            currentSearchType = type;
-            document.getElementById('imageSearchBtn').classList.toggle('active',type==='image');
-            document.getElementById('weightSearchBtn').classList.toggle('active',type==='weight');
+        // 初始化
+        window.onload = () => {
+            createSakura();
+            renderDirectories();
         };
 
-        // 搜索函数 (简版)
-        function performSearch(query) {
-            if(!query) return;
-            const results = document.getElementById('results');
-            if(currentSearchType === 'image') {
-                results.innerHTML = `<div class="image-results"><div class="image-card"><div class="image-wrapper"><img src="https://picsum.photos/300/200?random=1"></div><div class="image-info"><div class="image-code">示例款号: ${query}</div></div></div></div>`;
-            } else {
-                results.innerHTML = `<div class="weight-results"><div class="weight-card"><div class="weight-header"><span>${query}</span><button>📋复制</button></div><div class="weight-content"><div class="weight-specs"><div class="weight-spec-item">S: 220g</div></div></div></div></div>`;
-            }
-            document.getElementById('resultsInfo').innerHTML = `<p>找到 1 个结果</p>`;
-        }
-
-        window.searchDesktop = () => { const q = document.getElementById('searchInputDesktop').value.trim(); if(q) performSearch(q); };
-        window.searchMobile = () => { const q = document.getElementById('searchInputMobile').value.trim(); if(q) performSearch(q); };
-
-        // 同步两个输入框
-        document.getElementById('searchInputDesktop')?.addEventListener('input', (e) => document.getElementById('searchInputMobile').value = e.target.value);
-        document.getElementById('searchInputMobile')?.addEventListener('input', (e) => document.getElementById('searchInputDesktop').value = e.target.value);
-        document.getElementById('searchInputDesktop')?.addEventListener('keypress', (e) => e.key==='Enter' && searchDesktop());
-        document.getElementById('searchInputMobile')?.addEventListener('keypress', (e) => e.key==='Enter' && searchMobile());
-
-        // 模态框
-        window.openImageModal = (url, code) => { const m=document.getElementById('imageModal'); m.querySelector('#modalImage').src=url; m.classList.add('active'); };
-        window.closeModal = () => document.getElementById('imageModal').classList.remove('active');
-
-        // 其他占位函数
-        window.loadFromDirectory = () => { alert('示例模式，请自行接入数据'); };
-
-        // 启动
-        initialize();
+        // 每小时更新一次农历（简化）
+        setInterval(generateCalendar, 3600000);
     </script>
 </body>
 </html>
