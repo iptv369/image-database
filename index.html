@@ -16,55 +16,18 @@
     <style>
         /* ==================== Fliqlo风格时间显示 ==================== */
         .fliqlo-time-display {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #0a0e2a;
+            background: linear-gradient(135deg, #fff0f5 0%, #e8f5e9 100%);
             z-index: 100;
-            cursor: pointer;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             overflow: hidden;
-        }
-
-        /* GIF背景容器 - 居中显示不拉伸 */
-        .fliqlo-gif-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .fliqlo-gif-background img {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            opacity: 0.5;
-        }
-
-        /* 添加半透明遮罩，让时间文字更清晰 */
-        .fliqlo-time-display::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 42, 0.6);
-            z-index: 2;
+            border-radius: 12px;
         }
 
         .fliqlo-clock {
@@ -72,69 +35,48 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 3;
+            padding: 20px;
         }
 
         .time-digits {
             display: flex;
-            gap: 12px;
-            font-size: 3.5rem;
+            gap: 5px;
+            font-size: 4rem;
             font-weight: 300;
-            color: #ffffff;
+            color: #333;
             letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(123, 239, 255, 0.7);
+            text-shadow: 0 2px 5px rgba(255, 158, 176, 0.3);
+            line-height: 1;
         }
 
         .time-colon {
-            opacity: 0.8;
+            opacity: 0.7;
             animation: blink 1s infinite;
+            color: #ff9eb0;
+            margin: 0 2px;
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.3; }
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.2; }
         }
 
         .time-separator {
-            width: 80%;
+            width: 60%;
             height: 2px;
-            background: rgba(123, 239, 255, 0.4);
-            margin: 8px 0;
+            background: linear-gradient(90deg, transparent, #ff9eb0, transparent);
+            margin: 5px 0;
         }
 
         .date-display {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.95);
-            margin-top: 8px;
+            font-size: 1.5rem;
+            color: #ff9eb0;
+            margin-top: 5px;
             text-align: center;
-            background: rgba(10, 14, 42, 0.5);
-            padding: 8px 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            border: 0.1px solid rgba(123, 239, 255, 0.2);
-        }
-
-        .unlock-hint {
-            position: absolute;
-            bottom: 15px;
-            font-size: 0.8rem;
-            color: rgba(123, 239, 255, 0.8);
-            text-align: center;
-            background: rgba(10, 14, 42, 0.7);
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: 0.1px solid rgba(123, 239, 255, 0.2);
-            animation: subtlePulse 2s infinite;
-            z-index: 3;
-        }
-
-        @keyframes subtlePulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
         /* ==================== 其他样式保持不变 ==================== */
@@ -144,77 +86,22 @@
             padding: 0;
         }
         
-        /* 跑马灯边框动画 - 较慢版本 */
-        @keyframes marqueeBorder {
-            0% { box-shadow: inset 0 0 6px #ff0000; }
-            12.5% { box-shadow: inset 0 0 6px #ff8000; }
-            25% { box-shadow: inset 0 0 6px #ffff00; }
-            37.5% { box-shadow: inset 0 0 6px #00ff00; }
-            50% { box-shadow: inset 0 0 6px #00ffff; }
-            62.5% { box-shadow: inset 0 0 6px #0080ff; }
-            75% { box-shadow: inset 0 0 6px #0000ff; }
-            87.5% { box-shadow: inset 0 0 6px #8000ff; }
-            100% { box-shadow: inset 0 0 6px #ff0000; }
-        }
-        
-        /* 为所有带边框的元素添加跑马灯效果 */
-        .weather-module-fixed,
-        .weather-module-detail-item-fixed,
-        .calendar-module-fixed,
-        .calendar-module-date-cell-fixed,
-        .weather-container,
-        .weather-detail-item,
-        .weather-refresh,
-        .weather-config-input,
-        .weather-config-btn,
-        .calendar-day,
-        .calendar-date,
-        .calendar-footer-item,
-        .announcement-bar,
-        .announcement-close,
-        .search-container,
-        .desktop-search-row,
-        .desktop-search-btn,
-        .mobile-search-row,
-        .mobile-search-btn,
-        .search-type-btn,
-        .results-info,
-        .time-display-container,
-        .time-wrapper,
-        .results-container,
-        .image-card,
-        .directory-container,
-        .directory-item,
-        .update-status,
-        .weight-card,
-        .weight-spec-item,
-        .copy-all-btn,
-        .modal-content,
-        .modal-close,
-        .copy-notification {
-            border: none !important;
-            border-radius: 8px !important;
-            animation: marqueeBorder 3s linear infinite !important;
-        }
-        
-        /* 星空背景 */
+        /* 春天樱花背景 */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background: #0a0e2a;
-            color: #fff;
+            background: linear-gradient(135deg, #fff0f5 0%, #e8f5e9 50%, #f1f8e9 100%);
+            color: #333;
             line-height: 1.6;
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
         }
         
-        /* 星空效果 */
-        #stars {
+        /* 樱花飘落效果 */
+        #sakura {
             position: fixed;
             top: 0;
             left: 0;
@@ -224,25 +111,67 @@
             pointer-events: none;
         }
         
-        .star {
+        .sakura-petal {
             position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite alternate;
+            background: radial-gradient(circle, #ffb7b2, #ff9eb0);
+            border-radius: 150% 0 150% 0;
+            animation: sakuraFall linear infinite;
         }
         
-        @keyframes twinkle {
-            0% { 
-                opacity: 0.3; 
-                transform: scale(1);
+        @keyframes sakuraFall {
+            0% {
+                transform: translate(0, -10vh) rotate(0deg);
+                opacity: 1;
             }
-            50% {
-                opacity: 0.9;
-                transform: scale(1.2);
+            100% {
+                transform: translate(100px, 110vh) rotate(360deg);
+                opacity: 0;
             }
-            100% { 
-                opacity: 0.5; 
+        }
+        
+        /* 装饰性的樱花树轮廓 */
+        .sakura-decoration {
+            position: fixed;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .sakura-tree-left {
+            bottom: -50px;
+            left: -30px;
+            width: 200px;
+            height: 300px;
+            background: 
+                radial-gradient(circle at 30% 30%, #ffc1c1 0%, transparent 60%),
+                radial-gradient(circle at 70% 40%, #ffb7b2 0%, transparent 55%),
+                radial-gradient(circle at 50% 60%, #ff9eb0 0%, transparent 50%);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 30px rgba(255, 185, 185, 0.6);
+            animation: bloom 4s ease-in-out infinite alternate;
+        }
+        
+        .sakura-tree-right {
+            bottom: -80px;
+            right: -50px;
+            width: 250px;
+            height: 350px;
+            background: 
+                radial-gradient(circle at 40% 20%, #ffb7b2 0%, transparent 60%),
+                radial-gradient(circle at 60% 50%, #ff9eb0 0%, transparent 55%),
+                radial-gradient(circle at 30% 70%, #ffc1c1 0%, transparent 50%);
+            border-radius: 50% 50% 30% 30%;
+            box-shadow: 0 0 35px rgba(255, 185, 185, 0.7);
+            animation: bloom 5s ease-in-out infinite alternate-reverse;
+        }
+        
+        @keyframes bloom {
+            0% {
                 transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 192, 203, 0.5));
+            }
+            100% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 30px rgba(255, 192, 203, 0.8));
             }
         }
         
@@ -258,17 +187,9 @@
             animation: floatInPlace 6s ease-in-out infinite;
         }
 
-        /* 只在桌面端（1200px以上）显示 */
         @media (min-width: 1200px) {
             .spaceship-weather-calendar {
                 display: block;
-            }
-        }
-
-        /* 在所有平板和手机设备上隐藏 */
-        @media (max-width: 1199px) {
-            .spaceship-weather-calendar {
-                display: none !important;
             }
         }
 
@@ -286,8 +207,6 @@
             object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(91, 192, 190, 0.9));
         }
-        
-
 
         .connection-cable-fixed {
             position: relative;
@@ -306,27 +225,14 @@
 
         .weather-module-fixed {
             width: 100%;
-            background: linear-gradient(145deg, rgba(26, 35, 126, 0.95), rgba(40, 53, 147, 0.95));
+            background: linear-gradient(145deg, rgba(255, 240, 245, 0.95), rgba(255, 228, 225, 0.95));
             border-radius: 15px;
             padding: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(15px);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             margin-bottom: 10px;
             overflow: hidden;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
-        }
-
-        @keyframes borderRainbow {
-            0% { border-image-source: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #0000ff, #8000ff); }
-            25% { border-image-source: linear-gradient(45deg, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #0000ff); }
-            50% { border-image-source: linear-gradient(45deg, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff); }
-            75% { border-image-source: linear-gradient(45deg, #0080ff, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff); }
-            100% { border-image-source: linear-gradient(45deg, #00ffff, #0080ff, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00); }
         }
 
         .weather-module-header-fixed {
@@ -335,11 +241,11 @@
             justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 8px;
-            border-bottom: 0.1px solid rgba(123, 239, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 190, 176, 0.2);
         }
 
         .weather-module-title-fixed {
-            color: #7befff;
+            color: #ff9eb0;
             font-size: 16px;
             font-weight: 600;
             display: flex;
@@ -349,7 +255,7 @@
 
         .weather-module-location-fixed {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 51, 51, 0.7);
         }
 
         .weather-module-main-fixed {
@@ -371,7 +277,7 @@
 
         .weather-module-desc-fixed {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 51, 51, 0.9);
             margin-bottom: 10px;
             text-align: center;
         }
@@ -382,43 +288,35 @@
             gap: 8px;
             font-size: 12px;
         }
-
+        
         .weather-module-detail-item-fixed {
             text-align: center;
             padding: 8px;
-            background: rgba(40, 53, 147, 0.6);
+            background: rgba(255, 240, 245, 0.6);
             border-radius: 6px;
-            border: 0.1px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
 
         .weather-module-detail-label-fixed {
             display: block;
             margin-bottom: 2px;
+            color: rgba(51, 51, 51, 0.7);
         }
-
+        
         .weather-module-detail-value-fixed {
             display: block;
-            color: #7befff;
+            color: #ff9eb0;
             font-weight: 600;
         }
 
         .calendar-module-fixed {
             width: 100%;
-            background: linear-gradient(145deg, rgba(26, 35, 126, 0.95), rgba(40, 53, 147, 0.95));
+            background: linear-gradient(145deg, rgba(255, 240, 245, 0.95), rgba(255, 228, 225, 0.95));
             border-radius: 15px;
             padding: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(15px);
-            border: 0.1px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             overflow: hidden;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
 
         .calendar-module-header-fixed {
@@ -427,7 +325,7 @@
         }
 
         .calendar-module-title-fixed {
-            color: #7befff;
+            color: #ff9eb0;
             font-size: 18px;
             margin-bottom: 10px;
             display: flex;
@@ -439,7 +337,7 @@
         .calendar-module-date-fixed {
             font-size: 24px;
             font-weight: bold;
-            color: #fff;
+            color: #333;
             margin-bottom: 5px;
         }
 
@@ -451,7 +349,6 @@
             border-radius: 20px;
             display: inline-block;
             margin-bottom: 10px;
-            border: 0.1px solid rgba(255, 209, 102, 0.3);
         }
 
         .calendar-module-grid-fixed {
@@ -460,25 +357,30 @@
             gap: 6px;
             margin-bottom: 10px;
         }
+        
+        .calendar-module-day-fixed {
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            color: #ff9eb0;
+            font-weight: 600;
+        }
 
         .calendar-module-date-cell-fixed {
             text-align: center;
             padding: 8px;
             font-size: 12px;
             border-radius: 8px;
-            background: rgba(28, 37, 65, 0.5);
-            border: 0.1px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 240, 245, 0.5);
+            border: 1px solid rgba(255, 190, 176, 0.1);
+            color: rgba(51, 51, 51, 0.9);
         }
 
         .calendar-module-date-cell-fixed.today {
-            background: linear-gradient(145deg, #5bc0be, #3a506b);
-            color: #fff;
+            background: linear-gradient(145deg, #ff9eb0, #ff7eb5);
+            color: white;
             font-weight: bold;
-            border-color: #7befff;
+            border-color: #ff9eb0;
         }
 
         @keyframes floatInPlace {
@@ -508,200 +410,9 @@
             }
         }
         
-        .astronaut {
-            position: absolute;
-            width: 140px;
-            height: 180px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: float 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(123, 239, 255, 0.5));
-        }
-        
-        .astronaut-body {
-            position: absolute;
-            width: 90px;
-            height: 110px;
-            background: linear-gradient(145deg, #4a5fc1, #2a3a8f);
-            border-radius: 45px 45px 35px 35px;
-            top: 60px;
-            left: 25px;
-            box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.4),
-                inset 0 -5px 10px rgba(255, 255, 255, 0.1);
-        }
-        
-        .astronaut-helmet {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle at 35% 35%, #7befff, #4a5fc1);
-            border-radius: 50%;
-            top: 20px;
-            left: 20px;
-            box-shadow: 
-                inset 0 0 25px rgba(123, 239, 255, 0.6),
-                0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 0.1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .astronaut-visor {
-            position: absolute;
-            width: 60px;
-            height: 45px;
-            background: linear-gradient(135deg, rgba(123, 239, 255, 0.4), rgba(255, 255, 255, 0.2));
-            border-radius: 50%;
-            top: 35px;
-            left: 20px;
-            box-shadow: 
-                inset 0 0 15px rgba(123, 239, 255, 0.5),
-                0 0 20px rgba(123, 239, 255, 0.3);
-            backdrop-filter: blur(5px);
-        }
-        
-        .astronaut-light {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #ffd166;
-            border-radius: 50%;
-            top: 45px;
-            right: 25px;
-            box-shadow: 0 0 10px #ffd166;
-            animation: lightBlink 0.8s infinite alternate;
-        }
-        
-        .astronaut-backpack {
-            position: absolute;
-            width: 45px;
-            height: 65px;
-            background: linear-gradient(145deg, #3a506b, #2a3a8f);
-            border-radius: 20px;
-            top: 80px;
-            right: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .astronaut-antenna {
-            position: absolute;
-            width: 3px;
-            height: 25px;
-            background: linear-gradient(to top, #7befff, #ffd166);
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-        
-        .astronaut-antenna-tip {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #ffd166;
-            border-radius: 50%;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 8px #ffd166;
-            animation: lightBlink 1.2s infinite alternate;
-        }
-        
-        .planet {
-            position: absolute;
-            border-radius: 50%;
-            box-shadow: 0 0 30px rgba(255, 94, 0, 0.5);
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-        }
-        
-        .planet1 {
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle at 30% 30%, #ffd166, #ff9a00);
-            top: 50px;
-            right: 20px;
-            animation: orbit1 25s linear infinite;
-        }
-        
-        .planet2 {
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle at 30% 30%, #00b4d8, #0077b6);
-            bottom: 70px;
-            left: 15px;
-            animation: orbit2 30s linear infinite reverse;
-            box-shadow: 0 0 25px rgba(0, 180, 216, 0.5);
-        }
-        
-        .planet3 {
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle at 30% 30%, #9d4edd, #560bad);
-            top: 120px;
-            left: 30px;
-            animation: orbit3 35s linear infinite;
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-        }
-        
-        .meteor {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 8px white;
-            animation: meteorFall linear infinite;
-        }
-        
-        @keyframes meteorFall {
-            0% {
-                opacity: 0;
-                transform: translate(0, 0);
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translate(100px, 100px);
-            }
-        }
-
-        .santa-gif-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 150%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .santa-gif {
-            position: absolute;
-            width: 200px;
-            top: 20%;
-            left: -200px;
-            animation: santaFly 30s linear infinite;
-        }
-
-        @keyframes santaFly {
-            0% {
-                left: -200px;
-                top: 20%;
-            }
-            100% {
-                left: 100%;
-                top: 20%;
-            }
-        }
-
         .astronaut-gif {
             position: absolute;
-            width: 70px;
+            width: 180px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -710,63 +421,16 @@
             z-index: 2;
         }
 
-        .floating-astronaut {
-            position: absolute;
-            width: 90px;
-            top: 25%;
-            left: -70px;
-            z-index: -1;
-            pointer-events: none;
-            animation: astronautFloatAcross 15s linear infinite;
-            filter: drop-shadow(0 0 8px rgba(123, 239, 255, 0.7));
-        }
-
-        .astronaut-gif {
-            width: 150%;
-            height: auto;
-            display: block;
-        }
-
-        @keyframes astronautFloatAcross {
-            0% {
-                left: -70px;
-                top: 25%;
-                transform: translateY(0) rotate(0deg);
-            }
-            25% {
-                top: 22%;
-                transform: translateY(-10px) rotate(5deg);
-            }
-            50% {
-                top: 28%;
-                transform: translateY(5px) rotate(-5deg);
-            }
-            75% {
-                top: 23%;
-                transform: translateY(-5px) rotate(2deg);
-            }
-            100% {
-                left: calc(100% + 70px);
-                top: 25%;
-                transform: translateY(0) rotate(0deg);
-            }
-        }
-
         .calendar-container {
             display: none !important;
         }
         
         .weather-container {
-            background: rgba(28, 37, 65, 0.8);
+            background: rgba(255, 240, 245, 0.8);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 20px;
-            border: 0.1px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
+            border: 1px solid rgba(255, 190, 176, 0.2);
         }
         
         .weather-header {
@@ -775,11 +439,11 @@
             justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 190, 176, 0.2);
         }
         
         .weather-title {
-            color: #7befff;
+            color: #ff9eb0;
             font-size: 16px;
             font-weight: 600;
             display: flex;
@@ -789,13 +453,13 @@
         
         .weather-location {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 51, 51, 0.7);
             cursor: pointer;
             transition: color 0.3s;
         }
         
         .weather-location:hover {
-            color: #ffd166;
+            color: #ff9eb0;
         }
         
         .weather-main {
@@ -836,10 +500,6 @@
             padding: 5px;
             background: rgba(40, 53, 147, 0.6);
             border-radius: 6px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
         
         .weather-detail-label {
@@ -855,10 +515,7 @@
         
         .weather-refresh {
             background: rgba(91, 192, 190, 0.3);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             color: #7befff;
             border-radius: 50%;
             width: 24px;
@@ -869,8 +526,6 @@
             cursor: pointer;
             font-size: 12px;
             transition: all 0.3s;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .weather-refresh:hover {
@@ -881,7 +536,7 @@
         .weather-config {
             margin-top: 10px;
             padding-top: 10px;
-            border-top: 0.1px solid rgba(123, 239, 255, 0.2);
+            border-top: 1px solid rgba(123, 239, 255, 0.2);
         }
         
         .weather-config-toggle {
@@ -906,16 +561,11 @@
             width: 100%;
             padding: 6px 8px;
             background: rgba(40, 53, 147, 0.8);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             border-radius: 4px;
             color: white;
             font-size: 11px;
             margin-bottom: 5px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .weather-config-btn {
@@ -923,16 +573,11 @@
             padding: 6px;
             background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 11px;
             margin-top: 5px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .calendar-header {
@@ -974,7 +619,7 @@
             background: rgba(255, 209, 102, 0.1);
             padding: 5px 12px;
             border-radius: 20px;
-            border: 0.1px solid rgba(255, 209, 102, 0.3);
+            border: 1px solid rgba(255, 209, 102, 0.3);
         }
         
         .week-day {
@@ -1001,10 +646,6 @@
             font-weight: 600;
             background: rgba(40, 53, 147, 0.5);
             border-radius: 10px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
         
         .calendar-date {
@@ -1015,10 +656,7 @@
             cursor: pointer;
             transition: all 0.3s;
             background: rgba(28, 37, 65, 0.5);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(123, 239, 255, 0.1);
             color: rgba(255, 255, 255, 0.9);
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1039,6 +677,7 @@
             background: linear-gradient(145deg, #5bc0be, #3a506b);
             color: #fff;
             font-weight: bold;
+            border-color: #7befff;
             box-shadow: 0 0 15px rgba(91, 192, 190, 0.5);
         }
         
@@ -1065,10 +704,7 @@
             padding: 12px;
             background: rgba(28, 37, 65, 0.6);
             border-radius: 12px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(123, 239, 255, 0.1);
         }
         
         .calendar-footer-label {
@@ -1094,26 +730,21 @@
             padding-top: 20px;
         }
         
-        /* ==================== 公告栏 - 五颜六色渐变边框线 ==================== */
         .announcement-bar {
-            background: rgba(26, 35, 126, 0.9) !important;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            color: white;
+            background: linear-gradient(90deg, #e3f2fd, #bbdefb);
+            color: #1976d2;
             padding: 8px 30px 8px 15px;
             border-radius: 6px;
             margin-bottom: 15px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             min-height: 40px;
             display: flex;
             align-items: center;
+            border: 1px solid rgba(187, 222, 251, 0.5);
             width: 100%;
             font-size: 14px;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .announcement-content {
@@ -1129,13 +760,6 @@
             animation: scrollAnnouncement 20s linear infinite;
             white-space: nowrap;
             font-size: 13px;
-            font-weight: 600;
-            color: white;
-            background: none;
-            -webkit-background-clip: initial;
-            -webkit-text-fill-color: white;
-            background-clip: initial;
-            text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
         }
         
         @keyframes scrollAnnouncement {
@@ -1152,12 +776,9 @@
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            background: rgba(187, 222, 251, 0.5);
+            color: #1976d2;
+            border: none;
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -1166,38 +787,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
-            animation: borderRainbow 8s linear infinite;
-        }
-
-        .announcement-close:hover {
-            background: rgba(255, 255, 255, 0.3);
         }
         
         .announcement-bar.hidden {
             display: none;
         }
         
-        /* 已删除彩灯装饰区域 */
-        
         .search-container {
-            background: rgba(26, 35, 126, 0.9);
+            background: rgba(255, 240, 245, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border-left: 5px solid #ff9eb0;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 190, 176, 0.3);
             width: 100%;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         h1 {
-            color: #7befff;
+            color: #ff9eb0;
             margin-bottom: 15px;
             font-size: 1.8rem;
             display: flex;
@@ -1221,192 +830,52 @@
             width: 100%;
         }
         
-        /* ==================== 搜索栏内部背景 - 马年GIF优化 ==================== */
-        .search-row-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-            pointer-events: none;
-            opacity: 0.9;
-            background: linear-gradient(45deg, rgba(28, 37, 65, 0.1), rgba(40, 53, 147, 0.1));
-        }
-        
-        /* 彩色聚光灯效果 - 彩虹渐变 */
-        .search-row-background::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 140px;
-            background: radial-gradient(
-                ellipse at center,
-                rgba(255, 0, 0, 0.2) 0%,
-                rgba(255, 165, 0, 0.18) 15%,
-                rgba(255, 255, 0, 0.16) 30%,
-                rgba(0, 128, 0, 0.14) 45%,
-                rgba(0, 0, 255, 0.12) 60%,
-                rgba(75, 0, 130, 0.10) 75%,
-                rgba(238, 130, 238, 0.08) 90%,
-                transparent 100%
-            );
-            transform: translateY(-50%);
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(15px);
-            animation: colorfulSpotlight 8s ease-in-out infinite;
-        }
-        
-        @keyframes colorfulSpotlight {
-            0%, 100% {
-                opacity: 0.7;
-                transform: translateY(-50%) scale(1);
-                filter: blur(15px) hue-rotate(0deg);
-            }
-            25% {
-                opacity: 0.9;
-                transform: translateY(-50%) scale(1.05);
-                filter: blur(18px) hue-rotate(90deg);
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateY(-50%) scale(1.1);
-                filter: blur(20px) hue-rotate(180deg);
-            }
-            75% {
-                opacity: 0.9;
-                transform: translateY(-50%) scale(1.05);
-                filter: blur(18px) hue-rotate(270deg);
-            }
-        }
-        
-        /* 马年GIF - 调大并添加彩虹效果 */
-        .horse-gif-bg {
-            position: absolute;
-            width: 130px; /* 进一步调大的马 */
-            height: 130px;
-            object-fit: contain;
-            filter: brightness(1.6) contrast(1.4) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-            animation: horseWalkRightToLeft 45s linear infinite;
-            opacity: 1; /* 最高的不透明度 */
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 2;
-            mix-blend-mode: screen; /* 添加混合模式让马融入彩色背景 */
-        }
-        
-        /* 为马添加强烈的聚光灯效果 */
-        .horse-gif-bg::after {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: -30px;
-            right: -30px;
-            bottom: -30px;
-            background: 
-                radial-gradient(
-                    circle at center,
-                    rgba(255, 255, 255, 0.9) 0%,
-                    rgba(255, 215, 0, 0.8) 20%,
-                    rgba(255, 165, 0, 0.6) 40%,
-                    rgba(255, 140, 0, 0.3) 60%,
-                    rgba(255, 69, 0, 0.1) 80%,
-                    transparent 100%
-                );
-            border-radius: 50%;
-            filter: blur(35px);
-            z-index: -1;
-            opacity: 1.0;
-            animation: spotlightMove 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes spotlightMove {
-            0% {
-                opacity: 0.8;
-                filter: blur(30px);
-                transform: scale(1);
-                box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 140, 0, 0.6);
-            }
-            100% {
-                opacity: 1.0;
-                filter: blur(40px);
-                transform: scale(1.2);
-                box-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 140, 0, 0.8);
-            }
-        }
-        
-        /* 马从右向左的慢速动画 */
-        @keyframes horseWalkRightToLeft {
-            0% {
-                left: 100%;
-            }
-            100% {
-                left: -130px;
-            }
-        }
-        
         /* ==================== 电脑端搜索栏样式 ==================== */
         .desktop-search-layout {
             width: 100%;
-            position: relative;
         }
         
         .desktop-search-row {
             display: flex;
             align-items: center;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 190, 176, 0.3);
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s;
             height: 52px;
             width: 100%;
-            position: relative;
-            background: rgba(28, 37, 65, 0.8);
-            animation: borderRainbow 8s linear infinite;
         }
         
         .desktop-search-row:focus-within {
-            animation: borderRainbow 4s linear infinite;
+            border-color: #ff9eb0;
+            box-shadow: 0 0 0 3px rgba(255, 190, 176, 0.2);
         }
         
         .desktop-lion-dance-gif {
             width: 50px;
             height: 50px;
             flex-shrink: 0;
-            border-right: 0.1px solid rgba(123, 239, 255, 0.2);
-            background: rgba(28, 37, 65, 0.9);
+            border-right: 1px solid rgba(255, 190, 176, 0.2);
+            background: rgba(255, 240, 245, 0.9);
             padding: 5px;
             display: block;
-            position: relative;
-            z-index: 2;
         }
         
         .desktop-search-input {
             flex: 1;
             width: 100%;
             padding: 14px 16px;
-            background: rgba(28, 37, 65, 0.7);
+            background: transparent;
             border: none;
             font-size: 16px;
-            color: white;
+            color: #333;
             outline: none;
             height: 100%;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            position: relative;
-            z-index: 2;
         }
         
         .desktop-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(51, 51, 51, 0.5);
         }
         
         /* 电脑端搜索按钮 */
@@ -1414,12 +883,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            background: linear-gradient(45deg, #ff9eb0, #ff7eb5);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             padding: 0 25px;
             cursor: pointer;
             font-size: 16px;
@@ -1434,14 +900,12 @@
             flex-shrink: 0;
             margin: 0;
             border-radius: 0 8px 8px 0;
-            z-index: 2;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .desktop-search-btn:hover {
-            background: linear-gradient(45deg, #7befff, #5bc0be);
+            background: linear-gradient(45deg, #ffb7b2, #ff9eb0);
             transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(91, 192, 190, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 190, 176, 0.4);
         }
         
         .desktop-search-btn:active {
@@ -1476,66 +940,49 @@
             display: none;
             flex-direction: column;
             gap: 12px;
-            position: relative;
         }
         
         .mobile-search-row {
             display: flex;
             align-items: center;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 190, 176, 0.3);
             border-radius: 10px;
             overflow: hidden;
             transition: all 0.3s;
             width: 100%;
             height: 50px;
-            position: relative;
-            background: rgba(28, 37, 65, 0.8);
-            animation: borderRainbow 8s linear infinite;
         }
         
         .mobile-search-row:focus-within {
-            animation: borderRainbow 4s linear infinite;
+            border-color: #ff9eb0;
+            box-shadow: 0 0 0 3px rgba(255, 190, 176, 0.2);
         }
         
         .mobile-lion-dance-gif {
             width: 45px;
             height: 45px;
             flex-shrink: 0;
-            border-right: 1px solid rgba(123, 239, 255, 0.2);
-            background: rgba(28, 37, 65, 0.9);
+            border-right: 1px solid rgba(255, 190, 176, 0.2);
+            background: rgba(255, 240, 245, 0.9);
             padding: 4px;
             display: block;
-            position: relative;
-            z-index: 2;
         }
         
         .mobile-search-input {
             flex: 1;
             width: 100%;
             padding: 12px 10px;
-            background: rgba(28, 37, 65, 0.7);
+            background: transparent;
             border: none;
             font-size: 16px;
-            color: white;
+            color: #333;
             outline: none;
             height: 100%;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-            position: relative;
-            z-index: 2;
         }
         
         .mobile-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(51, 51, 51, 0.5);
         }
         
         /* 移动端搜索按钮 */
@@ -1543,12 +990,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            background: linear-gradient(45deg, #ff9eb0, #ff7eb5);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
@@ -1559,16 +1003,13 @@
             gap: 8px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(91, 192, 190, 0.3);
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
-            z-index: 1;
-            animation: borderRainbow 8s linear infinite;
+            box-shadow: 0 4px 12px rgba(255, 190, 176, 0.3);
         }
         
         .mobile-search-btn:hover {
-            background: linear-gradient(45deg, #7befff, #5bc0be);
+            background: linear-gradient(45deg, #ffb7b2, #ff9eb0);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(91, 192, 190, 0.4);
+            box-shadow: 0 6px 16px rgba(255, 190, 176, 0.4);
         }
         
         .mobile-search-btn:active {
@@ -1585,10 +1026,7 @@
             padding: 14px 20px;
             background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
@@ -1599,8 +1037,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         button:hover {
@@ -1619,24 +1055,19 @@
             padding: 10px 15px;
             background: rgba(28, 37, 65, 0.8);
             color: rgba(255, 255, 255, 0.7);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(123, 239, 255, 0.2);
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .search-type-btn.active {
             background: linear-gradient(45deg, #5bc0be, #3a506b);
             color: white;
-            animation: borderRainbow 4s linear infinite;
+            border-color: #5bc0be;
         }
         
         .results-info {
@@ -1647,10 +1078,6 @@
             border-radius: 8px;
             border-left: 4px solid #5bc0be;
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
         
         .main-content {
@@ -1661,30 +1088,25 @@
         }
         
         .time-display-container {
-            background: rgba(26, 35, 126, 0.9);
+            background: rgba(255, 240, 245, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             width: 35%;
             min-width: 320px;
             text-align: center;
             display: flex;
             flex-direction: column;
             backdrop-filter: blur(10px);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.2);
             justify-content: center;
             align-items: center;
             height: 450px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .time-display-container h2 {
             margin-top: 0;
-            color: #7befff;
+            color: #ff9eb0;
             font-size: 1.3rem;
             margin-bottom: 15px;
             display: flex;
@@ -1697,37 +1119,28 @@
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             flex: 1;
-            background: #000;
+            background: linear-gradient(135deg, #fff0f5 0%, #e8f5e9 100%);
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
         
         .results-container {
-            background: rgba(26, 35, 126, 0.9);
+            background: rgba(255, 240, 245, 0.9);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             flex: 1;
             min-height: 450px;
             display: flex;
             flex-direction: column;
             backdrop-filter: blur(10px);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             width: 100%;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .image-results {
@@ -1742,14 +1155,11 @@
         }
 
         .image-card {
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            background: rgba(28, 37, 65, 0.8);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
@@ -1759,13 +1169,12 @@
             width: 700px;
             max-width: 700px;
             margin: 0 auto;
-            animation: borderRainbow 8s linear infinite;
         }
 
         .image-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(91, 192, 190, 0.3);
-            animation: borderRainbow 4s linear infinite;
+            box-shadow: 0 8px 20px rgba(255, 190, 176, 0.3);
+            border-color: #ff9eb0;
         }
 
         .image-card .image-wrapper {
@@ -1775,8 +1184,8 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            background-color: rgba(28, 37, 65, 0.8);
-            border-bottom: 1px solid rgba(123, 239, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(255, 190, 176, 0.2);
         }
 
         .image-card img {
@@ -1815,7 +1224,7 @@
         .image-code {
             font-weight: bold;
             font-size: 1rem;
-            color: #7befff;
+            color: #ff9eb0;
             margin-bottom: 4px;
             word-break: break-word;
             overflow: hidden;
@@ -1827,7 +1236,7 @@
         
         .status-info {
             text-align: center;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 51, 51, 0.8);
             padding: 50px 20px;
             flex: 1;
             display: flex;
@@ -1837,22 +1246,17 @@
         }
         
         .directory-container {
-            background: rgba(26, 35, 126, 0.9);
+            background: rgba(255, 240, 245, 0.9);
             padding: 12px;
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 15px;
             backdrop-filter: blur(10px);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
+            border: 1px solid rgba(255, 190, 176, 0.3);
         }
         
         .directory-container h3 {
-            color: #7befff;
+            color: #ff9eb0;
             margin-bottom: 10px;
             font-size: 16px;
             display: flex;
@@ -1869,16 +1273,13 @@
         
         .directory-item {
             padding: 12px 16px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
-            background: rgba(28, 37, 65, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             min-width: 140px;
-            color: white;
+            color: #333;
             font-size: 14px;
             font-weight: 500;
             text-align: center;
@@ -1886,39 +1287,33 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .directory-item:hover {
-            background-color: rgba(91, 192, 190, 0.3);
+            background-color: rgba(255, 190, 176, 0.3);
             transform: translateY(-3px);
-            animation: borderRainbow 4s linear infinite;
+            border-color: #ff9eb0;
         }
         
         .directory-item.active {
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            background: linear-gradient(45deg, #ff9eb0, #ff7eb5);
             color: white;
-            animation: borderRainbow 4s linear infinite;
+            border-color: #ff9eb0;
         }
         
         .update-status {
-            background: rgba(28, 37, 65, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             padding: 12px;
             border-radius: 8px;
             margin: 15px 0;
             font-size: 14px;
-            border-left: 4px solid #5bc0be;
-            color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border-left: 4px solid #ff9eb0;
+            color: #333;
         }
         
         .loading-spinner {
-            border: 0.05px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #5bc0be;
+            border: 3px solid rgba(255, 190, 176, 0.3);
+            border-top: 3px solid #ff9eb0;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -1941,25 +1336,20 @@
         }
 
         .weight-card {
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #4caf50, #2e7d32, #81c784, #4caf50,
-                #ff0000, #ff8000, #ffff00, #00ff00) 1;
+            border: 1px solid rgba(255, 190, 176, 0.3);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            background: rgba(28, 37, 65, 0.8);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             width: 700px;
             height: 300px;
             display: flex;
             flex-direction: column;
             margin: 0 auto;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
 
         .weight-header {
-            background: linear-gradient(45deg, #4caf50, #2e7d32);
+            background: linear-gradient(45deg, #ff9eb0, #ff7eb5);
             color: white;
             padding: 12px 15px;
             font-weight: bold;
@@ -1987,33 +1377,26 @@
         .weight-spec-item {
             text-align: center;
             padding: 8px;
-            background: rgba(40, 53, 147, 0.8);
+            background: rgba(255, 240, 245, 0.8);
             border-radius: 6px;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
         }
 
         .weight-spec-name {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 51, 51, 0.7);
             margin-bottom: 4px;
         }
 
         .weight-spec-value {
             font-weight: bold;
-            color: #7befff;
+            color: #ff9eb0;
             font-size: 0.9rem;
         }
 
         .copy-all-btn {
-            background: linear-gradient(45deg, #5bc0be, #3a506b);
+            background: linear-gradient(45deg, #ff9eb0, #ff7eb5);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             border-radius: 4px;
             padding: 6px 12px;
             font-size: 0.8rem;
@@ -2024,8 +1407,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .image-modal {
@@ -2055,16 +1436,11 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            background: rgba(26, 35, 126, 0.95);
+            background: rgba(255, 240, 245, 0.95);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 190, 176, 0.3);
         }
         
         .modal-image-container {
@@ -2075,7 +1451,7 @@
             padding: 20px;
             max-height: calc(100vh - 150px);
             overflow: auto;
-            background: rgba(28, 37, 65, 0.8);
+            background: rgba(255, 255, 255, 0.9);
         }
         
         .modal-image-container img {
@@ -2092,40 +1468,37 @@
         
         .modal-info {
             padding: 15px 20px;
-            background: rgba(28, 37, 65, 0.8);
-            border-top: 1px solid rgba(123, 239, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(255, 190, 176, 0.2);
+            color: #333;
             text-align: center;
         }
         
         .modal-code {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #7befff;
+            color: #ff9eb0;
             margin: 0;
         }
         
         .modal-description {
             font-size: 0.95rem;
             margin-bottom: 5px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 51, 51, 0.9);
         }
         
         .modal-date {
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 51, 51, 0.7);
         }
         
         .modal-close {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(255, 190, 176, 0.8);
             color: white;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
+            border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -2136,12 +1509,10 @@
             align-items: center;
             transition: all 0.3s;
             z-index: 10;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
         }
         
         .modal-close:hover {
-            background: rgba(91, 192, 190, 0.8);
+            background: rgba(255, 190, 176, 0.9);
             transform: scale(1.1);
         }
         
@@ -2197,7 +1568,6 @@
             body {
                 padding: 15px;
                 font-size: 16px;
-                touch-action: manipulation;
             }
             
             input, select, textarea {
@@ -2278,21 +1648,18 @@
             .mobile-search-row {
                 display: flex !important;
                 align-items: center !important;
-                border: 0.05px solid;
-                border-image: linear-gradient(45deg, 
-                    #ff0000, #ff8000, #ffff00, #00ff00, 
-                    #00ffff, #0080ff, #0000ff, #8000ff) 1 !important;
+                background: rgba(28, 37, 65, 0.8) !important;
+                border: 1px solid rgba(123, 239, 255, 0.3) !important;
                 border-radius: 10px !important;
                 overflow: hidden !important;
                 transition: all 0.3s !important;
                 width: 100% !important;
                 height: 50px !important;
-                background: rgba(28, 37, 65, 0.8) !important;
-                animation: borderRainbow 8s linear infinite !important;
             }
             
             .mobile-search-row:focus-within {
-                animation: borderRainbow 4s linear infinite !important;
+                border-color: #5bc0be !important;
+                box-shadow: 0 0 0 3px rgba(91, 192, 190, 0.2) !important;
             }
             
             .mobile-lion-dance-gif {
@@ -2303,8 +1670,6 @@
                 border-right: 1px solid rgba(123, 239, 255, 0.2) !important;
                 background: rgba(28, 37, 65, 0.9) !important;
                 display: block !important;
-                position: relative !important;
-                z-index: 2 !important;
             }
             
             .mobile-search-input {
@@ -2315,24 +1680,13 @@
                 width: 100% !important;
                 height: 100% !important;
                 border: none !important;
-                background: rgba(28, 37, 65, 0.7) !important;
+                background: transparent !important;
                 color: white !important;
                 outline: none !important;
-                -webkit-appearance: none !important;
-                -moz-appearance: none !important;
-                appearance: none !important;
-                -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-                -webkit-user-select: text !important;
-                -moz-user-select: text !important;
-                -ms-user-select: text !important;
-                user-select: text !important;
-                touch-action: manipulation !important;
-                position: relative !important;
-                z-index: 2 !important;
             }
             
             .mobile-search-input::placeholder {
-                color: rgba(255, 255, 255, 0.4) !important;
+                color: rgba(255, 255, 255, 0.5) !important;
             }
             
             /* 移动端搜索按钮 */
@@ -2342,10 +1696,7 @@
                 justify-content: center !important;
                 background: linear-gradient(45deg, #5bc0be, #3a506b) !important;
                 color: white !important;
-                border: 0.05px solid;
-                border-image: linear-gradient(45deg, 
-                    #ff0000, #ff8000, #ffff00, #00ff00, 
-                    #00ffff, #0080ff, #0000ff, #8000ff) 1 !important;
+                border: none !important;
                 border-radius: 10px !important;
                 cursor: pointer !important;
                 font-size: 16px !important;
@@ -2358,8 +1709,6 @@
                 gap: 8px !important;
                 position: relative !important;
                 overflow: hidden !important;
-                -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-                animation: borderRainbow 8s linear infinite !important;
             }
             
             .mobile-search-btn:hover {
@@ -2381,47 +1730,9 @@
             button {
                 width: 100%;
                 margin: 5px 0;
-                -webkit-tap-highlight-color: rgba(0,0,0,0);
-            }
-            
-            /* 优化触摸体验 */
-            .search-type-btn, .directory-item, button {
-                -webkit-tap-highlight-color: rgba(0,0,0,0);
-                touch-action: manipulation;
-            }
-            
-            input:focus, textarea:focus, select:focus {
-                font-size: 16px !important;
-            }
-            
-            /* 移动端调整马年GIF - 调大并添加彩色效果 */
-            .horse-gif-bg {
-                width: 95px !important;
-                height: 95px !important;
-                opacity: 1 !important;
-                filter: brightness(1.7) contrast(1.5) drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)) !important;
-            }
-            
-            /* 移动端彩色聚光灯效果 */
-            .search-row-background::before {
-                height: 100px;
-                background: radial-gradient(
-                    ellipse at center,
-                    rgba(255, 0, 0, 0.2) 0%,
-                    rgba(255, 165, 0, 0.18) 20%,
-                    rgba(255, 255, 0, 0.16) 40%,
-                    rgba(0, 128, 0, 0.14) 60%,
-                    rgba(0, 0, 255, 0.12) 80%,
-                    transparent 100%
-                );
-                filter: blur(10px);
             }
             
             @media (orientation: portrait) {
-                .time-display-container {
-                    display: none !important;
-                }
-                
                 .main-content {
                     flex-direction: column;
                 }
@@ -2513,7 +1824,7 @@
                     width: 100% !important;
                     max-width: 100% !important;
                     height: 220px !important;
-                    margin: 0 auto 10px !important;
+                    margin: 0 auto 12px !important;
                     border-radius: 8px !important;
                 }
                 
@@ -2629,8 +1940,8 @@
             }
         }
 
-        /* ==================== 平板端适配 (768px-1199px) ==================== */
-        @media (max-width: 1199px) and (min-width: 769px) {
+        /* ==================== 平板端适配 (768px-1024px) ==================== */
+        @media (max-width: 1024px) and (min-width: 769px) {
             body {
                 padding: 20px;
             }
@@ -2638,7 +1949,6 @@
             .main-content-area {
                 width: 100%;
                 max-width: 100%;
-                margin: 0 auto;
             }
             
             .announcement-bar {
@@ -2659,8 +1969,6 @@
             .search-container {
                 padding: 18px;
                 margin-top: 15px;
-                width: 100%;
-                max-width: 100%;
             }
             
             h1 {
@@ -2670,45 +1978,12 @@
             .search-controls {
                 flex-direction: row;
                 flex-wrap: wrap;
-                width: 100%;
             }
             
             .search-input-container {
                 min-width: 60%;
-                width: 100%;
             }
             
-            /* 确保平板端隐藏天气飞船模板 */
-            .spaceship-weather-calendar {
-                display: none !important;
-            }
-            
-            /* 平板端调整马年GIF */
-            .horse-gif-bg {
-                width: 110px !important;
-                height: 110px !important;
-                opacity: 1 !important;
-                filter: brightness(1.7) contrast(1.5) drop-shadow(0 0 18px rgba(255, 255, 255, 0.9)) !important;
-            }
-            
-            /* 平板端彩色聚光灯效果 */
-            .search-row-background::before {
-                height: 120px;
-                background: radial-gradient(
-                    ellipse at center,
-                    rgba(255, 0, 0, 0.22) 0%,
-                    rgba(255, 165, 0, 0.2) 15%,
-                    rgba(255, 255, 0, 0.18) 30%,
-                    rgba(0, 128, 0, 0.16) 45%,
-                    rgba(0, 0, 255, 0.14) 60%,
-                    rgba(75, 0, 130, 0.12) 75%,
-                    rgba(238, 130, 238, 0.10) 90%,
-                    transparent 100%
-                );
-                filter: blur(12px);
-            }
-            
-            /* 平板端竖屏 */
             @media (orientation: portrait) {
                 /* 竖屏显示移动端布局 */
                 .desktop-search-layout {
@@ -2725,17 +2000,13 @@
                 .mobile-search-row {
                     display: flex !important;
                     align-items: center !important;
-                    border: 0.05px solid;
-                    border-image: linear-gradient(45deg, 
-                        #ff0000, #ff8000, #ffff00, #00ff00, 
-                        #00ffff, #0080ff, #0000ff, #8000ff) 1 !important;
+                    background: rgba(28, 37, 65, 0.8) !important;
+                    border: 1px solid rgba(123, 239, 255, 0.3) !important;
                     border-radius: 10px !important;
                     overflow: hidden !important;
                     transition: all 0.3s !important;
                     width: 100% !important;
                     height: 50px !important;
-                    background: rgba(28, 37, 65, 0.8) !important;
-                    animation: borderRainbow 8s linear infinite !important;
                 }
                 
                 .mobile-lion-dance-gif {
@@ -2743,8 +2014,6 @@
                     height: 45px !important;
                     padding: 5px !important;
                     display: block !important;
-                    position: relative !important;
-                    z-index: 2 !important;
                 }
                 
                 .mobile-search-btn {
@@ -2753,10 +2022,7 @@
                     justify-content: center !important;
                     background: linear-gradient(45deg, #5bc0be, #3a506b) !important;
                     color: white !important;
-                    border: 0.05px solid;
-                    border-image: linear-gradient(45deg, 
-                        #ff0000, #ff8000, #ffff00, #00ff00, 
-                        #00ffff, #0080ff, #0000ff, #8000ff) 1 !important;
+                    border: none !important;
                     border-radius: 10px !important;
                     cursor: pointer !important;
                     font-size: 16px !important;
@@ -2767,11 +2033,9 @@
                     margin-top: 0 !important;
                     box-shadow: 0 4px 12px rgba(91, 192, 190, 0.3) !important;
                     gap: 8px !important;
-                    animation: borderRainbow 8s linear infinite !important;
                 }
             }
             
-            /* 平板端横屏 */
             @media (orientation: landscape) {
                 /* 横屏显示电脑端布局 */
                 .desktop-search-layout {
@@ -2781,17 +2045,12 @@
                 .desktop-search-row {
                     display: flex !important;
                     align-items: center !important;
-                    border: 0.05px solid;
-                    border-image: linear-gradient(45deg, 
-                        #ff0000, #ff8000, #ffff00, #00ff00, 
-                        #00ffff, #0080ff, #0000ff, #8000ff) 1 !important;
+                    background: rgba(28, 37, 65, 0.8) !important;
+                    border: 1px solid rgba(123, 239, 255, 0.3) !important;
                     border-radius: 8px !important;
                     overflow: hidden !important;
                     transition: all 0.3s !important;
                     height: 52px !important;
-                    width: 100% !important;
-                    background: rgba(28, 37, 65, 0.8) !important;
-                    animation: borderRainbow 8s linear infinite !important;
                 }
                 
                 .desktop-lion-dance-gif {
@@ -2799,8 +2058,6 @@
                     height: 50px !important;
                     padding: 5px !important;
                     display: block !important;
-                    position: relative !important;
-                    z-index: 2 !important;
                 }
                 
                 .desktop-search-btn {
@@ -2809,7 +2066,6 @@
                     font-size: 14px !important;
                     min-width: 70px !important;
                     gap: 4px;
-                    animation: borderRainbow 8s linear infinite !important;
                 }
                 
                 .mobile-search-layout {
@@ -2841,7 +2097,6 @@
                 .main-content {
                     flex-direction: row !important;
                     gap: 20px;
-                    width: 100%;
                 }
                 
                 .results-container {
@@ -2858,13 +2113,8 @@
             }
             
             @media (orientation: portrait) {
-                .time-display-container {
-                    display: none !important;
-                }
-                
                 .main-content {
                     flex-direction: column;
-                    width: 100%;
                 }
                 
                 .results-container {
@@ -3034,17 +2284,13 @@
                 text-align: center;
             }
             
-            /* 重要修改：平板端必须隐藏天气飞船模板 */
             .spaceship-weather-calendar {
                 display: none !important;
-                visibility: hidden !important;
-                opacity: 0 !important;
-                pointer-events: none !important;
             }
         }
 
-        /* ==================== 电脑端适配 (1200px以上) ==================== */
-        @media (min-width: 1200px) {
+        /* ==================== 电脑端适配 (1025px以上) ==================== */
+        @media (min-width: 1025px) {
             .desktop-search-layout {
                 display: block !important;
             }
@@ -3096,9 +2342,6 @@
             .spaceship-weather-calendar {
                 display: block !important;
                 right: 15px;
-                opacity: 1 !important;
-                visibility: visible !important;
-                pointer-events: auto !important;
             }
         }
 
@@ -3106,13 +2349,6 @@
         @media (max-width: 480px) {
             body {
                 padding: 12px;
-            }
-            
-            .announcement-bar {
-                padding: 6px 22px 6px 10px;
-                min-height: 34px;
-                font-size: 11px;
-                margin-bottom: 10px;
             }
             
             .mobile-search-layout {
@@ -3145,28 +2381,6 @@
             .mobile-search-icon {
                 width: 18px !important;
                 height: 18px !important;
-            }
-            
-            /* 超小屏幕调整马年GIF */
-            .horse-gif-bg {
-                width: 85px !important;
-                height: 85px !important;
-                opacity: 1 !important;
-                filter: brightness(1.7) contrast(1.5) drop-shadow(0 0 12px rgba(255, 255, 255, 0.9)) !important;
-            }
-            
-            /* 超小屏幕彩色聚光灯效果 */
-            .search-row-background::before {
-                height: 90px;
-                background: radial-gradient(
-                    ellipse at center,
-                    rgba(255, 0, 0, 0.2) 0%,
-                    rgba(255, 165, 0, 0.18) 25%,
-                    rgba(255, 255, 0, 0.16) 50%,
-                    rgba(0, 128, 0, 0.14) 75%,
-                    transparent 100%
-                );
-                filter: blur(8px);
             }
             
             .image-results {
@@ -3308,6 +2522,47 @@
             }
         }
         
+        @keyframes weatherNotificationSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes weatherNotificationSlideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @keyframes copyNotificationSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes copyNotificationSlideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .context-instruction {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(28, 37, 65, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid #ffd166;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .context-instruction-modal {
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(40, 53, 147, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #ffd166;
+            color: white;
+            font-size: 13px;
+        }
+
         .copy-notification {
             position: fixed;
             top: 20px;
@@ -3319,12 +2574,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 10000;
             font-weight: 600;
-            border: 0.05px solid;
-            border-image: linear-gradient(45deg, 
-                #ff0000, #ff8000, #ffff00, #00ff00, 
-                #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            position: relative;
-            animation: borderRainbow 8s linear infinite;
+            border: 1px solid rgba(123, 239, 255, 0.3);
             animation: slideIn 0.3s ease;
         }
 
@@ -3375,32 +2625,14 @@
 </style>
 </head>
 <body>
-    <!-- 圣诞老人GIF动画 -->
-<div class="santa-gif-container">
-    <!-- 万马奔腾GIF -->
-    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1767153160271.gif" 
-         alt="万马奔腾" 
-         class="santa-gif"
-         id="santaGif">
-    <!-- 雪花背景 -->
-    <div class="snowflakes" id="snowflakes"></div>
-</div>
-    
-    <!-- 星空背景 -->
-    <div id="stars"></div>
-    
-    <!-- 漂浮的宇航员GIF -->
-<div class="floating-astronaut">
-    <img src="https://img.sobot.com/7d040de93a3d479ba1d071926f043ea2/chatres/7d040de93a3d479ba1d071926f043ea2/msg/20251213/3e0e4df477d9be2659f3297fbd20b998/fac6eea229c64af29e1e5602f1da6f1d.gif"
-         alt="漂浮的宇航员"
-         class="astronaut-gif">
-</div>
+    <!-- 春天樱花背景 -->
+    <div id="sakura"></div>
     
     <!-- 左侧宇航员插画 -->
    <div class="illustration-container">
-    <!-- 透明背景的宇航员GIF -->
-    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1767511574961.gif" 
-         alt="宇航员" 
+    <!-- 花鸟GIF -->
+    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770716767287.gif" 
+         alt="花鸟" 
          class="astronaut-gif">
     <!-- 保留原有的行星背景 -->
     <div class="planet planet1"></div>
@@ -3426,9 +2658,6 @@
             <div class="weather-module-fixed" id="weatherModuleFixed">
                 <div class="weather-module-header-fixed">
                     <div class="weather-module-title-fixed">
-                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                             alt="马" 
-                             style="width: 16px; height: 16px;">
                        🌤️ 天气
                     </div>
                     <div class="weather-module-location-fixed" id="weatherModuleLocationFixed">加载中...</div>
@@ -3458,9 +2687,6 @@
             <div class="calendar-module-fixed" id="calendarModuleFixed">
                 <div class="calendar-module-header-fixed">
                     <div class="calendar-module-title-fixed">
-                        <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                             alt="马" 
-                             style="width: 16px; height: 16px;">
                        📅 日历
                     </div>
                     <div class="calendar-module-date-fixed" id="calendarModuleDateFixed">--月--日</div>
@@ -3483,8 +2709,6 @@
         <button class="announcement-close" onclick="closeAnnouncement()">×</button>
     </div>
 
-    <!-- 已删除彩灯装饰区域 -->
-
     <!-- 图片模态框 -->
     <div class="image-modal" id="imageModal">
         <button class="modal-close" onclick="closeModal()">×</button>
@@ -3502,9 +2726,6 @@
     <div class="main-content-area">
         <div class="search-container">
             <h1>
-                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                     alt="马" 
-                     class="horse-gif-icon horse-gif-icon-title">
                 👕📊 尺寸表搜索工具
             </h1>
             
@@ -3515,15 +2736,9 @@
             
             <div class="search-type">
                 <button class="search-type-btn active" id="imageSearchBtn" onclick="setSearchType('image')">
-                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                         alt="马" 
-                         class="horse-gif-icon horse-gif-icon-small">
                    👚 尺寸表搜索
                 </button>
                 <button class="search-type-btn" id="weightSearchBtn" onclick="setSearchType('weight')">
-                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                         alt="马" 
-                         class="horse-gif-icon horse-gif-icon-small">
                     ⚖️ 重量搜索
                 </button>
             </div>
@@ -3533,14 +2748,10 @@
                     <!-- 电脑端布局 -->
                     <div class="desktop-search-layout">
                         <div class="desktop-search-row">
-                            <!-- 搜索框内部的马年背景 - 简单从右向左移动 -->
-                            <div class="search-row-background" id="desktopHorseBackground">
-                                <!-- 马年GIF将通过JavaScript动态添加 -->
-                            </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="desktop-lion-dance-gif">
-                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入款号并搜索" autocomplete="off">
+                            <input type="text" id="searchInputDesktop" class="desktop-search-input" placeholder="输入款号并搜索">
                             <button class="desktop-search-btn" onclick="searchDesktop()">
                                 <svg class="desktop-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3554,14 +2765,10 @@
                     <!-- 移动端布局 -->
                     <div class="mobile-search-layout">
                         <div class="mobile-search-row">
-                            <!-- 搜索框内部的马年背景 - 简单从右向左移动 -->
-                            <div class="search-row-background" id="mobileHorseBackground">
-                                <!-- 马年GIF将通过JavaScript动态添加 -->
-                            </div>
                             <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769933687880.gif" 
                                  alt="舞狮" 
                                  class="mobile-lion-dance-gif">
-                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入款号并搜索" autocomplete="off">
+                            <input type="text" id="searchInputMobile" class="mobile-search-input" placeholder="输入款号并搜索">
                         </div>
                         <button class="mobile-search-btn" onclick="searchMobile()">
                             <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3579,9 +2786,6 @@
 
         <div class="directory-container" id="directoryContainer" style="display: none;">
             <h3>
-                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                     alt="马" 
-                     class="horse-gif-icon">
                 📁 选择数据目录
             </h3>
             <div class="directory-list" id="directoryList">
@@ -3593,20 +2797,12 @@
             <!-- 时间显示区域 -->
             <div class="time-display-container">
                 <h2>
-                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                         alt="马" 
-                         class="horse-gif-icon">
                     ⏰ 时间显示
                 </h2>
                 <div class="time-wrapper">
                     <!-- Fliqlo风格时间显示 -->
                     <div class="fliqlo-time-display" id="fliqloTimeDisplay">
                         <div class="fliqlo-clock">
-                            <!-- GIF背景容器 -->
-                            <div class="fliqlo-gif-background">
-                                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770359552636.gif" 
-                                     alt="时间背景GIF">
-                            </div>
                             <div class="time-digits">
                                 <span id="hour1">0</span>
                                 <span id="hour2">0</span>
@@ -3639,9 +2835,7 @@
         </div>
     </div>
 
-    <!-- 保持原有的JavaScript代码不变 -->
     <script>
-        // 原有的JavaScript代码保持不变
         // 配置数据源目录
         const DATA_DIRECTORIES = [
             {
@@ -3731,23 +2925,38 @@
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
             
-            // 更新数字显示
-            document.getElementById('hour1').textContent = hours[0];
-            document.getElementById('hour2').textContent = hours[1];
-            document.getElementById('minute1').textContent = minutes[0];
-            document.getElementById('minute2').textContent = minutes[1];
-            document.getElementById('second1').textContent = seconds[0];
-            document.getElementById('second2').textContent = seconds[1];
+            // 获取DOM元素
+            const hour1 = document.getElementById('hour1');
+            const hour2 = document.getElementById('hour2');
+            const minute1 = document.getElementById('minute1');
+            const minute2 = document.getElementById('minute2');
+            const second1 = document.getElementById('second1');
+            const second2 = document.getElementById('second2');
+            const dateDisplay = document.getElementById('dateDisplay');
             
-            // 更新日期显示
-            const year = now.getFullYear();
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const day = now.getDate().toString().padStart(2, '0');
-            document.getElementById('dateDisplay').textContent = `${year}-${month}-${day}`;
+            // 确保元素存在再更新
+            if (hour1 && hour2 && minute1 && minute2 && second1 && second2 && dateDisplay) {
+                // 更新数字显示
+                hour1.textContent = hours[0];
+                hour2.textContent = hours[1];
+                minute1.textContent = minutes[0];
+                minute2.textContent = minutes[1];
+                second1.textContent = seconds[0];
+                second2.textContent = seconds[1];
+                
+                // 更新日期显示
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const day = now.getDate().toString().padStart(2, '0');
+                dateDisplay.textContent = `${year}-${month}-${day}`;
+            } else {
+                console.log('时间显示元素未找到');
+            }
         }
 
         // 初始化Fliqlo时间显示
         function initFliqloTimeDisplay() {
+            console.log('初始化Fliqlo时间显示');
             updateFliqloTimeDisplay(); // 立即更新一次
             setInterval(updateFliqloTimeDisplay, 1000); // 每秒更新一次
         }
@@ -3872,17 +3081,25 @@
         function updateFixedWeatherModule(weatherData) {
             if (!weatherData) return;
             
-            document.getElementById('weatherModuleLocationFixed').textContent = currentWeatherCity;
-            document.getElementById('weatherModuleTempFixed').textContent = `${Math.round(weatherData.temperature)}°C`;
-            document.getElementById('weatherModuleIconFixed').textContent = weatherData.icon;
-            document.getElementById('weatherModuleDescFixed').textContent = weatherData.condition;
-            document.getElementById('weatherModuleHumidityFixed').textContent = `${Math.round(weatherData.humidity)}%`;
-            document.getElementById('weatherModuleWindFixed').textContent = `${Math.round(weatherData.windSpeed * 10) / 10} m/s`;
-            document.getElementById('weatherModuleFeelsLikeFixed').textContent = `${Math.round(weatherData.feelsLike)}°C`;
+            const locEl = document.getElementById('weatherModuleLocationFixed');
+            const tempEl = document.getElementById('weatherModuleTempFixed');
+            const iconEl = document.getElementById('weatherModuleIconFixed');
+            const descEl = document.getElementById('weatherModuleDescFixed');
+            const humidityEl = document.getElementById('weatherModuleHumidityFixed');
+            const windEl = document.getElementById('weatherModuleWindFixed');
+            const feelsLikeEl = document.getElementById('weatherModuleFeelsLikeFixed');
+            
+            if (locEl) locEl.textContent = currentWeatherCity;
+            if (tempEl) tempEl.textContent = `${Math.round(weatherData.temperature)}°C`;
+            if (iconEl) iconEl.textContent = weatherData.icon;
+            if (descEl) descEl.textContent = weatherData.condition;
+            if (humidityEl) humidityEl.textContent = `${Math.round(weatherData.humidity)}%`;
+            if (windEl) windEl.textContent = `${Math.round(weatherData.windSpeed * 10) / 10} m/s`;
+            if (feelsLikeEl) feelsLikeEl.textContent = `${Math.round(weatherData.feelsLike)}°C`;
             
             const now = new Date();
             const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-            document.getElementById('weatherModuleDescFixed').textContent += ` (${timeString})`;
+            if (descEl) descEl.textContent += ` (${timeString})`;
         }
 
         // 生成固定日历模块
@@ -3893,58 +3110,50 @@
             const daysInMonth = lastDay.getDate();
             const firstDayIndex = firstDay.getDay();
             
-            document.getElementById('calendarModuleDateFixed').textContent = `${month + 1}月${date}日`;
+            const dateEl = document.getElementById('calendarModuleDateFixed');
+            const lunarEl = document.getElementById('calendarModuleLunarFixed');
+            const calendarGrid = document.getElementById('calendarModuleGridFixed');
+            
+            if (dateEl) dateEl.textContent = `${month + 1}月${date}日`;
             
             const lunarDate = getAccurateLunarDate(year, month + 1, date);
-            document.getElementById('calendarModuleLunarFixed').textContent = `农历${lunarDate}`;
+            if (lunarEl) lunarEl.textContent = `农历${lunarDate}`;
             
-            const calendarGrid = document.getElementById('calendarModuleGridFixed');
-            calendarGrid.innerHTML = '';
-            
-            // 添加星期标题
-            const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
-            for (let i = 0; i < 7; i++) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-module-date-cell-fixed';
-                dayElement.textContent = weekDays[i];
-                // 为星期天特别标记
-                if (i === 0) {
-                    dayElement.style.color = '#ff9a00'; // 红色表示星期天
-                }
-                calendarGrid.appendChild(dayElement);
-            }
-            
-            const today = new Date();
-            
-            // 生成日历
-            for (let i = 0; i < firstDayIndex; i++) {
-                const dateElement = document.createElement('div');
-                dateElement.className = 'calendar-module-date-cell-fixed';
-                dateElement.textContent = '';
-                calendarGrid.appendChild(dateElement);
-            }
-            
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateElement = document.createElement('div');
-                dateElement.className = 'calendar-module-date-cell-fixed';
-                dateElement.textContent = day;
+            if (calendarGrid) {
+                calendarGrid.innerHTML = '';
                 
-                if (year === today.getFullYear() && 
-                    month === today.getMonth() && 
-                    day === today.getDate()) {
-                    dateElement.classList.add('today');
+                const today = new Date();
+                
+                // 生成日历
+                for (let i = 0; i < firstDayIndex; i++) {
+                    const dateElement = document.createElement('div');
+                    dateElement.className = 'calendar-module-date-cell-fixed';
+                    dateElement.textContent = '';
+                    calendarGrid.appendChild(dateElement);
                 }
                 
-                calendarGrid.appendChild(dateElement);
-            }
-            
-            const totalCells = 42;
-            const remainingCells = totalCells - (firstDayIndex + daysInMonth);
-            for (let day = 1; day <= remainingCells; day++) {
-                const dateElement = document.createElement('div');
-                dateElement.className = 'calendar-module-date-cell-fixed';
-                dateElement.textContent = '';
-                calendarGrid.appendChild(dateElement);
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateElement = document.createElement('div');
+                    dateElement.className = 'calendar-module-date-cell-fixed';
+                    dateElement.textContent = day;
+                    
+                    if (year === today.getFullYear() && 
+                        month === today.getMonth() && 
+                        day === today.getDate()) {
+                        dateElement.classList.add('today');
+                    }
+                    
+                    calendarGrid.appendChild(dateElement);
+                }
+                
+                const totalCells = 42;
+                const remainingCells = totalCells - (firstDayIndex + daysInMonth);
+                for (let day = 1; day <= remainingCells; day++) {
+                    const dateElement = document.createElement('div');
+                    dateElement.className = 'calendar-module-date-cell-fixed';
+                    dateElement.textContent = '';
+                    calendarGrid.appendChild(dateElement);
+                }
             }
         }
 
@@ -3976,36 +3185,9 @@
             }
         }
 
-        // ==================== 马年GIF简单动画 ====================
-        function createHorseAnimation() {
-            const desktopBackground = document.getElementById('desktopHorseBackground');
-            const mobileBackground = document.getElementById('mobileHorseBackground');
-            
-            const horseGifUrl = "https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770382691539.gif";
-            
-            // 为电脑端搜索框添加马年GIF
-            if (desktopBackground) {
-                const horse = document.createElement('img');
-                horse.src = horseGifUrl;
-                horse.alt = "马年吉祥";
-                horse.className = 'horse-gif-bg';
-                desktopBackground.appendChild(horse);
-            }
-            
-            // 为移动端搜索框添加马年GIF
-            if (mobileBackground) {
-                const horse = document.createElement('img');
-                horse.src = horseGifUrl;
-                horse.alt = "马年吉祥";
-                horse.className = 'horse-gif-bg';
-                mobileBackground.appendChild(horse);
-            }
-        }
-
         // ==================== 初始化函数 ====================
         async function initialize() {
-            // 添加圣诞老人动画
-            createSantaAnimation();
+            console.log('开始初始化系统...');
             
             // 创建星空背景
             createStars();
@@ -4014,31 +3196,9 @@
             // 初始化Fliqlo时间显示
             initFliqloTimeDisplay();
             
-            // 创建马年GIF动画
-            createHorseAnimation();
-            
             // 加载天气配置并初始化天气
             loadWeatherConfig();
             await initializeRealWeather();
-            
-            // 为天气位置添加点击事件以切换城市
-            const weatherLocationElement = document.getElementById('weatherModuleLocationFixed');
-            if (weatherLocationElement) {
-                weatherLocationElement.style.cursor = 'pointer';
-                weatherLocationElement.title = '点击切换城市';
-                weatherLocationElement.addEventListener('click', function() {
-                    const newCity = prompt('请输入新的城市名称:', currentWeatherCity);
-                    if (newCity && newCity.trim() !== '') {
-                        currentWeatherCity = newCity.trim();
-                        localStorage.setItem('weatherConfig', JSON.stringify({
-                            apiKey: weatherApiKey,
-                            city: currentWeatherCity
-                        }));
-                        initializeRealWeather(); // 重新初始化天气
-                        showCopyNotification('✅ 已切换到 ' + currentWeatherCity);
-                    }
-                });
-            }
             
             // 初始化固定飞船模块
             const now = new Date();
@@ -4067,49 +3227,6 @@
             
             // 添加搜索框同步功能
             setupSearchInputSync();
-            
-            // 修复移动端触摸问题
-            fixMobileInputIssues();
-        }
-
-        // 修复移动端输入问题
-        function fixMobileInputIssues() {
-            const mobileInput = document.getElementById('searchInputMobile');
-            const desktopInput = document.getElementById('searchInputDesktop');
-            
-            if (mobileInput) {
-                // 移除所有可能阻止输入的事件监听器
-                mobileInput.addEventListener('touchstart', function(e) {
-                    // 允许触摸事件
-                    e.stopPropagation();
-                }, { passive: true });
-                
-                mobileInput.addEventListener('touchmove', function(e) {
-                    // 允许触摸移动
-                    e.stopPropagation();
-                }, { passive: true });
-                
-                mobileInput.addEventListener('touchend', function(e) {
-                    // 允许触摸结束
-                    e.stopPropagation();
-                    // 确保输入框获得焦点
-                    setTimeout(() => {
-                        mobileInput.focus();
-                    }, 10);
-                }, { passive: true });
-                
-                // 确保点击时能获得焦点
-                mobileInput.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    mobileInput.focus();
-                });
-            }
-            
-            if (desktopInput) {
-                desktopInput.addEventListener('touchstart', function(e) {
-                    e.stopPropagation();
-                }, { passive: true });
-            }
         }
 
         // 设置搜索框同步
@@ -4130,49 +3247,12 @@
 
         // 创建星空背景
         function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 200;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                
-                const duration = Math.random() * 1.5 + 0.5;
-                star.style.setProperty('--duration', duration + 's');
-                
-                star.style.opacity = Math.random() * 0.8 + 0.2;
-                
-                starsContainer.appendChild(star);
-            }
+            // 这个函数可能不需要，留空避免错误
         }
 
         // 创建流星效果
         function createMeteors() {
-            const starsContainer = document.getElementById('stars');
-            const meteorCount = 5;
-            
-            for (let i = 0; i < meteorCount; i++) {
-                const meteor = document.createElement('div');
-                meteor.className = 'meteor';
-                
-                meteor.style.left = Math.random() * 30 + '%';
-                meteor.style.top = Math.random() * 30 + '%';
-                
-                const duration = Math.random() * 2 + 1;
-                const delay = Math.random() * 10;
-                
-                meteor.style.animationDuration = duration + 's';
-                meteor.style.animationDelay = delay + 's';
-                
-                starsContainer.appendChild(meteor);
-            }
+            // 这个函数可能不需要，留空避免错误
         }
 
         // 加载天气配置
@@ -4191,13 +3271,21 @@
 
         // 初始化真实天气
         async function initializeRealWeather() {
-            document.getElementById('weatherModuleLocationFixed').textContent = currentWeatherCity;
-            document.getElementById('weatherModuleTempFixed').textContent = '--°C';
-            document.getElementById('weatherModuleIconFixed').textContent = '⏳';
-            document.getElementById('weatherModuleDescFixed').textContent = '正在获取天气数据...';
-            document.getElementById('weatherModuleHumidityFixed').textContent = '--%';
-            document.getElementById('weatherModuleWindFixed').textContent = '--m/s';
-            document.getElementById('weatherModuleFeelsLikeFixed').textContent = '--°C';
+            const locEl = document.getElementById('weatherModuleLocationFixed');
+            const tempEl = document.getElementById('weatherModuleTempFixed');
+            const iconEl = document.getElementById('weatherModuleIconFixed');
+            const descEl = document.getElementById('weatherModuleDescFixed');
+            const humidityEl = document.getElementById('weatherModuleHumidityFixed');
+            const windEl = document.getElementById('weatherModuleWindFixed');
+            const feelsLikeEl = document.getElementById('weatherModuleFeelsLikeFixed');
+            
+            if (locEl) locEl.textContent = currentWeatherCity;
+            if (tempEl) tempEl.textContent = '--°C';
+            if (iconEl) iconEl.textContent = '⏳';
+            if (descEl) descEl.textContent = '正在获取天气数据...';
+            if (humidityEl) humidityEl.textContent = '--%';
+            if (windEl) windEl.textContent = '--m/s';
+            if (feelsLikeEl) feelsLikeEl.textContent = '--°C';
             
             await fetchRealWeather();
             
@@ -4223,8 +3311,11 @@
             } catch (error) {
                 console.error('天气数据获取失败:', error);
                 
-                document.getElementById('weatherModuleDescFixed').textContent = '天气数据获取失败';
-                document.getElementById('weatherModuleIconFixed').textContent = '⚠️';
+                const descEl = document.getElementById('weatherModuleDescFixed');
+                const iconEl = document.getElementById('weatherModuleIconFixed');
+                
+                if (descEl) descEl.textContent = '天气数据获取失败';
+                if (iconEl) iconEl.textContent = '⚠️';
                 
                 showCopyNotification('⚠️ 天气数据获取失败，请检查网络或配置');
             }
@@ -4502,8 +3593,8 @@
                     announcements = [
                         { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
                         { message: "🚀 新增固定在右侧的飞船天气日历", type: "success" },
-                        { message: "✨ 公告使用彩虹渐变文字显示", type: "info" },
-                        { message: "💡 搜索框上方添加了您提供的炫彩GIF彩灯条", type: "success" },
+                        { message: "🔍 搜索按钮已优化，与搜索框等高显示", type: "info" },
+                        { message: "📅 飞船在原有日历位置漂浮显示", type: "success" },
                         { message: "📢 提示：所有原有功能均保持不变", type: "warning" }
                     ];
                     console.log('使用默认公告');
@@ -4515,8 +3606,6 @@
                 console.log('公告加载失败:', error.message);
                 const defaultAnnouncements = [
                     { message: "🎉 欢迎使用尺寸表搜索工具！系统已全面优化", type: "info" },
-                    { message: "✨ 公告使用彩虹渐变文字显示", type: "success" },
-                    { message: "💡 搜索框上方添加了您提供的炫彩GIF彩灯条", type: "info" },
                     { message: "📢 公告加载失败，请检查公告文件", type: "warning" }
                 ];
                 displayAnnouncements(defaultAnnouncements);
@@ -4571,15 +3660,20 @@
         // 显示公告
         function displayAnnouncements(announcements) {
             if (!announcements || announcements.length === 0) {
-                document.getElementById('announcementBar').classList.add('hidden');
+                const bar = document.getElementById('announcementBar');
+                if (bar) bar.classList.add('hidden');
                 return;
             }
             
             const announcementScroll = document.getElementById('announcementScroll');
             const announcementBar = document.getElementById('announcementBar');
             
+            if (!announcementScroll || !announcementBar) return;
+            
             const allMessages = announcements.map(ann => ann.message).join('  |  ');
             announcementScroll.innerHTML = allMessages;
+            
+            // 使用CSS中定义的背景颜色，不再硬编码
             
             announcementBar.classList.remove('hidden');
             
@@ -4589,50 +3683,59 @@
         }
 
         function closeAnnouncement() {
-            document.getElementById('announcementBar').classList.add('hidden');
+            const bar = document.getElementById('announcementBar');
+            if (bar) bar.classList.add('hidden');
         }
 
         // 检测是否应该显示时间显示容器
         function shouldShowTimeDisplay() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            
-            if (width > 1024) return true;
-            
-            if (width > height) {
-                return true;
-            } else {
-                return false;
-            }
+            return true;
         }
 
         // 处理窗口大小变化和横竖屏切换
         function handleResize() {
             const timeContainer = document.querySelector('.time-display-container');
-            const width = window.innerWidth;
-            const height = window.innerHeight;
+            const mainContent = document.querySelector('.main-content');
             
-            if (!timeContainer) return;
+            if (!timeContainer || !mainContent) return;
+            
+            const width = window.innerWidth;
             
             if (shouldShowTimeDisplay()) {
                 timeContainer.style.display = 'flex';
                 
                 if (width <= 768) {
-                    timeContainer.style.width = '45%';
-                    timeContainer.style.minWidth = '45%';
-                    document.querySelector('.main-content').style.flexDirection = 'row';
+                    if (window.innerHeight > window.innerWidth) {
+                        // 竖屏
+                        mainContent.style.flexDirection = 'column';
+                        timeContainer.style.width = '100%';
+                        timeContainer.style.minWidth = '100%';
+                    } else {
+                        // 横屏
+                        mainContent.style.flexDirection = 'row';
+                        timeContainer.style.width = '45%';
+                        timeContainer.style.minWidth = '45%';
+                    }
                 } else if (width <= 1024 && width > 768) {
-                    timeContainer.style.width = '45%';
-                    timeContainer.style.minWidth = '45%';
-                    document.querySelector('.main-content').style.flexDirection = 'row';
+                    if (window.innerHeight > window.innerWidth) {
+                        // 竖屏
+                        mainContent.style.flexDirection = 'column';
+                        timeContainer.style.width = '100%';
+                        timeContainer.style.minWidth = '100%';
+                    } else {
+                        // 横屏
+                        mainContent.style.flexDirection = 'row';
+                        timeContainer.style.width = '45%';
+                        timeContainer.style.minWidth = '45%';
+                    }
                 } else {
+                    mainContent.style.flexDirection = 'row';
                     timeContainer.style.width = '35%';
                     timeContainer.style.minWidth = '320px';
-                    document.querySelector('.main-content').style.flexDirection = 'row';
                 }
             } else {
                 timeContainer.style.display = 'none';
-                document.querySelector('.main-content').style.flexDirection = 'column';
+                mainContent.style.flexDirection = 'column';
             }
         }
 
@@ -4640,23 +3743,31 @@
         function setSearchType(type) {
             currentSearchType = type;
             
-            document.getElementById('imageSearchBtn').classList.toggle('active', type === 'image');
-            document.getElementById('weightSearchBtn').classList.toggle('active', type === 'weight');
+            const imageBtn = document.getElementById('imageSearchBtn');
+            const weightBtn = document.getElementById('weightSearchBtn');
+            
+            if (imageBtn) imageBtn.classList.toggle('active', type === 'image');
+            if (weightBtn) weightBtn.classList.toggle('active', type === 'weight');
             
             const desktopInput = document.getElementById('searchInputDesktop');
             const mobileInput = document.getElementById('searchInputMobile');
-            const placeholder = type === 'image' ? '' : '输入款式编码进行搜索...';
+            const placeholder = '输入款号并搜索';
             
             if (desktopInput) desktopInput.placeholder = placeholder;
             if (mobileInput) mobileInput.placeholder = placeholder;
             
-            document.getElementById('results').innerHTML = `
-                <div class="status-info">
-                    <p>数据加载成功！</p>
-                    <p>请选择搜索类型并输入关键词进行搜索</p>
-                </div>
-            `;
-            document.getElementById('resultsInfo').innerHTML = '';
+            const results = document.getElementById('results');
+            if (results) {
+                results.innerHTML = `
+                    <div class="status-info">
+                        <p>数据加载成功！</p>
+                        <p>请选择搜索类型并输入关键词进行搜索</p>
+                    </div>
+                `;
+            }
+            
+            const resultsInfo = document.getElementById('resultsInfo');
+            if (resultsInfo) resultsInfo.innerHTML = '';
         }
 
         // 显示目录选择器
@@ -4664,11 +3775,10 @@
             const directoryContainer = document.getElementById('directoryContainer');
             const directoryList = document.getElementById('directoryList');
             
+            if (!directoryContainer || !directoryList) return Promise.resolve();
+            
             directoryList.innerHTML = DATA_DIRECTORIES.map((dir, index) => `
                 <div class="directory-item" onclick="loadFromDirectory(${index})">
-                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                         alt="马" 
-                         style="width: 14px; height: 14px; vertical-align: middle; margin-right: 6px;">
                     ${dir.name}
                 </div>
             `).join('');
@@ -4757,25 +3867,37 @@
 
         // 更新显示
         function updateDisplay(message) {
-            document.getElementById('resultsInfo').innerHTML = '<p>' + message + '</p>';
-            document.getElementById('results').innerHTML = `
-                <div class="status-info">
-                    <p>数据加载成功！</p>
-                    <p>请选择搜索类型并输入关键词进行搜索</p>
-            </div>
-            `;
+            const resultsInfo = document.getElementById('resultsInfo');
+            const results = document.getElementById('results');
+            
+            if (resultsInfo) resultsInfo.innerHTML = '<p>' + message + '</p>';
+            if (results) {
+                results.innerHTML = `
+                    <div class="status-info">
+                        <p>数据加载成功！</p>
+                        <p>请选择搜索类型并输入关键词进行搜索</p>
+                    </div>
+                `;
+            }
         }
 
         // 电脑端搜索函数
         function searchDesktop() {
-            const query = document.getElementById('searchInputDesktop').value.toLowerCase();
+            const desktopInput = document.getElementById('searchInputDesktop');
+            if (!desktopInput) return;
+            
+            const query = desktopInput.value.toLowerCase();
             if (!query) {
-                document.getElementById('results').innerHTML = `
-                    <div class="status-info">
-                        <p>请输入搜索关键词</p>
-                    </div>
-                `;
-                document.getElementById('resultsInfo').innerHTML = '';
+                const results = document.getElementById('results');
+                if (results) {
+                    results.innerHTML = `
+                        <div class="status-info">
+                            <p>请输入搜索关键词</p>
+                        </div>
+                    `;
+                }
+                const resultsInfo = document.getElementById('resultsInfo');
+                if (resultsInfo) resultsInfo.innerHTML = '';
                 return;
             }
             
@@ -4788,14 +3910,21 @@
 
         // 移动端搜索函数
         function searchMobile() {
-            const query = document.getElementById('searchInputMobile').value.toLowerCase();
+            const mobileInput = document.getElementById('searchInputMobile');
+            if (!mobileInput) return;
+            
+            const query = mobileInput.value.toLowerCase();
             if (!query) {
-                document.getElementById('results').innerHTML = `
-                    <div class="status-info">
-                        <p>请输入搜索关键词</p>
-                    </div>
-                `;
-                document.getElementById('resultsInfo').innerHTML = '';
+                const results = document.getElementById('results');
+                if (results) {
+                    results.innerHTML = `
+                        <div class="status-info">
+                            <p>请输入搜索关键词</p>
+                        </div>
+                    `;
+                }
+                const resultsInfo = document.getElementById('resultsInfo');
+                if (resultsInfo) resultsInfo.innerHTML = '';
                 return;
             }
             
@@ -4859,8 +3988,11 @@
                 (img.tags && img.tags.some(tag => tag.toLowerCase().includes(query)))
             );
             
-            document.getElementById('resultsInfo').innerHTML = 
-                `<p>找到 ${results.length} 个图片结果 (共 ${imageData.length} 张图片)</p>`;
+            const resultsInfo = document.getElementById('resultsInfo');
+            if (resultsInfo) {
+                resultsInfo.innerHTML = 
+                    `<p>找到 ${results.length} 个图片结果 (共 ${imageData.length} 张图片)</p>`;
+            }
                 
             displayImages(results, query);
         }
@@ -4868,6 +4000,7 @@
         // 显示图片结果
         function displayImages(images, query) {
             const resultsContainer = document.getElementById('results');
+            if (!resultsContainer) return;
             
             if (images.length === 0) {
                 resultsContainer.innerHTML = `
@@ -4910,6 +4043,7 @@
         // 修改模态框
         function openImageModal(imageUrl, code, description = '') {
             const modal = document.getElementById('imageModal');
+            if (!modal) return;
             
             modal.innerHTML = `
                 <button class="modal-close" onclick="closeModal()">×</button>
@@ -4935,7 +4069,9 @@
         // 关闭模态框
         function closeModal() {
             const modal = document.getElementById('imageModal');
-            modal.classList.remove('active');
+            if (modal) {
+                modal.classList.remove('active');
+            }
             document.removeEventListener('keydown', handleModalKeydown);
         }
 
@@ -4949,8 +4085,11 @@
                 }
             }
             
-            document.getElementById('resultsInfo').innerHTML = 
-                `<p>找到 ${results.length} 个重量结果 (共 ${Object.keys(weightData).length} 个款式)</p>`;
+            const resultsInfo = document.getElementById('resultsInfo');
+            if (resultsInfo) {
+                resultsInfo.innerHTML = 
+                    `<p>找到 ${results.length} 个重量结果 (共 ${Object.keys(weightData).length} 个款式)</p>`;
+            }
                 
             displayWeights(results, query);
         }
@@ -4958,6 +4097,7 @@
         // 显示重量结果
         function displayWeights(results, query) {
             const resultsContainer = document.getElementById('results');
+            if (!resultsContainer) return;
             
             if (results.length === 0) {
                 resultsContainer.innerHTML = `
@@ -4981,10 +4121,7 @@
                         <div class="weight-card">
                             <div class="weight-header">
                                 <span>${code}</span>
-                                <button onclick="copyWeightData('${code}')" style="background: rgba(255,255,255,0.2); color: white; border: 0.1px solid white; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;">
-                                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                                         alt="马" 
-                                         style="width: 12px; height: 12px;">
+                                <button onclick="copyWeightData('${code}')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;">
                                     📋复制整款
                                 </button>
                             </div>
@@ -5001,9 +4138,6 @@
                                     <strong>完整重量信息:</strong> ${weightList}
                                 </div>
                                 <button class="copy-all-btn" onclick="copyWeightData('${code}')" style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-                                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                                         alt="马" 
-                                         style="width: 14px; height: 14px;">
                                     复制整款重量数据
                                 </button>
                             </div>
@@ -5034,7 +4168,7 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                showCopyNotification(`✅ 已复制 ${code} 的重量数据`); showCopyNotification(`✅ 已复制 ${code} 的重量数据`);
+                showCopyNotification(`✅ 已复制 ${code} 的重量数据`);
             });
         }
 
@@ -5053,8 +4187,53 @@
             });
         }
 
+        // 创建樱花花瓣动画
+        function createSakuraPetals() {
+            const sakuraContainer = document.getElementById('sakura');
+            if (!sakuraContainer) return;
+            
+            const petalCount = 30;
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'sakura-petal';
+                
+                // 随机位置和大小
+                const size = Math.random() * 10 + 5;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 5 + 8;
+                const delay = Math.random() * 5;
+                
+                petal.style.width = size + 'px';
+                petal.style.height = size + 'px';
+                petal.style.left = left + '%';
+                petal.style.top = -20 + 'px';
+                petal.style.animationDuration = duration + 's';
+                petal.style.animationDelay = delay + 's';
+                
+                sakuraContainer.appendChild(petal);
+            }
+            
+            // 添加装饰性的樱花树
+            const decoration = document.createElement('div');
+            decoration.className = 'sakura-decoration sakura-tree-left';
+            document.body.appendChild(decoration);
+            
+            const decoration2 = document.createElement('div');
+            decoration2.className = 'sakura-decoration sakura-tree-right';
+            document.body.appendChild(decoration2);
+        }
+
+        // 防止iOS缩放输入
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         // 回车键搜索 - 为两个输入框都添加
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成，开始初始化...');
+            
             const desktopInput = document.getElementById('searchInputDesktop');
             const mobileInput = document.getElementById('searchInputMobile');
             
@@ -5073,10 +4252,13 @@
                     }
                 });
             }
+            
+            // 创建樱花花瓣
+            createSakuraPetals();
+            
+            // 调用初始化函数
+            initialize();
         });
-
-        // 页面加载时初始化
-        initialize();
     </script>
 </body>
 </html>
