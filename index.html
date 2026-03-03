@@ -721,7 +721,7 @@
 
         .astronaut-gif {
             position: absolute;
-            width: 70px;
+            width: 100px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -3608,11 +3608,6 @@
                     <!-- Fliqlo风格时间显示 -->
                     <div class="fliqlo-time-display" id="fliqloTimeDisplay">
                         <div class="fliqlo-clock">
-                            <!-- GIF背景容器 -->
-                            <div class="fliqlo-gif-background">
-                                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1770359552636.gif" 
-                                     alt="时间背景GIF">
-                            </div>
                             <div class="time-digits">
                                 <span id="hour1">0</span>
                                 <span id="hour2">0</span>
@@ -4137,7 +4132,7 @@
         // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            const starCount = 200;
+            const starCount = 500;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
