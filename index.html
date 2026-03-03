@@ -198,14 +198,19 @@
         }
         
         /* 北极光风吹效果的动态渐变背景 */
+        html {
+            background: linear-gradient(135deg, #0a2e36, #1e5128, #3d9970, #7fdbff, #8a2be2, #4b0082, #0a2e36);
+            background-size: 400% 400%;
+            animation: windBlow 20s ease infinite;
+            min-height: 100vh;
+        }
+        
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #0a2e36, #1e5128, #3d9970, #7fdbff, #8a2be2, #4b0082, #0a2e36);
-            background-size: 400% 400%;
-            animation: windBlow 20s ease infinite;
+            background: transparent;
             color: #fff;
             line-height: 1.6;
             position: relative;
@@ -2215,9 +2220,6 @@
                 padding: 15px;
                 font-size: 16px;
                 touch-action: manipulation;
-                background: linear-gradient(135deg, #0a2e36, #1e5128, #3d9970, #7fdbff, #8a2be2, #4b0082, #0a2e36) !important;
-                background-size: 400% 400% !important;
-                animation: windBlow 20s ease infinite !important;
             }
             
             input, select, textarea {
