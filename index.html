@@ -14,6 +14,99 @@
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
+        /* ==================== 网络异常提示样式 ==================== */
+        .network-status {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .network-status.error {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: 1px solid #bd2130;
+        }
+        
+        .network-status.warning {
+            background: linear-gradient(135deg, #ffc107, #ffca2c);
+            color: #333;
+            border: 1px solid #ffc107;
+        }
+        
+        .network-status.success {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+            border: 1px solid #1e7e34;
+        }
+        
+        .network-status .status-icon {
+            margin-right: 8px;
+        }
+        
+        .network-status .status-message {
+            font-weight: 500;
+        }
+        
+        .network-status .status-close {
+            margin-left: 15px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .network-status .status-close:hover {
+            opacity: 1;
+        }
+        
+        /* ==================== 加载状态样式 ==================== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 42, 0.85);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(123, 239, 255, 0.3);
+            border-top: 4px solid #7befff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            color: #7befff;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .loading-subtext {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* ==================== Fliqlo风格时间显示 ==================== */
         .fliqlo-time-display {
             position: absolute;
@@ -3397,6 +3490,15 @@
 </style>
 </head>
 <body>
+    <!-- 网络状态提示 -->
+    <div id="networkStatus" class="network-status"></div>
+    
+    <!-- 加载遮罩 -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">正在加载...</div>
+        <div class="loading-subtext" id="loadingSubtext">请稍候</div>
+    </div>
     
     <!-- 星空背景 -->
     <div id="stars"></div>
@@ -3949,6 +4051,133 @@
             }
         }
 
+        // ==================== 网络优化函数 ====================
+        let networkRetryCount = 0;
+        const MAX_RETRY = 3;
+        const RETRY_DELAY = 1000;
+        
+        // 显示网络状态提示
+        function showNetworkStatus(message, type = 'info', duration = 3000) {
+            const statusEl = document.getElementById('networkStatus');
+            if (!statusEl) return;
+            
+            const iconMap = {
+                'error': '❌',
+                'warning': '⚠️',
+                'success': '✅',
+                'info': 'ℹ️'
+            };
+            
+            statusEl.className = `network-status ${type}`;
+            statusEl.innerHTML = `
+                <span class="status-icon">${iconMap[type] || iconMap.info}</span>
+                <span class="status-message">${message}</span>
+                <span class="status-close" onclick="closeNetworkStatus()">×</span>
+            `;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                closeNetworkStatus();
+            }, duration);
+        }
+        
+        // 关闭网络状态提示
+        function closeNetworkStatus() {
+            const statusEl = document.getElementById('networkStatus');
+            if (statusEl) {
+                statusEl.style.display = 'none';
+            }
+        }
+        
+        // 显示加载状态
+        function showLoading(message = '正在加载...', subtext = '请稍候') {
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const loadingSubtext = document.getElementById('loadingSubtext');
+            
+            if (overlay) {
+                overlay.style.display = 'flex';
+                if (loadingText) loadingText.textContent = message;
+                if (loadingSubtext) loadingSubtext.textContent = subtext;
+            }
+        }
+        
+        // 隐藏加载状态
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+        
+        // 带重试机制的网络请求
+        async function fetchWithRetry(url, options = {}, retryCount = 0) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                networkRetryCount = 0;
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                
+                if (error.name === 'AbortError') {
+                    showNetworkStatus('请求超时，正在重试...', 'warning');
+                } else if (retryCount < MAX_RETRY) {
+                    showNetworkStatus(`网络异常，正在重试 (${retryCount + 1}/${MAX_RETRY})...`, 'warning');
+                    
+                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (retryCount + 1)));
+                    
+                    return fetchWithRetry(url, options, retryCount + 1);
+                } else {
+                    showNetworkStatus('网络请求失败，请检查网络连接', 'error');
+                    throw error;
+                }
+            }
+        }
+        
+        // 带缓存的JSON请求
+        async function fetchWithCache(url, cacheKey, maxAge = 30 * 60 * 1000) {
+            try {
+                const cachedData = localStorage.getItem(cacheKey);
+                const cachedTime = localStorage.getItem(cacheKey + '_time');
+                const now = Date.now();
+                
+                if (cachedData && cachedTime && (now - parseInt(cachedTime)) < maxAge) {
+                    console.log(`使用缓存数据: ${cacheKey}`);
+                    return JSON.parse(cachedData);
+                }
+                
+                const response = await fetchWithRetry(url);
+                const data = await response.json();
+                
+                localStorage.setItem(cacheKey, JSON.stringify(data));
+                localStorage.setItem(cacheKey + '_time', now.toString());
+                
+                return data;
+            } catch (error) {
+                const cachedData = localStorage.getItem(cacheKey);
+                if (cachedData) {
+                    console.log(`使用过期缓存数据: ${cacheKey}`);
+                    return JSON.parse(cachedData);
+                }
+                throw error;
+            }
+        }
+        
+        // ==================== 网络优化函数 ====================
+        
         // ==================== 圣诞老人动画 ====================
         function createSantaAnimation() {
             // 创建雪花
@@ -4071,6 +4300,15 @@
             
             // 修复移动端触摸问题
             fixMobileInputIssues();
+            
+            // 添加网络状态监听
+            window.addEventListener('online', () => {
+                showNetworkStatus('✅ 网络已连接', 'success');
+            });
+            
+            window.addEventListener('offline', () => {
+                showNetworkStatus('❌ 网络已断开', 'error');
+            });
         }
 
         // 修复移动端输入问题
@@ -4184,14 +4422,19 @@
                     const config = JSON.parse(savedConfig);
                     weatherApiKey = config.apiKey || "";
                     currentWeatherCity = config.city || "东莞";
+                    console.log(`已加载天气配置: ${currentWeatherCity}`);
+                } else {
+                    console.log('未找到天气配置，使用默认城市: 东莞');
                 }
             } catch (e) {
-                console.log('天气配置加载失败');
+                console.log('天气配置加载失败:', e);
             }
         }
 
         // 初始化真实天气
         async function initializeRealWeather() {
+            showLoading('正在初始化天气...', '请稍候');
+            
             document.getElementById('weatherModuleLocationFixed').textContent = currentWeatherCity;
             document.getElementById('weatherModuleTempFixed').textContent = '--°C';
             document.getElementById('weatherModuleIconFixed').textContent = '⏳';
@@ -4202,6 +4445,8 @@
             
             await fetchRealWeather();
             
+            hideLoading();
+            
             if (weatherUpdateTimer) {
                 clearInterval(weatherUpdateTimer);
             }
@@ -4210,6 +4455,8 @@
 
         // 获取真实天气数据
         async function fetchRealWeather() {
+            showLoading('正在获取天气数据...', '请稍候');
+            
             try {
                 let weatherData;
                 
@@ -4220,14 +4467,17 @@
                 }
                 
                 updateFixedWeatherModule(weatherData);
+                hideLoading();
+                showNetworkStatus('✅ 天气数据获取成功', 'success');
                 
             } catch (error) {
                 console.error('天气数据获取失败:', error);
+                hideLoading();
                 
                 document.getElementById('weatherModuleDescFixed').textContent = '天气数据获取失败';
                 document.getElementById('weatherModuleIconFixed').textContent = '⚠️';
                 
-                showCopyNotification('⚠️ 天气数据获取失败，请检查网络或配置');
+                showNetworkStatus('⚠️ 天气数据获取失败，请检查网络或配置', 'warning');
             }
         }
 
@@ -4240,10 +4490,7 @@
             const encodedCity = encodeURIComponent(currentWeatherCity);
             const url = `https://devapi.qweather.com/v7/weather/now?location=${encodedCity}&key=${weatherApiKey}`;
             
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`API请求失败: ${response.status}`);
-            }
+            const response = await fetchWithRetry(url);
             
             const data = await response.json();
             
@@ -4265,11 +4512,7 @@
         async function fetchFreeWeatherData() {
             const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(currentWeatherCity)}&count=1&language=zh&format=json`;
             
-            const geoResponse = await fetch(geocodingUrl);
-            if (!geoResponse.ok) {
-                throw new Error('地理位置查询失败');
-            }
-            
+            const geoResponse = await fetchWithRetry(geocodingUrl);
             const geoData = await geoResponse.json();
             
             if (!geoData.results || geoData.results.length === 0) {
@@ -4285,11 +4528,7 @@
             
             const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto`;
             
-            const weatherResponse = await fetch(weatherUrl);
-            if (!weatherResponse.ok) {
-                throw new Error('天气数据获取失败');
-            }
-            
+            const weatherResponse = await fetchWithRetry(weatherUrl);
             const weatherData = await weatherResponse.json();
             
             const current = weatherData.current_weather;
@@ -4397,7 +4636,7 @@
 
         // 刷新天气
         function refreshWeather() {
-            showCopyNotification('🔄 正在刷新天气数据...');
+            showLoading('正在刷新天气数据...', '请稍候');
             fetchRealWeather();
         }
 
@@ -4422,7 +4661,7 @@
 
         // 加载重量数据
         async function loadWeightData() {
-            updateStatus('正在加载重量数据...', 'default');
+            showLoading('正在加载重量数据...', '请稍候');
             
             let loaded = false;
             
@@ -4432,16 +4671,21 @@
                         await loadWeightDataFromTraditional(source.url);
                         loaded = true;
                         updateStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success');
+                        showNetworkStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success', 2000);
                         break;
                     }
                 } catch (error) {
                     console.log(`${source.name} 加载失败:`, error.message);
+                    showNetworkStatus(`⚠️ ${source.name} 加载失败，尝试下一个数据源`, 'warning', 2000);
                     continue;
                 }
             }
             
+            hideLoading();
+            
             if (!loaded) {
                 updateStatus('⚠️ 重量数据加载失败，使用默认数据', 'warning');
+                showNetworkStatus('⚠️ 重量数据加载失败，使用默认数据', 'warning', 3000);
             }
         }
 
@@ -4483,15 +4727,14 @@
                 
                 for (const file of announcementFiles) {
                     try {
-                        const response = await fetch(file + '?t=' + Date.now());
-                        if (response.ok) {
-                            const content = await response.text();
-                            if (content.trim()) {
-                                announcements = parseAnnouncementContent(content);
-                                fileFound = true;
-                                console.log(`✅ 成功加载公告文件: ${file}`);
-                                break;
-                            }
+                        const response = await fetchWithRetry(file + '?t=' + Date.now());
+                        const content = await response.text();
+                        if (content.trim()) {
+                            announcements = parseAnnouncementContent(content);
+                            fileFound = true;
+                            console.log(`✅ 成功加载公告文件: ${file}`);
+                            showNetworkStatus(`✅ 已加载公告: ${file}`, 'success', 2000);
+                            break;
                         }
                     } catch (error) {
                         console.log(`尝试加载 ${file} 失败:`, error.message);
