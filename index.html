@@ -4068,6 +4068,9 @@
                 'info': 'ℹ️'
             };
             
+            // 只显示错误和警告，不显示成功
+            if (type === 'success') return;
+            
             statusEl.className = `network-status ${type}`;
             statusEl.innerHTML = `
                 <span class="status-icon">${iconMap[type] || iconMap.info}</span>
@@ -4303,7 +4306,7 @@
             
             // 添加网络状态监听
             window.addEventListener('online', () => {
-                showNetworkStatus('✅ 网络已连接', 'success');
+                // 网络已连接，不显示成功提示
             });
             
             window.addEventListener('offline', () => {
@@ -4433,8 +4436,6 @@
 
         // 初始化真实天气
         async function initializeRealWeather() {
-            showLoading('正在初始化天气...', '请稍候');
-            
             document.getElementById('weatherModuleLocationFixed').textContent = currentWeatherCity;
             document.getElementById('weatherModuleTempFixed').textContent = '--°C';
             document.getElementById('weatherModuleIconFixed').textContent = '⏳';
@@ -4455,8 +4456,6 @@
 
         // 获取真实天气数据
         async function fetchRealWeather() {
-            showLoading('正在获取天气数据...', '请稍候');
-            
             try {
                 let weatherData;
                 
@@ -4468,7 +4467,6 @@
                 
                 updateFixedWeatherModule(weatherData);
                 hideLoading();
-                showNetworkStatus('✅ 天气数据获取成功', 'success');
                 
             } catch (error) {
                 console.error('天气数据获取失败:', error);
@@ -4636,7 +4634,6 @@
 
         // 刷新天气
         function refreshWeather() {
-            showLoading('正在刷新天气数据...', '请稍候');
             fetchRealWeather();
         }
 
@@ -4661,8 +4658,6 @@
 
         // 加载重量数据
         async function loadWeightData() {
-            showLoading('正在加载重量数据...', '请稍候');
-            
             let loaded = false;
             
             for (const source of WEIGHT_DATA_SOURCES) {
@@ -4670,8 +4665,6 @@
                     if (source.type === "traditional") {
                         await loadWeightDataFromTraditional(source.url);
                         loaded = true;
-                        updateStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success');
-                        showNetworkStatus(`✅ 已从 ${source.name} 加载重量数据`, 'success', 2000);
                         break;
                     }
                 } catch (error) {
@@ -4733,7 +4726,6 @@
                             announcements = parseAnnouncementContent(content);
                             fileFound = true;
                             console.log(`✅ 成功加载公告文件: ${file}`);
-                            showNetworkStatus(`✅ 已加载公告: ${file}`, 'success', 2000);
                             break;
                         }
                     } catch (error) {
