@@ -3823,6 +3823,58 @@
         let weatherApiKey = "";
         let weatherUpdateTimer = null;
 
+        // ==================== 图片数据本地缓存 ====================
+        const IMAGE_CACHE = {
+            CACHE_KEY: 'imageDataCache',
+            CACHE_VERSION: '1.0',
+            CACHE_EXPIRY: 24 * 60 * 60 * 1000,
+
+            save: function(data) {
+                try {
+                    const cacheData = {
+                        version: this.CACHE_VERSION,
+                        timestamp: Date.now(),
+                        data: data
+                    };
+                    localStorage.setItem(this.CACHE_KEY, JSON.stringify(cacheData));
+                    console.log('✅ 图片数据已缓存');
+                } catch (e) {
+                    console.warn('缓存保存失败:', e);
+                }
+            },
+
+            get: function() {
+                try {
+                    const cached = localStorage.getItem(this.CACHE_KEY);
+                    if (!cached) return null;
+
+                    const cacheData = JSON.parse(cached);
+                    const now = Date.now();
+
+                    if (now - cacheData.timestamp > this.CACHE_EXPIRY) {
+                        console.log('缓存已过期');
+                        this.clear();
+                        return null;
+                    }
+
+                    console.log('✅ 使用缓存的图片数据');
+                    return cacheData.data;
+                } catch (e) {
+                    console.warn('缓存读取失败:', e);
+                    return null;
+                }
+            },
+
+            clear: function() {
+                try {
+                    localStorage.removeItem(this.CACHE_KEY);
+                    console.log('缓存已清除');
+                } catch (e) {
+                    console.warn('缓存清除失败:', e);
+                }
+            }
+        };
+
         // ==================== Fliqlo时间显示功能 ====================
 
         // 更新Fliqlo时间显示
@@ -4945,6 +4997,9 @@
                     const cloudData = await response.json();
                     imageData = cloudData;
                     
+                    // 保存到本地缓存
+                    IMAGE_CACHE.save(cloudData);
+                    
                     updateStatus(`✅ 已从 ${directory.name} 加载数据 (${imageData.length} 张图片)`, 'success');
                     updateDisplay(`✅ 使用 ${directory.name} 数据 (共 ${imageData.length} 张图片)`);
                 } else {
@@ -4959,7 +5014,13 @@
                     updateStatus(`❌ ${directory.name} 加载失败: ${error.message}`, 'error');
                 }
                 
-                if (directory.url === "./images.json") {
+                // 尝试使用缓存数据
+                const cachedData = IMAGE_CACHE.get();
+                if (cachedData) {
+                    imageData = cachedData;
+                    updateStatus(`✅ 使用缓存数据 (${imageData.length} 张图片)`, 'success');
+                    updateDisplay(`✅ 使用缓存数据 (共 ${imageData.length} 张图片)`);
+                } else if (directory.url === "./images.json") {
                     updateStatus('正在尝试使用示例数据...', 'warning');
                     imageData = SAMPLE_DATA;
                     
