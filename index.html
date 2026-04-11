@@ -3897,118 +3897,120 @@
             setInterval(updateFliqloTimeDisplay, 1000); // 每秒更新一次
         }
 
-        // ==================== 简单准确的农历计算 ====================
+        // ==================== 通用农历计算系统 ====================
         function getAccurateLunarDate(year, month, day) {
-            // 2025年准确的农历数据表
-            const lunarData2025 = {
-                '2025-01-01': '甲辰年腊月初二',
-                '2025-01-29': '甲辰年腊月三十',
-                '2025-01-30': '乙巳年正月初一',
-                
-                '2025-02-10': '乙巳年正月十二',
-                '2025-02-20': '乙巳年正月廿二',
-                '2025-02-28': '乙巳年正月三十',
-                
-                '2025-03-01': '乙巳年二月初二',
-                '2025-03-10': '乙巳年二月十一',
-                '2025-03-20': '乙巳年二月廿一',
-                '2025-03-30': '乙巳年三月初一',
-                
-                '2025-04-01': '乙巳年三月初三',
-                '2025-04-10': '乙巳年三月十二',
-                '2025-04-20': '乙巳年三月廿二',
-                '2025-04-30': '乙巳年四月初三',
-                
-                '2025-05-01': '乙巳年四月初四',
-                '2025-05-10': '乙巳年四月十三',
-                '2025-05-20': '乙巳年四月廿三',
-                '2025-05-30': '乙巳年五月初三',
-                
-                '2025-06-01': '乙巳年五月初五',
-                '2025-06-10': '乙巳年五月十四',
-                '2025-06-20': '乙巳年五月廿四',
-                '2025-06-30': '乙巳年闰五月初四',
-                
-                '2025-07-01': '乙巳年闰五月初五',
-                '2025-07-10': '乙巳年闰五月十四',
-                '2025-07-20': '乙巳年闰五月廿四',
-                '2025-07-30': '乙巳年六月初五',
-                
-                '2025-08-01': '乙巳年六月初七',
-                '2025-08-10': '乙巳年六月十六',
-                '2025-08-20': '乙巳年六月廿六',
-                '2025-08-30': '乙巳年七月初七',
-                
-                '2025-09-01': '乙巳年七月初九',
-                '2025-09-10': '乙巳年七月十八',
-                '2025-09-20': '乙巳年七月廿八',
-                '2025-09-30': '乙巳年八月初八',
-                
-                '2025-10-01': '乙巳年八月初九',
-                '2025-10-10': '乙巳年八月十八',
-                '2025-10-20': '乙巳年八月廿八',
-                '2025-10-30': '乙巳年九月初九',
-                
-                '2025-11-01': '乙巳年九月十一',
-                '2025-11-10': '乙巳年九月二十',
-                '2025-11-20': '乙巳年九月三十',
-                '2025-11-30': '乙巳年十月初十',
-                
-                '2025-12-01': '乙巳年十月十一',
-                '2025-12-10': '乙巳年十月二十',
-                '2025-12-20': '乙巳年十月三十',
-                '2025-12-25': '乙巳年冬月初五',
-                '2025-12-30': '乙巳年冬月初十',
-                '2025-12-31': '乙巳年冬月十一'
+            // 农历年份数据表（支持多年度）
+            const lunarYearData = {
+                // 2024年（甲辰年）
+                2024: {
+                    springFestival: new Date(2024, 1, 10), // 2024年2月10日
+                    leapMonth: 2, // 2024年闰二月
+                    lastDay: new Date(2024, 0, 9) // 2023年腊月最后一天
+                },
+                // 2025年（乙巳年）
+                2025: {
+                    springFestival: new Date(2025, 0, 29), // 2025年1月29日
+                    leapMonth: 5, // 2025年闰五月
+                    lastDay: new Date(2025, 0, 28) // 2024年腊月最后一天
+                },
+                // 2026年（丙午年）
+                2026: {
+                    springFestival: new Date(2026, 1, 17), // 2026年2月17日
+                    leapMonth: 0, // 2026年无闰月
+                    lastDay: new Date(2026, 1, 16) // 2025年腊月最后一天
+                },
+                // 2027年（丁未年）
+                2027: {
+                    springFestival: new Date(2027, 1, 6), // 2027年2月6日
+                    leapMonth: 0, // 2027年无闰月
+                    lastDay: new Date(2027, 1, 5) // 2026年腊月最后一天
+                },
+                // 2028年（戊申年）
+                2028: {
+                    springFestival: new Date(2028, 1, 26), // 2028年2月26日
+                    leapMonth: 5, // 2028年闰五月
+                    lastDay: new Date(2028, 1, 25) // 2027年腊月最后一天
+                }
             };
-
-            const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             
-            if (lunarData2025[dateStr]) {
-                return lunarData2025[dateStr];
+            // 农历月份名称
+            const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
+                                   "七月", "八月", "九月", "十月", "冬月", "腊月"];
+            
+            // 农历日期名称
+            const lunarDayNames = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
+                                 "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                                 "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+            
+            // 农历年份名称（60年周期）
+            const heavenlyStems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+            const earthlyBranches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+            
+            const currentDate = new Date(year, month - 1, day);
+            
+            // 确定农历年份
+            let lunarYear = year;
+            let yearData = lunarYearData[lunarYear];
+            
+            // 如果当前日期在春节之前，则属于上一年
+            if (currentDate < yearData.springFestival) {
+                lunarYear = year - 1;
+                yearData = lunarYearData[lunarYear];
             }
             
-            const dateObj = new Date(year, month - 1, day);
+            // 计算农历年份名称（60年周期）
+            const yearCycle = (lunarYear - 4) % 60;
+            const stemIndex = yearCycle % 10;
+            const branchIndex = yearCycle % 12;
+            const yearName = `${heavenlyStems[stemIndex]}${earthlyBranches[branchIndex]}`;
             
-            const springFestival2025 = new Date(2025, 0, 29);
-            const diffDays = Math.floor((dateObj - springFestival2025) / (1000 * 60 * 60 * 24));
+            // 计算与春节的天数差
+            const diffDays = Math.floor((currentDate - yearData.springFestival) / (1000 * 60 * 60 * 24));
             
-            if (diffDays >= 0) {
-                const lunarMonthNames = ["正月", "二月", "三月", "四月", "五月", "六月", 
-                                       "七月", "八月", "九月", "十月", "冬月", "腊月"];
-                const lunarDayNames = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
-                                     "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
-                                     "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
-                
-                const lunarMonthDays = [
-                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29,
-                    30,
-                    30, 29, 30, 29, 30, 29, 30, 29, 30, 29
-                ];
-                
-                let remainingDays = diffDays;
-                let lunarMonth = 0;
-                
-                while (remainingDays >= lunarMonthDays[lunarMonth]) {
-                    remainingDays -= lunarMonthDays[lunarMonth];
-                    lunarMonth++;
-                }
-                
-                const lunarDay = remainingDays + 1;
-                
-                let monthDisplay = "";
-                if (lunarMonth === 5) {
-                    monthDisplay = "闰六月";
-                } else if (lunarMonth > 5) {
-                    monthDisplay = lunarMonthNames[lunarMonth - 1];
-                } else {
-                    monthDisplay = lunarMonthNames[lunarMonth];
-                }
-                
-                return `乙巳年${monthDisplay}${lunarDayNames[lunarDay - 1]}`;
+            if (diffDays < 0) {
+                // 春节前的日期，属于上一年腊月
+                const lastDayDiff = Math.floor((currentDate - yearData.lastDay) / (1000 * 60 * 60 * 24));
+                const lunarDay = Math.abs(lastDayDiff) + 1;
+                return `${yearName}年腊月${lunarDayNames[lunarDay - 1]}`;
+            }
+            
+            // 春节后的日期，计算农历月份和日期
+            const lunarMonthDays = [
+                30, 29, 30, 29, 30, 29, 30, 29, 30, 29,
+                30, 29, 30, 29, 30, 29, 30, 29, 30, 29
+            ];
+            
+            // 如果有闰月，插入闰月
+            if (yearData.leapMonth > 0) {
+                lunarMonthDays.splice(yearData.leapMonth, 0, 30); // 闰月通常为30天
+            }
+            
+            let remainingDays = diffDays;
+            let lunarMonth = 0;
+            
+            while (remainingDays >= lunarMonthDays[lunarMonth]) {
+                remainingDays -= lunarMonthDays[lunarMonth];
+                lunarMonth++;
+            }
+            
+            const lunarDay = remainingDays + 1;
+            
+            // 处理闰月显示
+            let monthDisplay = "";
+            if (yearData.leapMonth > 0 && lunarMonth === yearData.leapMonth) {
+                monthDisplay = `闰${lunarMonthNames[lunarMonth - 1]}`;
+            } else if (yearData.leapMonth > 0 && lunarMonth > yearData.leapMonth) {
+                monthDisplay = lunarMonthNames[lunarMonth - 1];
             } else {
-                return "甲辰年腊月";
+                monthDisplay = lunarMonthNames[lunarMonth];
             }
+            
+            // 确保月份名称有效
+            if (!monthDisplay) {
+                monthDisplay = "腊月";
+            }
+            
+            return `${yearName}年${monthDisplay}${lunarDayNames[lunarDay - 1]}`;
         }
 
         // ==================== 固定在右侧的飞船天气日历功能 ====================
