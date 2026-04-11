@@ -175,7 +175,7 @@
         .time-digits {
             display: flex;
             gap: 12px;
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 300;
             color: #ffffff;
             letter-spacing: 2px;
@@ -380,6 +380,11 @@
         /* 在所有平板和手机设备上隐藏 */
         @media (max-width: 1199px) {
             .spaceship-weather-calendar {
+                display: none !important;
+            }
+            
+            /* 移动端隐藏添加数据界面 */
+            .directory-batch-container {
                 display: none !important;
             }
         }
@@ -1943,7 +1948,7 @@
         .status-info {
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
-            padding: 50px 20px;
+            padding: 30px 15px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -1953,10 +1958,10 @@
         
         .directory-container {
             background: rgba(26, 35, 126, 0.9);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+            margin-bottom: 12px;
             backdrop-filter: blur(10px);
             border: 0.05px solid;
             border-image: linear-gradient(45deg, 
@@ -1968,11 +1973,11 @@
         
         .directory-container h3 {
             color: #7befff;
-            margin-bottom: 10px;
-            font-size: 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .directory-list {
@@ -1983,24 +1988,24 @@
         }
         
         .directory-item {
-            padding: 12px 16px;
+            padding: 10px 12px;
             border: 0.05px solid;
             border-image: linear-gradient(45deg, 
                 #ff0000, #ff8000, #ffff00, #00ff00, 
                 #00ffff, #0080ff, #0000ff, #8000ff) 1;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
             background: rgba(28, 37, 65, 0.8);
-            min-width: 140px;
+            min-width: 120px;
             color: white;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             position: relative;
             animation: borderRainbow 8s linear infinite;
         }
@@ -2600,8 +2605,8 @@
             
             @media (orientation: landscape) {
                 .image-card {
-                    width: 95% !important;
-                    max-width: 95% !important;
+                    width: 100% !important;
+                    max-width: 100% !important;
                     height: 250px !important;
                     margin: 0 auto 15px !important;
                 }
@@ -2647,8 +2652,8 @@
             
             @media (orientation: landscape) {
                 .weight-card {
-                    width: 95% !important;
-                    max-width: 95% !important;
+                    width: 100% !important;
+                    max-width: 100% !important;
                     height: 240px !important;
                     margin: 0 auto 15px !important;
                     border-radius: 10px !important;
@@ -2795,6 +2800,11 @@
             
             /* 确保平板端隐藏天气飞船模板 */
             .spaceship-weather-calendar {
+                display: none !important;
+            }
+            
+            /* 平板端隐藏添加数据界面 */
+            .directory-batch-container {
                 display: none !important;
             }
             
@@ -3578,6 +3588,7 @@
                     <!-- 日历网格将通过JavaScript动态生成 -->
                 </div>
             </div>
+            </div>
         </div>
     </div>
     
@@ -3685,21 +3696,49 @@
             <div class="results-info" id="resultsInfo"></div>
         </div>
 
-        <div class="directory-container" id="directoryContainer" style="display: none;">
-            <h3>
-                <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
-                     alt="马" 
-                     class="horse-gif-icon">
-                📁 选择数据目录
-            </h3>
-            <div class="directory-list" id="directoryList">
-                <!-- 目录项将通过JavaScript动态生成 -->
+        <!-- 选择数据目录和批量添加数据（同一行布局） -->
+        <div class="directory-batch-container" style="display: flex; gap: 20px; margin-top: 20px;">
+            <!-- 选择数据目录 -->
+            <div class="directory-container" id="directoryContainer" style="display: none; flex: 0.3;">
+                <h3>
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
+                    📁 选择数据目录
+                </h3>
+                <div class="directory-list" id="directoryList">
+                    <!-- 目录项将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 批量数据输入区域 -->
+            <div class="panel" style="flex: 0.7; background: rgba(10, 14, 42, 0.8); padding: 15px; border-radius: 10px; border: 1px solid rgba(123, 239, 255, 0.3);">
+                <h2 style="color: #7befff; font-size: 16px; margin-bottom: 12px;">
+                    🔒 批量添加数据（密码保护）
+                </h2>
+                <div style="margin-bottom: 8px; font-size: 13px; color: rgba(255, 255, 255, 0.8);">
+                    <p>批量添加图片数据到本地数据库（支持JSON、HTML标签、CSV格式）</p>
+                </div>
+                
+                <!-- 密码输入区域 -->
+                <div style="margin-bottom: 12px;">
+                    <input type="password" id="batchDataPassword" placeholder="请输入密码" style="width: 100%; padding: 10px; background: rgba(40, 53, 147, 0.6); color: white; border: 1px solid rgba(123, 239, 255, 0.3); border-radius: 6px; font-size: 12px; box-sizing: border-box; margin-bottom: 8px;">
+                    <button id="batchDataAuthBtn" style="padding: 8px 16px; background: linear-gradient(135deg, #ff6b35, #ff8e53); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; width: 100%; transition: all 0.3s; box-shadow: 0 2px 6px rgba(255, 107, 53, 0.3);">
+                        🔑 验证密码
+                    </button>
+                </div>
+                
+                <textarea id="batchDataInputDirectory" style="width: 100%; height: 150px; background: rgba(40, 53, 147, 0.6); color: white; border: 1px solid rgba(123, 239, 255, 0.3); border-radius: 8px; padding: 10px; font-size: 12px; font-family: 'Consolas', monospace; resize: vertical; box-sizing: border-box; margin-bottom: 12px; line-height: 1.5; display: none;"></textarea>
+                <button id="batchAddDataBtnDirectory" style="padding: 10px 20px; background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; transition: all 0.3s; box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3); display: none;">
+                    批量添加数据
+                </button>
+                <div id="batchAddInfoDirectory" style="margin-top: 12px; padding: 8px; border-radius: 6px; font-size: 12px; text-align: center; display: none;"></div>
             </div>
         </div>
-
-        <div class="main-content">
-            <!-- 时间显示区域 -->
-            <div class="time-display-container">
+            <!-- 时间显示和搜索结果区域（同一行布局） -->
+            <div class="row-layout-container" style="display: flex; gap: 20px; margin-top: 20px;">
+                <!-- 时间显示区域 -->
+                <div class="time-display-container" style="flex: 0.4;">
                 <h2>
                     <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
                          alt="马" 
@@ -3730,10 +3769,10 @@
                     <p>⏱️ 实时时间显示功能</p>
                     <p>📅 显示当前日期和时间</p>
                 </div>
-            </div>
-
-            <!-- 搜索结果区域 -->
-            <div class="results-container" id="results">
+                </div>
+                
+                <!-- 搜索结果区域 -->
+                <div class="results-container" id="results">
                 <div class="status-info">
                     <p>📥 正在加载数据，请稍候...</p>
                     <p>系统初始化完成后，您可以搜索图片或重量信息</p>
@@ -5292,6 +5331,259 @@
             });
         }
 
+        // 通用复制函数
+        function copyToClipboard(text, type = '内容') {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+            }).catch(err => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyNotification(`✅ 已复制${type}: ${text.length > 30 ? text.substring(0, 30) + '...' : text}`);
+            });
+        }
+
+        // 批量添加数据函数（选择数据目录板块）
+        function batchAddDataDirectory() {
+            const batchDataInput = document.getElementById('batchDataInputDirectory');
+            const batchAddInfo = document.getElementById('batchAddInfoDirectory');
+            
+            if (!batchDataInput || !batchAddInfo) return;
+            
+            const text = batchDataInput.value.trim();
+            if (!text) {
+                batchAddInfo.style.display = 'block';
+                batchAddInfo.style.background = 'rgba(220, 53, 69, 0.8)';
+                batchAddInfo.innerHTML = '❌ 请输入数据';
+                setTimeout(() => { batchAddInfo.style.display = 'none'; }, 3000);
+                return;
+            }
+            
+            let addedCount = 0;
+            let updatedCount = 0;
+            
+            try {
+                // 尝试解析为JSON格式
+                if (text.trim().startsWith('[')) {
+                    const jsonData = JSON.parse(text);
+                    if (Array.isArray(jsonData)) {
+                        jsonData.forEach(item => {
+                            if (item.code && item.url) {
+                                const existingIndex = imageData.findIndex(img => img.code === item.code);
+                                const newImage = {
+                                    code: item.code,
+                                    url: item.url,
+                                    date: item.date || new Date().toISOString().split('T')[0],
+                                    tags: item.tags || ["JSON导入"],
+                                    description: item.description || `JSON导入图片 ${item.code}`
+                                };
+                                
+                                if (existingIndex !== -1) {
+                                    imageData[existingIndex] = newImage;
+                                    updatedCount++;
+                                } else {
+                                    imageData.push(newImage);
+                                    addedCount++;
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    // 按行处理文本格式
+                    const lines = text.split('\n');
+                    lines.forEach(line => {
+                        line = line.trim();
+                        if (!line) return;
+                        
+                        let code = '';
+                        let url = '';
+                        
+                        if (line.startsWith('<img')) {
+                            const srcMatch = line.match(/src\s*=\s*["']([^"']+)["']/i);
+                            const altMatch = line.match(/alt\s*=\s*["']([^"']+)["']/i);
+                            
+                            if (srcMatch && altMatch) {
+                                url = srcMatch[1];
+                                code = altMatch[1];
+                            }
+                        } else {
+                            const parts = line.split(',');
+                            if (parts.length >= 2) {
+                                code = parts[0].trim();
+                                url = parts[1].trim();
+                            }
+                        }
+                        
+                        if (code && url) {
+                            const existingIndex = imageData.findIndex(img => img.code === code);
+                            const newImage = {
+                                code: code,
+                                url: url,
+                                date: new Date().toISOString().split('T')[0],
+                                tags: ["批量添加"],
+                                description: `批量添加图片 ${code}`
+                            };
+                            
+                            if (existingIndex !== -1) {
+                                imageData[existingIndex] = newImage;
+                                updatedCount++;
+                            } else {
+                                imageData.push(newImage);
+                                addedCount++;
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                batchAddInfo.style.display = 'block';
+                batchAddInfo.style.background = 'rgba(220, 53, 69, 0.8)';
+                batchAddInfo.innerHTML = '❌ 数据格式错误，请检查JSON格式';
+                setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+                return;
+            }
+            
+            // 保存到本地文件（提供下载）
+            const dataStr = JSON.stringify(imageData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'images.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            batchAddInfo.style.display = 'block';
+            batchAddInfo.style.background = 'rgba(40, 167, 69, 0.8)';
+            batchAddInfo.innerHTML = `✅ 批量添加完成！新增: ${addedCount}, 更新: ${updatedCount}<br>✅ 已下载 images.json 文件到本地`;
+            setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+            
+            showCopyNotification(`✅ 已添加 ${addedCount + updatedCount} 条数据，已下载 images.json`);
+        }
+
+        // 批量添加数据函数
+        function batchAddData() {
+            const batchDataInput = document.getElementById('batchDataInput');
+            const batchAddInfo = document.getElementById('batchAddInfo');
+            
+            if (!batchDataInput || !batchAddInfo) return;
+            
+            const text = batchDataInput.value.trim();
+            if (!text) {
+                batchAddInfo.style.display = 'block';
+                batchAddInfo.style.background = 'rgba(220, 53, 69, 0.8)';
+                batchAddInfo.innerHTML = '❌ 请输入数据';
+                setTimeout(() => { batchAddInfo.style.display = 'none'; }, 3000);
+                return;
+            }
+            
+            let addedCount = 0;
+            let updatedCount = 0;
+            
+            try {
+                // 尝试解析为JSON格式
+                if (text.trim().startsWith('[')) {
+                    const jsonData = JSON.parse(text);
+                    if (Array.isArray(jsonData)) {
+                        jsonData.forEach(item => {
+                            if (item.code && item.url) {
+                                const existingIndex = imageData.findIndex(img => img.code === item.code);
+                                const newImage = {
+                                    code: item.code,
+                                    url: item.url,
+                                    date: item.date || new Date().toISOString().split('T')[0],
+                                    tags: item.tags || ["JSON导入"],
+                                    description: item.description || `JSON导入图片 ${item.code}`
+                                };
+                                
+                                if (existingIndex !== -1) {
+                                    imageData[existingIndex] = newImage;
+                                    updatedCount++;
+                                } else {
+                                    imageData.push(newImage);
+                                    addedCount++;
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    // 按行处理文本格式
+                    const lines = text.split('\n');
+                    lines.forEach(line => {
+                        line = line.trim();
+                        if (!line) return;
+                        
+                        let code = '';
+                        let url = '';
+                        
+                        if (line.startsWith('<img')) {
+                            const srcMatch = line.match(/src\s*=\s*["']([^"']+)["']/i);
+                            const altMatch = line.match(/alt\s*=\s*["']([^"']+)["']/i);
+                            
+                            if (srcMatch && altMatch) {
+                                url = srcMatch[1];
+                                code = altMatch[1];
+                            }
+                        } else {
+                            const parts = line.split(',');
+                            if (parts.length >= 2) {
+                                code = parts[0].trim();
+                                url = parts[1].trim();
+                            }
+                        }
+                        
+                        if (code && url) {
+                            const existingIndex = imageData.findIndex(img => img.code === code);
+                            const newImage = {
+                                code: code,
+                                url: url,
+                                date: new Date().toISOString().split('T')[0],
+                                tags: ["批量添加"],
+                                description: `批量添加图片 ${code}`
+                            };
+                            
+                            if (existingIndex !== -1) {
+                                imageData[existingIndex] = newImage;
+                                updatedCount++;
+                            } else {
+                                imageData.push(newImage);
+                                addedCount++;
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                batchAddInfo.style.display = 'block';
+                batchAddInfo.style.background = 'rgba(220, 53, 69, 0.8)';
+                batchAddInfo.innerHTML = '❌ 数据格式错误，请检查JSON格式';
+                setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+                return;
+            }
+            
+            // 保存到本地文件（提供下载）
+            const dataStr = JSON.stringify(imageData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'images.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            batchAddInfo.style.display = 'block';
+            batchAddInfo.style.background = 'rgba(40, 167, 69, 0.8)';
+            batchAddInfo.innerHTML = `✅ 批量添加完成！新增: ${addedCount}, 更新: ${updatedCount}<br>✅ 已下载 images.json 文件到本地`;
+            setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+            
+            showCopyNotification(`✅ 已添加 ${addedCount + updatedCount} 条数据，已下载 images.json`);
+        }
+
         // 回车键搜索 - 为两个输入框都添加
         document.addEventListener('DOMContentLoaded', function() {
             const desktopInput = document.getElementById('searchInputDesktop');
@@ -5309,6 +5601,58 @@
                 mobileInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         searchMobile();
+                    }
+                });
+            }
+            
+            // 批量添加数据按钮事件监听器
+            const batchAddDataBtn = document.getElementById('batchAddDataBtn');
+            if (batchAddDataBtn) {
+                batchAddDataBtn.addEventListener('click', batchAddData);
+            }
+            
+            // 选择数据目录板块的批量添加数据按钮事件监听器
+            const batchAddDataBtnDirectory = document.getElementById('batchAddDataBtnDirectory');
+            if (batchAddDataBtnDirectory) {
+                batchAddDataBtnDirectory.addEventListener('click', batchAddDataDirectory);
+            }
+            
+            // 密码验证按钮事件监听器
+            const batchDataAuthBtn = document.getElementById('batchDataAuthBtn');
+            if (batchDataAuthBtn) {
+                batchDataAuthBtn.addEventListener('click', function() {
+                    const password = document.getElementById('batchDataPassword').value;
+                    const batchDataInput = document.getElementById('batchDataInputDirectory');
+                    const batchAddBtn = document.getElementById('batchAddDataBtnDirectory');
+                    const batchAddInfo = document.getElementById('batchAddInfoDirectory');
+                    
+                    // 预设密码（您可以修改这个密码）
+                    const correctPassword = "88888";
+                    
+                    if (password === correctPassword) {
+                        // 密码正确，显示数据输入区域
+                        batchDataInput.style.display = 'block';
+                        batchAddBtn.style.display = 'block';
+                        batchAddInfo.style.display = 'block';
+                        batchAddInfo.style.background = 'rgba(40, 167, 69, 0.8)';
+                        batchAddInfo.innerHTML = '✅ 密码验证成功，可以添加数据';
+                        setTimeout(() => { batchAddInfo.style.display = 'none'; }, 3000);
+                    } else {
+                        // 密码错误
+                        batchAddInfo.style.display = 'block';
+                        batchAddInfo.style.background = 'rgba(220, 53, 69, 0.8)';
+                        batchAddInfo.innerHTML = '❌ 密码错误，请重新输入';
+                        setTimeout(() => { batchAddInfo.style.display = 'none'; }, 3000);
+                    }
+                });
+            }
+            
+            // 密码输入框回车键支持
+            const batchDataPassword = document.getElementById('batchDataPassword');
+            if (batchDataPassword) {
+                batchDataPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('batchDataAuthBtn').click();
                     }
                 });
             }
