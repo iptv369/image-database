@@ -3714,6 +3714,9 @@
             <!-- 批量数据输入区域 -->
             <div class="panel" style="flex: 0.7; background: rgba(10, 14, 42, 0.8); padding: 15px; border-radius: 10px; border: 1px solid rgba(123, 239, 255, 0.3);">
                 <h2 style="color: #7befff; font-size: 16px; margin-bottom: 12px;">
+                    <img src="https://jxy-ai-oss.juxieyun.com/assets/6/assistant/07a5bc1e4a884cd0b06434d46ae0f452/chat_bot/file-1769649686685.gif" 
+                         alt="马" 
+                         class="horse-gif-icon">
                     🔒 批量添加数据（密码保护）
                 </h2>
                 <div style="margin-bottom: 8px; font-size: 13px; color: rgba(255, 255, 255, 0.8);">
@@ -5637,6 +5640,40 @@
                         batchAddInfo.style.background = 'rgba(40, 167, 69, 0.8)';
                         batchAddInfo.innerHTML = '✅ 密码验证成功，可以添加数据';
                         setTimeout(() => { batchAddInfo.style.display = 'none'; }, 3000);
+                        
+                        // 30秒无人操作自动锁上
+                        let autoLockTimer = setTimeout(() => {
+                            batchDataInput.style.display = 'none';
+                            batchAddBtn.style.display = 'none';
+                            batchAddInfo.style.display = 'block';
+                            batchAddInfo.style.background = 'rgba(255, 193, 7, 0.8)';
+                            batchAddInfo.innerHTML = '⏰ 30秒无人操作，已自动锁定，请重新验证密码';
+                            setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+                            document.getElementById('batchDataPassword').value = '';
+                        }, 30000);
+                        
+                        // 重置定时器的函数
+                        function resetAutoLockTimer() {
+                            clearTimeout(autoLockTimer);
+                            autoLockTimer = setTimeout(() => {
+                                batchDataInput.style.display = 'none';
+                                batchAddBtn.style.display = 'none';
+                                batchAddInfo.style.display = 'block';
+                                batchAddInfo.style.background = 'rgba(255, 193, 7, 0.8)';
+                                batchAddInfo.innerHTML = '⏰ 30秒无人操作，已自动锁定，请重新验证密码';
+                                setTimeout(() => { batchAddInfo.style.display = 'none'; }, 5000);
+                                document.getElementById('batchDataPassword').value = '';
+                            }, 30000);
+                        }
+                        
+                        // 监听数据输入框的操作
+                        batchDataInput.addEventListener('input', resetAutoLockTimer);
+                        batchDataInput.addEventListener('click', resetAutoLockTimer);
+                        batchAddBtn.addEventListener('click', resetAutoLockTimer);
+                        
+                        // 监听键盘操作
+                        document.addEventListener('keydown', resetAutoLockTimer);
+                        
                     } else {
                         // 密码错误
                         batchAddInfo.style.display = 'block';
