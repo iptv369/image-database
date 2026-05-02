@@ -9934,5 +9934,14 @@
       "批量导入"
     ],
     "description": "从HTML批量导入的图片"
+  },
+  {
+    "code": "H171",
+    "url": "https://v1.ax1x.com/2026/05/02/NbKGuJ.png",
+    "date": "2026-05-02",
+    "tags": [
+      "批量添加"
+    ],
+    "description": "批量添加图片 H171"
   }
 ]
